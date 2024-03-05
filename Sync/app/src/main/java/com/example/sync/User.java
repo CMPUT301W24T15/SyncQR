@@ -1,13 +1,13 @@
 package com.example.sync;
 
-import java.util.ArrayList;
-import java.util.List;
+import androidx.appcompat.app.AppCompatActivity;
 
-public abstract class User {
+public abstract class User extends AppCompatActivity {
     String username;
-    ArrayList<Integer> password;
+    String password;
 
     public User() {
         this.username = "Visitor";
     }
+
 }
