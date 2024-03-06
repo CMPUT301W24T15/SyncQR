@@ -40,8 +40,7 @@ public class Administrator extends User{
     }
 
     @Override
-    public void onOKPressed(Profile newCity) {
-        profileAdapter.add(newCity);
-    }
+    public void onConfirmPressed(Profile newProfile) {
+        profileAdapter.add(newProfile);
     }
 }

@@ -23,7 +23,7 @@ public class EditProfileFragment extends DialogFragment {
     private Profile profile;
 
     public interface OnFragmentInteractionListener {
-        void onOKPressed(Profile newProfile);
+        void onConfirmPressed(Profile newProfile);
     }
 
     @Override
@@ -68,7 +68,6 @@ public class EditProfileFragment extends DialogFragment {
                         String newEmail = email.getText().toString();
                         String newPhoneNumber = phoneNumber.getText().toString();
 
-                        // consult Jakaria
                         if (Profile != null){
                             Profile.setName(newProfileName);
                             Profile.setPictureurl(newPicture);
