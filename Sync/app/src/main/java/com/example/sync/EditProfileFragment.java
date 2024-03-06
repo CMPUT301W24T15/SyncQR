@@ -68,13 +68,13 @@ public class EditProfileFragment extends DialogFragment {
                         String newEmail = email.getText().toString();
                         String newPhoneNumber = phoneNumber.getText().toString();
 
-                        if (Profile != null){
-                            Profile.setName(newProfileName);
-                            Profile.setPictureurl(newPicture);
-                            Profile.setEmail(newEmail);
-                            Profile.setPhoneNumber(newPhoneNumber);
+                        if (profile != null){
+                            profile.setName(newProfileName);
+                            profile.setPictureurl(newPicture);
+                            profile.setEmail(newEmail);
+                            profile.setPhoneNumber(newPhoneNumber);
                         } else{
-                            listener.onOKPressed(new Profile(newProfileName, newPicture, newEmail, newPhoneNumber));
+                            listener.onConfirmPressed(new Profile(newProfileName, newPicture, newEmail, newPhoneNumber));
                         }
 
                     }
