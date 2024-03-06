@@ -8,6 +8,7 @@
 
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 
     <application
         android:allowBackup="true"
@@ -19,6 +20,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Sync"
         tools:targetApi="31">
+        <receiver android:name=".MyNotificationReceiver"/>
         <activity
             android:name=".MainActivity"
             android:exported="true">
