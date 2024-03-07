@@ -101,5 +101,12 @@
                     android:layout_height="0dp"
                     android:layout_weight="1"
                     android:backgroundTint="#BAB7B7"
-                    android:text="View Event Details"
-                    />
+                    android:text="View Event Details" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
