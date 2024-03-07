@@ -6,17 +6,19 @@
     android:layout_height="wrap_content" >
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content">
 
         <androidx.appcompat.widget.Toolbar
-                android:id="@+id/create_event_title"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/white"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:title="Create Event Page" />
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            app:titleTextColor="@color/black"
+            app:navigationIcon="?attr/homeAsUpIndicator"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:title="Create Event Page" />
 
         <TextView
             android:id="@+id/hint1"
@@ -24,8 +26,9 @@
             android:layout_height="wrap_content"
             android:textSize="20sp"
             android:layout_marginLeft="20dp"
+            android:layout_marginTop="15dp"
             android:text="Event Name"
-            app:layout_constraintTop_toBottomOf="@id/create_event_title"
+            app:layout_constraintTop_toBottomOf="@id/toolbar"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toTopOf="@id/input1">
@@ -44,6 +47,7 @@
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="@drawable/border"
                 android:hint="Enter event name">
             </com.google.android.material.textfield.TextInputEditText>
         </com.google.android.material.textfield.TextInputLayout>
@@ -54,7 +58,7 @@
             android:layout_height="wrap_content"
             android:textSize="20sp"
             android:layout_marginLeft="20dp"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="30dp"
             android:text="Event Date"
             app:layout_constraintTop_toBottomOf="@id/input1"
             app:layout_constraintStart_toStartOf="parent"
@@ -75,6 +79,7 @@
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="@drawable/border"
                 android:hint="Enter event date">
             </com.google.android.material.textfield.TextInputEditText>
         </com.google.android.material.textfield.TextInputLayout>
@@ -85,7 +90,7 @@
             android:layout_height="wrap_content"
             android:textSize="20sp"
             android:layout_marginHorizontal="20dp"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="30dp"
             android:text="Event Location"
             app:layout_constraintTop_toBottomOf="@id/input2"
             app:layout_constraintStart_toStartOf="parent"
@@ -106,6 +111,7 @@
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="@drawable/border"
                 android:hint="Enter event location">
             </com.google.android.material.textfield.TextInputEditText>
         </com.google.android.material.textfield.TextInputLayout>
@@ -116,7 +122,7 @@
             android:layout_height="wrap_content"
             android:textSize="20sp"
             android:layout_marginLeft="20dp"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="30dp"
             android:text="Attendee Limitation (Optional)"
             app:layout_constraintTop_toBottomOf="@id/input3"
             app:layout_constraintStart_toStartOf="parent"
@@ -137,6 +143,7 @@
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="@drawable/border"
                 android:hint="Enter attendee number">
             </com.google.android.material.textfield.TextInputEditText>
         </com.google.android.material.textfield.TextInputLayout>
@@ -148,7 +155,7 @@
             android:layout_height="wrap_content"
             android:textSize="20sp"
             android:layout_marginLeft="20dp"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="30dp"
             android:text="Event description"
             app:layout_constraintTop_toBottomOf="@id/input4"
             app:layout_constraintStart_toStartOf="parent"
@@ -165,11 +172,16 @@
             app:layout_constraintTop_toBottomOf="@id/hint5"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent">
+
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Enter attendee number"
+                android:background="@drawable/border"
+                android:hint="Enter description"
+                android:textColorHint="@color/white"
+                android:gravity="top|start"
                 android:minHeight="120dp">
+
             </com.google.android.material.textfield.TextInputEditText>
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -179,7 +191,7 @@
             android:layout_height="wrap_content"
             android:textSize="20sp"
             android:layout_marginLeft="20dp"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="30dp"
             android:text="Upload Event Poster"
             app:layout_constraintTop_toBottomOf="@id/input5"
             app:layout_constraintStart_toStartOf="parent"
@@ -188,15 +200,50 @@
         </TextView>
         <ImageView
             android:id="@+id/image"
-            android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:src="@null"
+            android:layout_width="350dp"
+            android:layout_height="350dp"
+            android:layout_marginVertical="10dp"
+            android:background="@drawable/border"
+            android:src="@drawable/uploadimage"
+            android:padding="3dp"
+            android:scaleType="fitCenter"
             app:layout_constraintTop_toBottomOf="@id/hint6"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/upload_image_button">
+
+        </ImageView>
+        <Button
+            android:id="@+id/upload_image_button"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="19dp"
+            android:layout_marginTop="5dp"
+            android:text="Upload"
+            android:textStyle="bold"
+            android:textSize="17sp"
+            app:layout_constraintTop_toBottomOf="@id/image"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/generate_QRcode">
+
+        </Button>
+        <Button
+            android:id="@+id/generate_QRcode"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="19dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="70dp"
+            android:text="Generate QR code"
+            android:textStyle="bold"
+            android:textSize="17sp"
+            app:layout_constraintTop_toBottomOf="@id/upload_image_button"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent">
 
-        </ImageView>
+        </Button>
 
 
 
