@@ -1,51 +1,138 @@
 package com.example.sync;
 
-import android.media.Image;
+import com.google.firebase.firestore.FirebaseFirestore;
 
-import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Event {
 
-    private Image poster;
+    private String eventId;
+    private String eventName;
+    private Date eventDate;
+    private String eventLocation;
+    private int attendeeNumber;
+    private String eventDescription;
+    private String poster;
+    private String organizerId;
+    private Map<String, Boolean> attendees;
 
-    private Image QRCode;
+    private transient FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-    private ArrayList<Attendee> attendees;   // all the attendees of this event
-
-    public Event() {
-
-    }
-
-    public void CheckIn(Attendee attendee) {
-        /*
-        this is just pseudocode, can be changed according to the function of databse.
-        if (database doesn't have this attendee) {
-            this.attendees.add(attendee);
-            database.addEntry(attendee);
-        }
-        else {
-            database.countOfAttendee += 1;
-        }
-        */
-    }
-
-    public void setPoster(Image poster) {
+    public Event(String eventId, String eventName, Date eventDate, String eventLocation,
+                 int attendeeNumber, String eventDescription, String poster, String organizerId) {
+        this.eventId = eventId;
+        this.eventName = eventName;
+        this.eventDate = eventDate;
+        this.eventLocation = eventLocation;
+        this.attendeeNumber = attendeeNumber;
+        this.eventDescription = eventDescription;
         this.poster = poster;
+        this.organizerId = organizerId;
+        this.attendees = new HashMap<>();
     }
 
-    public Image getPoster() {
+    public void saveEventToDatabase() {
+        Map<String, Object> eventData = new HashMap<>();
+        eventData.put("eventName", eventName);
+        eventData.put("eventDate", eventDate);
+        eventData.put("eventLocation", eventLocation);
+        eventData.put("attendeeNumber", attendeeNumber);
+        eventData.put("eventDescription", eventDescription);
+        eventData.put("poster", poster);
+        eventData.put("organizerId", organizerId);
+        eventData.put("attendees", attendees);
+
+        db.collection("events").document(eventId).set(eventData)
+                // Upload successful
+                .addOnSuccessListener(aVoid -> {
+                })
+                // If error occurs during upload
+                .addOnFailureListener(e -> {
+                });
+    }
+
+    public void checkInAttendee(String attendeeId) {
+        attendees.put(attendeeId, true);
+        // Recalculate the number of attendees
+        attendeeNumber = attendees.size();
+        // Save the updated attendee list and count
+        saveEventToDatabase();
+    }
+
+
+    public String getEventId() {
+        return eventId;
+    }
+
+    public void setEventId(String eventId) {
+        this.eventId = eventId;
+    }
+
+    public String getEventName() {
+        return eventName;
+    }
+
+    public void setEventName(String eventName) {
+        this.eventName = eventName;
+    }
+
+    public Date getEventDate() {
+        return eventDate;
+    }
+
+    public void setEventDate(Date eventDate) {
+        this.eventDate = eventDate;
+    }
+
+    public String getEventLocation() {
+        return eventLocation;
+    }
+
+    public void setEventLocation(String eventLocation) {
+        this.eventLocation = eventLocation;
+    }
+
+    public int getAttendeeNumber() {
+        return attendeeNumber;
+    }
+
+    public void setAttendeeNumber(int attendeeNumber) {
+        this.attendeeNumber = attendeeNumber;
+    }
+
+    public String getEventDescription() {
+        return eventDescription;
+    }
+
+    public void setEventDescription(String eventDescription) {
+        this.eventDescription = eventDescription;
+    }
+
+    public String getPoster() {
         return poster;
     }
 
-    public Image getQRCode() {
-        return QRCode;
+    public void setPoster(String poster) {
+        this.poster = poster;
     }
 
-    public void setQRCode(Image QRCode) {
-        this.QRCode = QRCode;
+    public String getOrganizerId() {
+        return organizerId;
     }
 
-    public ArrayList<Attendee> getAttendees() {
+    public void setOrganizerId(String organizerId) {
+        this.organizerId = organizerId;
+    }
+
+    public Map<String, Boolean> getAttendees() {
         return attendees;
+    }
+
+    public void setAttendees(Map<String, Boolean> attendees) {
+        this.attendees = attendees;
+        // Update attendee count
+        this.attendeeNumber = attendees.size();
     }
 }
