@@ -21,31 +21,27 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="@string/homeBtn"
-                android:drawableTop="@drawable/ic_home" />
+                android:text="@string/homeBtn" />
 
             <Button
                 android:id="@+id/profile_button"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="@string/profileBtn"
-                android:drawableTop="@drawable/ic_profile" />
+                android:text="@string/profileBtn" />
 
             <Button
                 android:id="@+id/event_button"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="@string/eventBtn"
-                android:drawableTop="@drawable/ic_event" />
+                android:text="@string/eventBtn" />
 
             <Button
                 android:id="@+id/messages_button"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:drawableTop="@drawable/ic_messages"
                 android:text="@string/messagesBtn" />
 
         </LinearLayout>
