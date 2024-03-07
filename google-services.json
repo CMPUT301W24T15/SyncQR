@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "540299877004",
+    "project_id": "syncqr-c1173",
+    "storage_bucket": "syncqr-c1173.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:540299877004:android:b04bc9664ad1d739d6b9a9",
+        "android_client_info": {
+          "package_name": "com.cmput301.syncqr"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyACg-ey7L_pEw_3VecDANK14p1pdtM0ygo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
