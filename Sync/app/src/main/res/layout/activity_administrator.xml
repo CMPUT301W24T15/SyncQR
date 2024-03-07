@@ -6,19 +6,29 @@
     android:layout_height="match_parent">
 
     <EditText
-        android:id="@+id/administator_text"
+        android:id="@+id/administrator_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Search for Profile"
-        tools:layout_editor_absoluteX="132dp"
-        tools:layout_editor_absoluteY="670dp" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:layout_editor_absoluteY="3dp" />
 
     <Button
-        android:id="@+id/administator_button"
+        android:id="@+id/administrator_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="4dp"
         android:text="Confirm"
-        app:layout_constraintStart_toEndOf="@+id/administator_text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/administrator_text"
         tools:layout_editor_absoluteY="667dp" />
+
+    <ListView
+        android:id="@+id/profile_list"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/administrator_text" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -27,8 +27,9 @@
         android:layout_height="wrap_content"
         android:text="Notification"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toEndOf="@+id/browse_event_button"
-        tools:layout_editor_absoluteY="187dp" />
+        tools:layout_editor_absoluteY="407dp" />
 
     <Button
         android:id="@+id/browse_event_button"
