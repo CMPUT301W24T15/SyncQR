@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">Sync</string>
+    <string name="homeBtn">Home</string>
+    <string name="eventBtn">Event</string>
+    <string name="profileBtn">Profile</string>
+    <string name="messagesBtn">Messages</string>
 </resources>
