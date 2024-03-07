@@ -1,21 +1,21 @@
 {
   "project_info": {
-    "project_number": "540299877004",
-    "project_id": "syncqr-c1173",
-    "storage_bucket": "syncqr-c1173.appspot.com"
+    "project_number": "735596601729",
+    "project_id": "syncqr-fc86d",
+    "storage_bucket": "syncqr-fc86d.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:540299877004:android:b04bc9664ad1d739d6b9a9",
+        "mobilesdk_app_id": "1:735596601729:android:57af8dbbac7f15cb67c880",
         "android_client_info": {
-          "package_name": "com.cmput301.syncqr"
+          "package_name": "com.example.sync"
         }
       },
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyACg-ey7L_pEw_3VecDANK14p1pdtM0ygo"
+          "current_key": "AIzaSyD33hIw562z2VODr7JzNSQ5UGHPWSLxFSs"
         }
       ],
       "services": {
