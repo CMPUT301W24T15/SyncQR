@@ -1,32 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <Button
+        android:id="@+id/home_Button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Home"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:layout_editor_absoluteY="187dp" />
+
+    <Button
         android:id="@+id/edit_File_Button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Edit File"
-        tools:layout_editor_absoluteX="96dp"
-        tools:layout_editor_absoluteY="88dp" />
+        android:text="Profile"
+        app:layout_constraintStart_toEndOf="@+id/home_Button"
+        tools:layout_editor_absoluteY="187dp" />
 
     <Button
         android:id="@+id/set_Notification_Button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Set Notification"
-        tools:layout_editor_absoluteX="108dp"
-        tools:layout_editor_absoluteY="165dp" />
+        android:text="Notification"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/browse_event_button"
+        tools:layout_editor_absoluteY="187dp" />
 
     <Button
         android:id="@+id/browse_event_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Browse Events"
-        tools:layout_editor_absoluteX="108dp"
-        tools:layout_editor_absoluteY="247dp" />
+        android:text="Events"
+        app:layout_constraintStart_toEndOf="@+id/edit_File_Button"
+        tools:layout_editor_absoluteY="187dp" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
