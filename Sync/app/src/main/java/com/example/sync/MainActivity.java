@@ -2,8 +2,12 @@ package com.example.sync;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.sync.organizer.OrganizerDashboard;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -12,9 +16,17 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.home_page);
 
-        // Button organizer = findViewById(R.id.get_into_organizer_Button);
+        Button organizerButton = findViewById(R.id.get_into_organizer_Button);
+        organizerButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Define the intent to start the new activity
+                Intent intent = new Intent(MainActivity.this, OrganizerDashboard.class);
 
-//        Intent intent = new Intent(MainActivity.this, Administrator.class);
-//        startActivity(intent);
+                // Start the new activity
+                startActivity(intent);
+            }
+        });
+
     }
 }

@@ -31,8 +31,11 @@
             </intent-filter>
         </activity>
 
+        <activity android:name=".organizer.OrganizerDashboard" />
 
-        <activity android:name=".organizer.OrganizerDashboard"></activity>
+        <activity android:name=".Administrator" />
+
+        <activity android:name=".Attendee" />
         <!--suppress AndroidDomInspection -->
         <service
             android:name="com.google.android.gms.metadata.ModuleDependencies"

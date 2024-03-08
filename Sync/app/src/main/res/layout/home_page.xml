@@ -102,6 +102,14 @@
                     android:backgroundTint="#BAB7B7"
                     android:text="View Event Details" />
 
+                <Button
+                    android:id="@+id/get_into_organizer_Button"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:backgroundTint="#BAB7B7"
+                    android:text="View Event Details" />
+
             </LinearLayout>
 
         </LinearLayout>
