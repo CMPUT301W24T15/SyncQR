@@ -1,7 +1,5 @@
 package com.example.sync;
 
-import static android.app.PendingIntent.getActivity;
-
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
