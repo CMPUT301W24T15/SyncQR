@@ -10,10 +10,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.sync.organizer.OrganizerDashboard;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.Date;
-
 public class MainActivity extends AppCompatActivity {
 
     @Override
@@ -47,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // for now, linked to attendee
-                Intent intent = new Intent(MainActivity.this, Attendee.class); // Assuming you have a ProfileActivity
+                Intent intent = new Intent(MainActivity.this, Attendee.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                 startActivity(intent);
             }
