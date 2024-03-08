@@ -59,10 +59,10 @@ public class EventDetailsActivity extends AppCompatActivity {
 
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
-            String eventID = extras.getString("ID");
+            String eventID = extras.getString("eventID");
 
             FirebaseFirestore db = FirebaseFirestore.getInstance();
-            DocumentReference eventRef = db.collection("cities").document(eventID);
+            DocumentReference eventRef = db.collection("events").document(eventID);
 
 //            final Map<String, Object> data;
             eventRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
