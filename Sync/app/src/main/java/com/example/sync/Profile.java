@@ -19,6 +19,10 @@ public class Profile extends AppCompatActivity {
     private EditText userNameInput, userHomepageInput, userContactInput;
     private DatabaseReference databaseReference;
 
+    public Profile(DatabaseReference databaseReference) {
+        this.databaseReference = databaseReference;
+    }
+
     public static ArrayList<Profile> find(String profileNumber) {
         return null;
     }
@@ -55,7 +59,7 @@ public class Profile extends AppCompatActivity {
         saveButton.setOnClickListener(view -> saveProfileData());
         cancelButton.setOnClickListener(view -> clearInputs());
     }
-    private void saveProfileData() {
+    void saveProfileData() {
         String name = userNameInput.getText().toString().trim();
         String homepage = userHomepageInput.getText().toString().trim();
         String contact = userContactInput.getText().toString().trim();
