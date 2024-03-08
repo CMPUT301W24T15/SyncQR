@@ -14,7 +14,7 @@ public class MainActivity extends AppCompatActivity {
 
         // Button organizer = findViewById(R.id.get_into_organizer_Button);
 
-        Intent intent = new Intent(MainActivity.this, Administrator.class);
-        startActivity(intent);
+//        Intent intent = new Intent(MainActivity.this, Administrator.class);
+//        startActivity(intent);
     }
 }
