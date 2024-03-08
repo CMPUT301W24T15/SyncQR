@@ -15,7 +15,7 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-public class ProfileUnitTest {
+public class SyncUnitTest {
     @Mock
     private EditText userNameInput;
 
