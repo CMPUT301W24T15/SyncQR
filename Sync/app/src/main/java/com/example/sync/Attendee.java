@@ -26,17 +26,17 @@ public class Attendee extends User {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_attendee); // Replace your_layout_file with the actual file name
 
-        Button homeButton = findViewById(R.id.home_Button);
-        homeButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                // Start HomeActivity when the button is clicked
-                Intent intent = new Intent(CurrentActivity.this, Attendee.class);
-                // Consider clearing the task or setting flags if needed, to prevent back stack accumulation
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-                startActivity(intent);
-            }
-        });
+//        Button homeButton = findViewById(R.id.home_Button);
+//        homeButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                // Start HomeActivity when the button is clicked
+//                Intent intent = new Intent(CurrentActivity.this, Attendee.class);
+//                // Consider clearing the task or setting flags if needed, to prevent back stack accumulation
+//                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+//                startActivity(intent);
+//            }
+//        });
 
         Button setNotificationButton = findViewById(R.id.set_Notification_Button);
         setNotificationButton.setOnClickListener(new View.OnClickListener() {
