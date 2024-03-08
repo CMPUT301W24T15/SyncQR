@@ -2,6 +2,7 @@ package com.example.sync;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 
@@ -26,6 +27,8 @@ public class Profile extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile); // Ensure this matches your XML file name
+
+        Log.d("kevinTag", "Created Profile Instance");
 
         // Initialize Firebase Database
         databaseReference = FirebaseDatabase.getInstance().getReference("Profiles");

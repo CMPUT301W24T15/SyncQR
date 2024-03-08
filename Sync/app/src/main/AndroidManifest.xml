@@ -53,6 +53,7 @@
         </service>
         <activity android:name=".EventDetailsActivity"/>
 
+        <activity android:name=".EventListActivity"/>
 
     </application>
 
