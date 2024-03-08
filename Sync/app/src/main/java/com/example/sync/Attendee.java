@@ -9,14 +9,14 @@ import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.TextView;
 
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.util.ArrayList;
-
-
+/**
+ * This is a class that keeps the attendee's activity
+ */
 public class Attendee extends User {
     private ArrayList<Event> events;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -24,7 +24,7 @@ public class Attendee extends User {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_attendee); // Replace your_layout_file with the actual file name
+        setContentView(R.layout.activity_attendee);
 
 //        Button homeButton = findViewById(R.id.home_Button);
 //        homeButton.setOnClickListener(new View.OnClickListener() {
@@ -38,7 +38,7 @@ public class Attendee extends User {
 //            }
 //        });
 
-        Button setNotificationButton = findViewById(R.id.set_Notification_Button);
+        Button setNotificationButton = findViewById(R.id.messages_button);
         setNotificationButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -46,7 +46,7 @@ public class Attendee extends User {
             }
         });
 
-        Button browseEventButton = findViewById(R.id.browse_event_button);
+        Button browseEventButton = findViewById(R.id.event_button);
         browseEventButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -54,7 +54,9 @@ public class Attendee extends User {
             }
         });
     }
-
+    /**
+     * This method set notification and sent it to attendee 1 hour before
+     */
     public void setNotification(){
         // Create the NotificationChannel
         NotificationManager notificationManager = getSystemService(NotificationManager.class);
@@ -74,23 +76,24 @@ public class Attendee extends User {
         long notificationTime = eventTimeInMillis - 3600000; // 1 hour before the event
         alarmManager.set(AlarmManager.RTC_WAKEUP, notificationTime, pendingIntent);
     }
+    /**
+     * This method get a few events from firebase and display them
+     */
     public void browseEvent(){
         db.collection("events").get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 StringBuilder descriptions = new StringBuilder();
                 for (QueryDocumentSnapshot document : task.getResult()) {
                     Event event = document.toObject(Event.class);
-                    descriptions.append(event.getEventDescription()).append("\n\n");
+                    descriptions.append(event.getEventName()).append("\n\n");
                 }
-                updateUI(descriptions.toString()); // Implement this method to update your UI
+
+                // Start EventDetailActivity and pass event details
+                Intent intent = new Intent(Attendee.this, EventDetailActivity.class);
+                intent.putExtra("eventDetails", descriptions.toString());
+                startActivity(intent);
             }
         });
-    }
-
-    private void updateUI(String descriptions) {
-        // Assuming you have a TextView with the id 'textViewEventDescriptions'
-        TextView textView = findViewById(R.id.textViewEventDescriptions);
-        textView.setText(descriptions);
     }
 
     @Override

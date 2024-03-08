@@ -2,16 +2,18 @@ package com.example.sync;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
-
+/**
+ * This is a class that contains the methods of profile
+ */
 public class Profile extends AppCompatActivity {
 
     private EditText userNameInput, userHomepageInput, userContactInput;
@@ -63,27 +65,37 @@ public class Profile extends AppCompatActivity {
         saveButton.setOnClickListener(view -> saveProfileData());
         cancelButton.setOnClickListener(view -> clearInputs());
     }
-
+    /**
+     * This is a method that goes to attendee page
+     */
     private void navigateToAttendee() {
         Intent intent = new Intent(this, Attendee.class); // Updated to correct class
         startActivity(intent);
     }
-
+    /**
+     * This is a method that goes to events page
+     */
     private void navigateToEvent() {
         Intent intent = new Intent(this, Event.class); // Updated to correct class
         startActivity(intent);
     }
-
+    /**
+     * This is a method that goes to notification page
+     */
     private void navigateToMyNotificationReceiver() {
         Intent intent = new Intent(this, MyNotificationReceiver.class); // Assuming this is an activity you intend to navigate to
         startActivity(intent);
     }
-
+    /**
+     * This is a method that goes to QRCode scan page
+     */
     private void navigateToQRCodeScanActivity() {
         Intent intent = new Intent(this, QRCodeScanActivity.class); // Updated to correct class
         startActivity(intent);
     }
-
+    /**
+     * This is a method that save the profile data
+     */
     private void saveProfileData() {
         String name = userNameInput.getText().toString().trim();
         String homepage = userHomepageInput.getText().toString().trim();
@@ -94,12 +106,17 @@ public class Profile extends AppCompatActivity {
         Profile profile = new Profile(name, "", homepage, contact); // Updated to use correct parameters
         databaseReference.child(userId).setValue(profile);
     }
-
+    /**
+     * This is a method that clear the profile data
+     */
     private void clearInputs() {
         userNameInput.setText("");
         userHomepageInput.setText("");
         userContactInput.setText("");
     }
+    /**
+     * These are methods of getters and setters
+     */
     public String getName() {
         return name;
     }

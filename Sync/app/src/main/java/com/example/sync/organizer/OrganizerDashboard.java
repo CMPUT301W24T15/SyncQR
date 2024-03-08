@@ -8,7 +8,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.example.sync.R;
-
+/**
+ * This a class that shows the dashboard of organizer
+ */
 public class OrganizerDashboard extends AppCompatActivity implements CreateEventFrag.CreateEventFragListener {
     private Organizer organizer;
 
@@ -44,7 +46,9 @@ public class OrganizerDashboard extends AppCompatActivity implements CreateEvent
         });
 
     }
-
+    /**
+     * This method allow organizer to shut down the notification
+     */
     @Override
     public void notifyShutDown(CreateEventFrag frag) {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();

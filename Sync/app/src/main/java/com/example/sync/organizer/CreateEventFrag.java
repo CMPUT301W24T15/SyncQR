@@ -19,14 +19,14 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 
 import com.example.sync.R;
 
 import java.io.FileNotFoundException;
 import java.io.InputStream;
-
+/**
+ * This is a class that create new event fragment
+ */
 public class CreateEventFrag extends Fragment {
     ActivityResultLauncher<PickVisualMediaRequest> pickMedia;
     Button upload;
@@ -34,13 +34,16 @@ public class CreateEventFrag extends Fragment {
     Toolbar toolbar;
     Uri imageuri;
     CreateEventFragListener listener;
-
+    /**
+     * This return the new fragment
+     * @return
+     * Return the new fragment
+     */
     static CreateEventFrag newInstance() {
         // create the fragment instance
         CreateEventFrag fragment = new CreateEventFrag();
         return fragment;
     }
-
     interface CreateEventFragListener {
         public void notifyShutDown(CreateEventFrag frag);
     }

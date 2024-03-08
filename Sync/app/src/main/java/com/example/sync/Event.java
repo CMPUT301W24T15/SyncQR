@@ -5,7 +5,9 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-
+/**
+ * This is a class that keeps the methods of event
+ */
 public class Event {
 
     private String eventId;
@@ -33,6 +35,9 @@ public class Event {
         this.attendees = new HashMap<>();
     }
 
+    /**
+     * This is a method that save the event information into database
+     */
     public void saveEventToDatabase() {
         Map<String, Object> eventData = new HashMap<>();
         eventData.put("eventName", eventName);
@@ -52,7 +57,9 @@ public class Event {
                 .addOnFailureListener(e -> {
                 });
     }
-
+    /**
+     * This is a class that keeps track of check in attendance
+     */
     public void checkInAttendee(String attendeeId) {
         attendees.put(attendeeId, true);
         // Recalculate the number of attendees
@@ -61,7 +68,9 @@ public class Event {
         saveEventToDatabase();
     }
 
-
+    /**
+     * The following methods are the setters and getters
+     */
     public String getEventId() {
         return eventId;
     }

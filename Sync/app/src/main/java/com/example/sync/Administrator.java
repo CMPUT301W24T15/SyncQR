@@ -9,7 +9,9 @@ import android.widget.EditText;
 import android.widget.ListView;
 
 import java.util.ArrayList;
-
+/**
+ * This is a class that keeps the administrator's activity
+ */
 public class Administrator extends User {
     private ArrayList<Profile> profiles;
     private ListView profileList;
@@ -38,13 +40,18 @@ public class Administrator extends User {
         });
     }
 
+    /**
+     * This method search for profile and add the searched profile into profiles
+     */
     private void searchProfile(String profileNumber){
         ArrayList<Profile> find_profiles = Profile.find(profileNumber);
         profiles.addAll(find_profiles);
     }
-    public void editProfile(){
 
-        Button editProfileButton = findViewById(R.id.edit_File_Button);
+    /**
+     * This method edit the existing profile through clicking it
+     */
+    public void editProfile(){
         profileList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {

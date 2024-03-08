@@ -12,7 +12,9 @@ import android.widget.EditText;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
-
+/**
+ * This is a class that shows edit profile fragment
+ */
 public class EditProfileFragment extends DialogFragment {
 
     private EditText name;

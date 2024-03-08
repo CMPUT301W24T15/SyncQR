@@ -11,16 +11,18 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import java.util.ArrayList;
-
+/**
+ * This is a class that modify the ArrayAdapter into profile adaptor
+ */
 public class ProfileAdapter extends ArrayAdapter<Profile> {
 
     private ArrayList<Profile> profiles;
     private Context context;
 
     public ProfileAdapter(View.OnClickListener context, ArrayList<Profile> profiles){
-        super(context, 0, profiles);
+        super((Context) context, 0, profiles);
         this.profiles = profiles;
-        this.context = context;
+        this.context = (Context) context;
     }
 
     @NonNull
@@ -34,10 +36,10 @@ public class ProfileAdapter extends ArrayAdapter<Profile> {
 
         Profile profile = profiles.get(position);
 
-        TextView name = view.findViewById(R.id.profile_name);
-        TextView image = view.findViewById(R.id.profile_image);
-        TextView email = view.findViewById(R.id.profile_email);
-        TextView phoneNumber = view.findViewById(R.id.profile_phone);
+        TextView name = view.findViewById(R.id.name_text);
+        TextView image = view.findViewById(R.id.picture_text);
+        TextView email = view.findViewById(R.id.email_text);
+        TextView phoneNumber = view.findViewById(R.id.phoneNumber_text);
 
         name.setText(profile.getName());
         image.setText(profile.getProfilePictureUrl());

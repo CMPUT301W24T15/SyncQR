@@ -7,7 +7,9 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
-
+/**
+ * This is a class that can scan QR code
+ */
 public class QRCodeScanActivity extends AppCompatActivity {
 
     @Override

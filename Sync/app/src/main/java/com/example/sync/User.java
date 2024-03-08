@@ -3,7 +3,9 @@ package com.example.sync;
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.ArrayList;
-
+/**
+ * This is a class that contains basic method of users
+ */
 public abstract class User extends AppCompatActivity implements EditProfileFragment.OnFragmentInteractionListener{
     private String username;
     private String password;
@@ -13,7 +15,9 @@ public abstract class User extends AppCompatActivity implements EditProfileFragm
     public User() {
         this.username = "Visitor";
     }
-
+    /**
+     * This is a method to scan QR code
+     */
     public void scanQRCode(){
         new QRCodeScanActivity();
     }
