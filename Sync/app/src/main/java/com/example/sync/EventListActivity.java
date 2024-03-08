@@ -55,7 +55,10 @@ public class EventListActivity extends AppCompatActivity {
 
         String TAG = "kevinTag";
 
-        dataList.add(new Event("Test Meeting 1", new Date(1230123), "Edmonton", "Kevin", "Enjoy your sunny day", "sample poster", 10000009));
+        Event sampleEvent = new Event("Test Meeting 1", new Date(1230123), "Edmonton", "Kevin", "Enjoy your sunny day", "sample poster", 10000009);
+        sampleEvent.setEventId(0);
+
+        dataList.add(sampleEvent);
 
 //        db.collection("events")
 //                .get()
@@ -130,12 +133,12 @@ public class EventListActivity extends AppCompatActivity {
         eventList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Event event = dataList.get(position);
-                Intent intent = new Intent(EventListActivity.this, EventDetailsActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-                Integer ID = event.getEventId();
-                intent.putExtra("eventID", ID.toString());
-                startActivity(intent);
+//                Event event = dataList.get(position);
+//                Intent intent = new Intent(EventListActivity.this, EventDetailsActivity.class);
+//                intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+//                Integer ID = event.getEventId();
+//                intent.putExtra("eventID", ID.toString());
+//                startActivity(intent);
             }
         });
 
