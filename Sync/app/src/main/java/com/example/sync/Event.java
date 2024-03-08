@@ -1,43 +1,47 @@
 package com.example.sync;
 
+import com.example.sync.organizer.EventDetailFrag;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 /**
  * This is a class that keeps the methods of event
  */
-public class Event {
+public class Event implements Serializable {
 
-    private String eventId;
+    private int eventId;
     private String eventName;
     private Date eventDate;
     private String eventLocation;
     private int attendeeNumber;
+    private String organizerName;
     private String eventDescription;
     private String poster;
-    private String organizerId;
+    private int organizerId;
     private Map<String, Boolean> attendees;
 
     private transient FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-    public Event(String eventId, String eventName, Date eventDate, String eventLocation,
-                 int attendeeNumber, String eventDescription, String poster, String organizerId) {
-        this.eventId = eventId;
+    public Event(String eventName, Date eventDate, String eventLocation, String organizerName,
+                 String eventDescription, String poster, int organizerId) {
         this.eventName = eventName;
         this.eventDate = eventDate;
         this.eventLocation = eventLocation;
-        this.attendeeNumber = attendeeNumber;
+        this.attendeeNumber = 0;
         this.eventDescription = eventDescription;
         this.poster = poster;
         this.organizerId = organizerId;
-        this.attendees = new HashMap<>();
+        this.organizerName = organizerName;
     }
 
     /**
      * This is a method that save the event information into database
      */
+
+    // has not modified, it is inconsistent with the constructor
     public void saveEventToDatabase() {
         Map<String, Object> eventData = new HashMap<>();
         eventData.put("eventName", eventName);
@@ -49,7 +53,7 @@ public class Event {
         eventData.put("organizerId", organizerId);
         eventData.put("attendees", attendees);
 
-        db.collection("events").document(eventId).set(eventData)
+        db.collection("events").document(String.valueOf(eventId)).set(eventData)
                 // Upload successful
                 .addOnSuccessListener(aVoid -> {
                 })
@@ -71,11 +75,11 @@ public class Event {
     /**
      * The following methods are the setters and getters
      */
-    public String getEventId() {
+    public int getEventId() {
         return eventId;
     }
 
-    public void setEventId(String eventId) {
+    public void setEventId(int eventId) {
         this.eventId = eventId;
     }
 
@@ -127,11 +131,11 @@ public class Event {
         this.poster = poster;
     }
 
-    public String getOrganizerId() {
+    public int getOrganizerId() {
         return organizerId;
     }
 
-    public void setOrganizerId(String organizerId) {
+    public void setOrganizerId(int organizerId) {
         this.organizerId = organizerId;
     }
 
@@ -144,4 +148,13 @@ public class Event {
         // Update attendee count
         this.attendeeNumber = attendees.size();
     }
+
+    public String getOrganizerName() {
+        return organizerName;
+    }
+
+    public void setOrganizerName(String organizerName) {
+        this.organizerName = organizerName;
+    }
+
 }
