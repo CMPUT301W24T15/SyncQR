@@ -55,14 +55,14 @@ public class Administrator extends User {
         profileList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                new EditProfileFragment((Profile)profileList.getItemAtPosition(i)).show(getSupportFragmentManager(),"Add/Edit_Profile");
+                new EditProfileFragment((ProfileP)profileList.getItemAtPosition(i)).show(getSupportFragmentManager(),"Add/Edit_Profile");
 
             }
         });
     }
 
     @Override
-    public void onConfirmPressed(Profile newProfile) {
+    public void onConfirmPressed(ProfileP newProfile) {
         ;
     }
 }

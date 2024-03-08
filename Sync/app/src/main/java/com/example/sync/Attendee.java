@@ -97,7 +97,7 @@ public class Attendee extends User {
     }
 
     @Override
-    public void onConfirmPressed(Profile newProfile) {
+    public void onConfirmPressed(ProfileP newProfile) {
         ;
     }
 }

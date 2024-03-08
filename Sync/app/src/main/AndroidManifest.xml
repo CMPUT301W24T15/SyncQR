@@ -36,6 +36,8 @@
         <activity android:name=".Administrator" />
 
         <activity android:name=".Attendee" />
+        <activity android:name=".Profile"/>
+        <activity android:name=".QRCodeScanActivity"/>
         <!--suppress AndroidDomInspection -->
         <service
             android:name="com.google.android.gms.metadata.ModuleDependencies"
@@ -50,6 +52,7 @@
                 android:value="" />
         </service>
         <activity android:name=".EventDetailsActivity"/>
+
 
     </application>
 

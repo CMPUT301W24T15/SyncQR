@@ -1,6 +1,7 @@
 package com.example.sync.organizer;
 
 import com.example.sync.Profile;
+import com.example.sync.ProfileP;
 import com.example.sync.User;
 /**
  * This a class contains the method of organizer use
@@ -12,13 +13,13 @@ public class Organizer extends User {
     }
 
     @Override
-    public void onConfirmPressed(Profile newProfile) {
+    public void onPointerCaptureChanged(boolean hasCapture) {
+        super.onPointerCaptureChanged(hasCapture);
         int i = 0;
     }
 
     @Override
-    public void onPointerCaptureChanged(boolean hasCapture) {
-        super.onPointerCaptureChanged(hasCapture);
-        int i = 0;
+    public void onConfirmPressed(ProfileP newProfileP) {
+        int i= 0;
     }
 }

@@ -12,8 +12,9 @@ import android.widget.EditText;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
+
 /**
- * This is a class that shows edit profile fragment
+ * This class shows an edit profile fragment
  */
 public class EditProfileFragment extends DialogFragment {
 
@@ -22,20 +23,20 @@ public class EditProfileFragment extends DialogFragment {
     private EditText email;
     private EditText phoneNumber;
     private OnFragmentInteractionListener listener;
-    private Profile profile;
+    private ProfileP profileP; // Use ProfileP instead of Profile
 
+    // Update the interface to use ProfileP
     public interface OnFragmentInteractionListener {
-        void onConfirmPressed(Profile newProfile);
+        void onConfirmPressed(ProfileP newProfileP);
     }
 
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        if(context instanceof OnFragmentInteractionListener) {
+        if (context instanceof OnFragmentInteractionListener) {
             listener = (OnFragmentInteractionListener) context;
-        }
-        else {
-            throw new RuntimeException(context.toString()+"exception");
+        } else {
+            throw new RuntimeException(context.toString() + " must implement OnFragmentInteractionListener");
         }
     }
 
@@ -49,18 +50,19 @@ public class EditProfileFragment extends DialogFragment {
         email = view.findViewById(R.id.email_editText);
         phoneNumber = view.findViewById(R.id.phone_number_editText);
 
-        if(profile != null){
-            name.setText(profile.getName());
-            pictureURL.setText(profile.getProfilePictureUrl());
-            email.setText(profile.getEmail());
-            phoneNumber.setText(profile.getPhoneNumber());
+        // Initialize fields if editing an existing profile
+        if (profileP != null) {
+            name.setText(profileP.getName());
+            pictureURL.setText(profileP.getProfilePictureUrl());
+            email.setText(profileP.getEmail());
+            phoneNumber.setText(profileP.getPhoneNumber());
         }
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
 
         return builder
                 .setView(view)
-                .setTitle("Add/Edit new Profile")
+                .setTitle("Edit Profile")
                 .setNegativeButton("Cancel", null)
                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override
@@ -69,26 +71,22 @@ public class EditProfileFragment extends DialogFragment {
                         String newPicture = pictureURL.getText().toString();
                         String newEmail = email.getText().toString();
                         String newPhoneNumber = phoneNumber.getText().toString();
-                        if(profile != null){
-                            name.setText(newProfileName);
-                            pictureURL.setText(newPicture);
-                            email.setText(newEmail);
-                            phoneNumber.setText(newPhoneNumber);
-                        } else {
-                            listener.onConfirmPressed(new Profile(newProfileName, newPicture, newEmail, newPhoneNumber));
-                        }
 
-
+                        // Create or update ProfileP instance
+                        ProfileP updatedProfileP = new ProfileP(newProfileName, newPicture, newEmail, newPhoneNumber);
+                        listener.onConfirmPressed(updatedProfileP);
                     }
                 }).create();
     }
 
-    public EditProfileFragment(Profile aProfile) {
+    // Constructor for initializing with an existing ProfileP (for editing)
+    public EditProfileFragment(ProfileP profileP) {
         super();
-        this.profile = aProfile;
-
+        this.profileP = profileP;
     }
-    public EditProfileFragment(){
+
+    // Default constructor
+    public EditProfileFragment() {
         super();
     }
 }

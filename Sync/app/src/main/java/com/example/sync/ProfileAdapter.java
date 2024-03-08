@@ -41,10 +41,10 @@ public class ProfileAdapter extends ArrayAdapter<Profile> {
         TextView email = view.findViewById(R.id.email_text);
         TextView phoneNumber = view.findViewById(R.id.phoneNumber_text);
 
-        name.setText(profile.getName());
-        image.setText(profile.getProfilePictureUrl());
-        email.setText(profile.getEmail());
-        phoneNumber.setText(profile.getPhoneNumber());
+        name.setText(ProfileP.getName());
+        image.setText(ProfileP.getProfilePictureUrl());
+        email.setText(ProfileP.getEmail());
+        phoneNumber.setText(ProfileP.getPhoneNumber());
 
         return view;
     }

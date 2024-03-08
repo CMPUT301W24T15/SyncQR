@@ -15,21 +15,8 @@ import java.util.ArrayList;
  * This is a class that contains the methods of profile
  */
 public class Profile extends AppCompatActivity {
-
     private EditText userNameInput, userHomepageInput, userContactInput;
     private DatabaseReference databaseReference;
-    private String name;
-    private String profilePictureUrl; // This could represent homepage in your context
-    private String email; // This could be unused or repurposed in your context
-    private String phoneNumber; // This could represent contact in your context
-
-    // Constructor matching your usage
-    public Profile(String name, String profilePictureUrl, String email, String phoneNumber) {
-        this.name = name;
-        this.profilePictureUrl = profilePictureUrl;
-        this.email = email;
-        this.phoneNumber = phoneNumber;
-    }
 
     public static ArrayList<Profile> find(String profileNumber) {
         return null;
@@ -65,6 +52,15 @@ public class Profile extends AppCompatActivity {
         saveButton.setOnClickListener(view -> saveProfileData());
         cancelButton.setOnClickListener(view -> clearInputs());
     }
+    private void saveProfileData() {
+        String name = userNameInput.getText().toString().trim();
+        String homepage = userHomepageInput.getText().toString().trim();
+        String contact = userContactInput.getText().toString().trim();
+
+        String userId = databaseReference.push().getKey();
+        ProfileP profile = new ProfileP(name, "", homepage, contact);
+        databaseReference.child(userId).setValue(profile);
+    }
     /**
      * This is a method that goes to attendee page
      */
@@ -96,19 +92,17 @@ public class Profile extends AppCompatActivity {
     /**
      * This is a method that save the profile data
      */
-    private void saveProfileData() {
-        String name = userNameInput.getText().toString().trim();
-        String homepage = userHomepageInput.getText().toString().trim();
-        String contact = userContactInput.getText().toString().trim();
-
-        // Assuming you have a Profile object
-        String userId = databaseReference.push().getKey(); // Generate a unique ID for the user
-        Profile profile = new Profile(name, "", homepage, contact); // Updated to use correct parameters
-        databaseReference.child(userId).setValue(profile);
-    }
-    /**
-     * This is a method that clear the profile data
-     */
+//    private void saveProfileData() {
+//        String name = userNameInput.getText().toString().trim();
+//        String homepage = userHomepageInput.getText().toString().trim();
+//        String contact = userContactInput.getText().toString().trim();
+//
+//        // Assuming you have a Profile object
+//        String userId = databaseReference.push().getKey(); // Generate a unique ID for the user
+//        ProfileP profile = new Profile(name, "", homepage, contact); // Updated to use correct parameters
+//        databaseReference.child(userId).setValue(profile);
+//    }
+//    /**/
     private void clearInputs() {
         userNameInput.setText("");
         userHomepageInput.setText("");
@@ -117,36 +111,6 @@ public class Profile extends AppCompatActivity {
     /**
      * These are methods of getters and setters
      */
-    public String getName() {
-        return name;
-    }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getProfilePictureUrl() {
-        return profilePictureUrl;
-    }
-
-    public void setProfilePictureUrl(String profilePictureUrl) {
-        this.profilePictureUrl = profilePictureUrl;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getPhoneNumber() {
-        return phoneNumber;
-    }
-
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
-    }
 }
 
