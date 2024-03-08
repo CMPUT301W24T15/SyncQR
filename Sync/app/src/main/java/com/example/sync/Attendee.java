@@ -17,7 +17,7 @@ import java.util.ArrayList;
 /**
  * This is a class that keeps the attendee's activity
  */
-public class Attendee extends User {
+public class Attendee extends User implements EditProfileFragment.OnFragmentInteractionListener{
     private ArrayList<Event> events;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
 
@@ -26,17 +26,17 @@ public class Attendee extends User {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_attendee);
 
-//        Button homeButton = findViewById(R.id.home_Button);
-//        homeButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                // Start HomeActivity when the button is clicked
-//                Intent intent = new Intent(CurrentActivity.this, Attendee.class);
-//                // Consider clearing the task or setting flags if needed, to prevent back stack accumulation
-//                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-//                startActivity(intent);
-//            }
-//        });
+        Button homeButton = findViewById(R.id.home_button);
+    homeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // Start HomeActivity when the button is clicked
+                Intent intent = new Intent(Attendee.this, MainActivity.class);
+                // Consider clearing the task or setting flags if needed, to prevent back stack accumulation
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                startActivity(intent);
+            }
+        });
 
         Button profileButton = findViewById(R.id.profile_button);
         profileButton.setOnClickListener(new View.OnClickListener() {

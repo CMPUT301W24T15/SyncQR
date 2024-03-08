@@ -61,8 +61,4 @@ public class Administrator extends User {
         });
     }
 
-    @Override
-    public void onConfirmPressed(ProfileP newProfile) {
-        ;
-    }
 }

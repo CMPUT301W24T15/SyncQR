@@ -1,7 +1,5 @@
 package com.example.sync.organizer;
 
-import com.example.sync.Profile;
-import com.example.sync.ProfileP;
 import com.example.sync.User;
 /**
  * This a class contains the method of organizer use
@@ -18,8 +16,4 @@ public class Organizer extends User {
         int i = 0;
     }
 
-    @Override
-    public void onConfirmPressed(ProfileP newProfileP) {
-        int i= 0;
-    }
 }

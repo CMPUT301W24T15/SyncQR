@@ -6,7 +6,7 @@ import java.util.ArrayList;
 /**
  * This is a class that contains basic method of users
  */
-public abstract class User extends AppCompatActivity implements EditProfileFragment.OnFragmentInteractionListener{
+public abstract class User extends AppCompatActivity{
     private String username;
     private String password;
     private Profile profile;
