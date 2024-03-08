@@ -15,6 +15,11 @@ public class EventDetailsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_event_detail);
 
+        Button homeButton = findViewById(R.id.home_button);
+        Button profileButton = findViewById(R.id.profile_button);
+        Button eventButton = findViewById(R.id.event_button);
+        Button messagesButton = findViewById(R.id.messages_button);
+
 //        TextView cityName = findViewById(R.id.show_city);
 
         Bundle extras = getIntent().getExtras();

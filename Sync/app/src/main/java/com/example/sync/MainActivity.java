@@ -16,21 +16,20 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.home_page);
 
+        Button homeButton = findViewById(R.id.home_button);
         Button profileButton = findViewById(R.id.profile_button);
         Button eventButton = findViewById(R.id.event_button);
+        Button messagesButton = findViewById(R.id.messages_button);
         Button checkInButton = findViewById(R.id.check_in_button);
-
         Button organizerButton = findViewById(R.id.get_into_organizer_Button);
-        organizerButton.setOnClickListener(new View.OnClickListener() {
+
+        homeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Define the intent to start the new activity
-                Intent intent = new Intent(MainActivity.this, OrganizerDashboard.class);
-
-                // Start the new activity
-                startActivity(intent);
+                // Nothing to add, since it stays in homepage
             }
         });
+
         profileButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -47,10 +46,30 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        messagesButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // not implemented yet
+//                Intent intent = new Intent(MainActivity.this, MessageActivity.class);
+//                startActivity(intent);
+            }
+        });
+
         checkInButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, QRCodeScanActivity.class); // Assuming you have a QRCodeScanActivity
+                startActivity(intent);
+            }
+        });
+
+        organizerButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Define the intent to start the new activity
+                Intent intent = new Intent(MainActivity.this, OrganizerDashboard.class);
+
+                // Start the new activity
                 startActivity(intent);
             }
         });
