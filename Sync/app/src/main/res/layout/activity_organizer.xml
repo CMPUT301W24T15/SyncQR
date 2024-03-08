@@ -44,15 +44,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/create_new_event" />
 
-        <Button
-            android:id="@+id/send_notifications"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text="Send Notifications"
-            android:layout_marginHorizontal="15dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/view_my_events" />
 
         <Button
             android:id="@+id/track_attendance"
@@ -62,7 +53,7 @@
             android:layout_marginHorizontal="15dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/send_notifications" />
+            app:layout_constraintTop_toBottomOf="@+id/view_my_events" />
 
         <TextView
             android:id="@+id/recent_activity"
@@ -88,10 +79,11 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <FrameLayout
-        android:id="@+id/create_event_container"
+        android:id="@+id/fragment_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
     </FrameLayout>
+
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

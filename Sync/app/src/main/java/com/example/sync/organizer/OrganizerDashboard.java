@@ -5,18 +5,17 @@ import android.view.View;
 import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.example.sync.R;
-/**
- * This a class that shows the dashboard of organizer
- */
-public class OrganizerDashboard extends AppCompatActivity implements CreateEventFrag.CreateEventFragListener {
+
+public class OrganizerDashboard extends AppCompatActivity implements FragListener {
     private Organizer organizer;
 
     // find fragments
     View dashboard;
-    View createEventContainer;
+    View fragmentContainer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,35 +24,48 @@ public class OrganizerDashboard extends AppCompatActivity implements CreateEvent
 
         // find fragments
         dashboard = findViewById(R.id.dashboard);
-        createEventContainer = findViewById(R.id.create_event_container);
+        fragmentContainer = findViewById(R.id.fragment_container);
 
         // set visibility
-        createEventContainer.setVisibility(View.GONE);
+        fragmentContainer.setVisibility(View.GONE);
 
         Button createEvent = dashboard.findViewById(R.id.create_new_event);
+        Button viewEvent = dashboard.findViewById(R.id.view_my_events);
+
+        // click listeners
         createEvent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 CreateEventFrag createEventFrag = CreateEventFrag.newInstance();
                 FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-                transaction.replace(R.id.create_event_container, createEventFrag);
+                transaction.replace(R.id.fragment_container, createEventFrag);
                 transaction.commit();
 
                 dashboard.setVisibility(View.GONE);
-                createEventContainer.setVisibility(View.VISIBLE);
+                fragmentContainer.setVisibility(View.VISIBLE);
+            }
+        });
 
+        viewEvent.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ViewEventsFrag viewEventsFrag = ViewEventsFrag.newInstance();
+                FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+                transaction.replace(R.id.fragment_container, viewEventsFrag);
+                transaction.commit();
+
+                dashboard.setVisibility(View.GONE);
+                fragmentContainer.setVisibility(View.VISIBLE);
             }
         });
 
     }
-    /**
-     * This method allow organizer to shut down the notification
-     */
+
     @Override
-    public void notifyShutDown(CreateEventFrag frag) {
+    public void notifyShutDown(Fragment frag) {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.remove(frag);
         dashboard.setVisibility(View.VISIBLE);
-        createEventContainer.setVisibility(View.GONE);
+        fragmentContainer.setVisibility(View.GONE);
     }
 }

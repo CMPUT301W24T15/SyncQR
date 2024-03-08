@@ -19,43 +19,37 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.example.sync.R;
 
 import java.io.FileNotFoundException;
 import java.io.InputStream;
-/**
- * This is a class that create new event fragment
- */
+
 public class CreateEventFrag extends Fragment {
     ActivityResultLauncher<PickVisualMediaRequest> pickMedia;
     Button upload;
     ImageView image;
     Toolbar toolbar;
     Uri imageuri;
-    CreateEventFragListener listener;
-    /**
-     * This return the new fragment
-     * @return
-     * Return the new fragment
-     */
+    FragListener listener;
+
     static CreateEventFrag newInstance() {
         // create the fragment instance
         CreateEventFrag fragment = new CreateEventFrag();
         return fragment;
     }
-    interface CreateEventFragListener {
-        public void notifyShutDown(CreateEventFrag frag);
-    }
+
 
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
 
-        if (context instanceof CreateEventFragListener) {
-            listener = (CreateEventFragListener) context;
+        if (context instanceof FragListener) {
+            listener = (FragListener) context;
         } else {
-            throw new RuntimeException(context + " must implement AddDialogListener");
+            throw new RuntimeException(context + " must implement FragListener");
         }
     }
 
