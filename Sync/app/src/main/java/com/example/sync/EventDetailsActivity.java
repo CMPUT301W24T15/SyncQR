@@ -8,6 +8,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
@@ -43,7 +44,9 @@ public class EventDetailsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_event_detail);
 
         name = findViewById(R.id.event_name);
-
+        location = findViewById(R.id.event_location);
+        date = findViewById(R.id.event_date_time);
+        description = findViewById(R.id.event_description);
 
         Button backButton = findViewById(R.id.back_button);
 
@@ -61,7 +64,7 @@ public class EventDetailsActivity extends AppCompatActivity {
             FirebaseFirestore db = FirebaseFirestore.getInstance();
             DocumentReference eventRef = db.collection("cities").document(eventID);
 
-            final Map<String, Object> data;
+//            final Map<String, Object> data;
             eventRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                 @Override
                 public void onComplete(@NonNull Task<DocumentSnapshot> task) {
@@ -69,7 +72,19 @@ public class EventDetailsActivity extends AppCompatActivity {
                         DocumentSnapshot document = task.getResult();
                         if (document.exists()) {
                             Log.d(TAG, "DocumentSnapshot data: " + document.getData());
-                            data = document.getData();
+
+                            String nameString = document.getData().get("eventName").toString();
+                            name.setText(nameString);
+
+                            String event_location = "Location:  " + document.getData().get("eventLocation");
+                            location.setText(event_location);
+
+                            SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd");
+                            date.setText(sdf.format(document.getData().get("eventDate")));
+
+                            String event_description = "Description: " + document.getData().get("eventDescription");
+                            description.setText(event_description);
+
                         } else {
                             Log.d(TAG, "No such document");
                         }
@@ -79,16 +94,7 @@ public class EventDetailsActivity extends AppCompatActivity {
                 }
             });
 
-            name.setText(data.get("eventName"));
 
-            String event_location = "Location:  " + data.get("eventLocation");
-            location.setText(event_location);
-
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd");
-            date.setText(sdf.format(data.get("eventDate")));
-
-            String event_description = "Description: " + data.get("eventDescription");
-            description.setText(event_description);
 
 
 //            We dont need organizer according to Figma?
