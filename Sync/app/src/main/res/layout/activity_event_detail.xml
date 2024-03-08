@@ -9,45 +9,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/colorprimary"
-            android:orientation="horizontal"
-            android:padding="10dp">
-
             <Button
-                android:id="@+id/home_button"
-                android:layout_width="0dp"
+                android:id="@+id/back_button"
+                android:layout_width="100dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:drawableTop="@drawable/ic_home"
-                android:text="@string/home" />
+                android:text="Back" />
 
-            <Button
-                android:id="@+id/profile_button"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:drawableTop="@drawable/ic_profile"
-                android:text="@string/profile" />
-
-            <Button
-                android:id="@+id/event_button"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:drawableTop="@drawable/ic_event"
-                android:text="@string/event" />
-
-            <Button
-                android:id="@+id/messages_button"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:drawableTop="@drawable/ic_messages"
-                android:text="@string/messages" />
-        </LinearLayout>
     </com.google.android.material.appbar.AppBarLayout>
 
 
@@ -92,23 +59,19 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Description:"/>
-            <TextView
-                android:id="@+id/event_registered_attendee_count"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Attendee Limit:"/>
-            <!--            <LinearLayout-->
-            <!--                android:layout_width="match_parent"-->
-            <!--                android:layout_height="wrap_content"-->
-            <!--                android:marginTop="20dp"-->
-            <!--                android:orientation="vertical">-->
+
+<!--            <TextView-->
+<!--                android:id="@+id/event_registered_attendee_count"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:text="Attendee Limit:"/>-->
 
             <Button
                 android:id="@+id/check_in_button"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"></Button>
-
-            <!--            </LinearLayout>-->
+                android:layout_height="wrap_content"
+                android:text="Check In">
+            </Button>
 
         </LinearLayout>
 
