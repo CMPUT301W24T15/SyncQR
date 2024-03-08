@@ -10,6 +10,10 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.sync.organizer.OrganizerDashboard;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.Date;
+
 public class MainActivity extends AppCompatActivity {
 
     @Override
@@ -18,6 +22,12 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.home_page);
 
         Log.d("kevinTag", "Created MainActivity Instance");
+
+//        Log.d("kevinTag", "Testing databse by adding an event");
+
+//        Event testEvent = new Event("Test Meeting 1", new Date(1230123), "Edmonton", "Kevin", "Enjoy your sunny day", "sample poster", 10000009);
+//        testEvent.setEventId(1230123);
+//        testEvent.saveEventToDatabase();
 
         Button homeButton = findViewById(R.id.home_button);
         Button profileButton = findViewById(R.id.profile_button);

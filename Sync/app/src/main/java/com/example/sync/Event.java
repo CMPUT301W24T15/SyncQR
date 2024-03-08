@@ -50,6 +50,9 @@ public class Event implements Serializable {
         eventData.put("attendeeNumber", attendeeNumber);
         eventData.put("eventDescription", eventDescription);
         eventData.put("poster", poster);
+
+        eventData.put("organizerName", organizerName);  // added to make it consistent with constructor
+
         eventData.put("organizerId", organizerId);
         eventData.put("attendees", attendees);
 

@@ -29,7 +29,7 @@ public class EventDetailFrag extends Fragment {
     TextView location;
     TextView organizer;
     TextView description;
-    static EventDetailFrag newInstance(Event event) {
+    public static EventDetailFrag newInstance(Event event) {
         // create the fragment instance
         EventDetailFrag fragment = new EventDetailFrag();
 
