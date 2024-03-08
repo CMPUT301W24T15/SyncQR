@@ -46,6 +46,7 @@
                 android:name="photopicker_activity:0:required"
                 android:value="" />
         </service>
+        <activity android:name=".EventDetailsActivity"/>
 
     </application>
 

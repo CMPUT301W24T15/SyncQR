@@ -14,13 +14,6 @@
         android:textStyle="bold" />
 
     <TextView
-        android:id="@+id/eventDescription"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Event Description"
-        android:textSize="16sp" />
-
-    <TextView
         android:id="@+id/eventLocation"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -32,6 +25,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Event Date"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/eventDescription"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Event Description"
         android:textSize="16sp" />
 
     <ImageView
