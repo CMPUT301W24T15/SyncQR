@@ -36,6 +36,7 @@ public class MainActivity extends AppCompatActivity {
         profileButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // for now, linked to attendee
                 Intent intent = new Intent(MainActivity.this, Attendee.class); // Assuming you have a ProfileActivity
                 intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                 startActivity(intent);
@@ -54,9 +55,9 @@ public class MainActivity extends AppCompatActivity {
         messagesButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // not implemented yet
-//                Intent intent = new Intent(MainActivity.this, MessageActivity.class);
-//                startActivity(intent);
+                // for now, linked to administrator
+                Intent intent = new Intent(MainActivity.this, Administrator.class);
+                startActivity(intent);
             }
         });
 
@@ -71,7 +72,7 @@ public class MainActivity extends AppCompatActivity {
         organizerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Define the intent to start the new activity
+                // for now, linked to organizer
                 Intent intent = new Intent(MainActivity.this, OrganizerDashboard.class);
 
                 // Start the new activity

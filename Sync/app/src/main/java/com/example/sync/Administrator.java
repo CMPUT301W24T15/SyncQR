@@ -17,10 +17,6 @@ public class Administrator extends User {
     private ListView profileList;
     private ArrayAdapter<Profile> profileArrayAdapter;
 
-    public Administrator(ArrayList<Profile> profiles) {
-        this.profiles = profiles;
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
