@@ -34,9 +34,8 @@
         <activity android:name=".organizer.OrganizerDashboard" />
 
         <activity android:name=".Administrator" />
-
-        <activity android:name=".Attendee" />
         <activity android:name=".Profile"/>
+        <activity android:name=".Attendee" />
         <activity android:name=".QRCodeScanActivity"/>
         <!--suppress AndroidDomInspection -->
         <service
