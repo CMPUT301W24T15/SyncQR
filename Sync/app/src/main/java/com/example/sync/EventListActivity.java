@@ -8,6 +8,7 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentTransaction;
 
@@ -20,8 +21,12 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 public class EventListActivity extends AppCompatActivity {
 
@@ -42,44 +47,49 @@ public class EventListActivity extends AppCompatActivity {
         Button messagesButton = findViewById(R.id.messages_button);
 
         dataList = new ArrayList<Event>();
+        eventList = findViewById(R.id.event_list);
+        eventListAdapter = new EventListAdapter(this, dataList);
+        eventList.setAdapter(eventListAdapter);
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-        String TAG = "databaseTag";
-        db.collection("events")
-                .get()
-                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                    @Override
-                    public void onSuccess(QuerySnapshot documentSnapshots) {
-                        if (documentSnapshots.isEmpty()) {
-                            Log.d(TAG, "onSuccess: LIST EMPTY");
-                            return;
-                        } else {
-                            List<Event> types = documentSnapshots.toObjects(Event.class);
+        String TAG = "kevinTag";
 
-                            // Add all to your list
-                            dataList.addAll(types);
-                            Log.d(TAG, "onSuccess: " + dataList);
+        dataList.add(new Event("Test Meeting 1", new Date(1230123), "Edmonton", "Kevin", "Enjoy your sunny day", "sample poster", 10000009));
 
-                        }
-                    }
-                });
+//        db.collection("events")
+//                .get()
 //                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
 //                    @Override
 //                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
 //                        if (task.isSuccessful()) {
 //                            for (QueryDocumentSnapshot document : task.getResult()) {
-//                                Log.d("databaseTag", document.getId() + " => " + document.getData());
+//                                Log.d(TAG, document.getId() + " => " + document.getData());
+//
+//                                Map<String, Object> temp = document.getData();
+//                                SimpleDateFormat formatter = new SimpleDateFormat("yyyy.MM.dd");
+//
+////                                try {
+//                                    dataList.add(new Event(temp.get("eventName").toString(),
+//                                            new Date(1230123),
+////                                            formatter.parse(temp.get("eventDate").toString()),
+//                                            temp.get("eventLocation").toString(),
+//                                            temp.get("roganizerName").toString(),
+//                                            temp.get("eventDescription").toString(),
+//                                            temp.get("poster").toString(),
+//                                            Integer.parseInt(temp.get("attendees").toString()))
+//                                            );
+////                                } catch (ParseException e) {
+////                                    Log.d(TAG, "Error in parsing");
+////                                    throw new RuntimeException(e);
+////                                }
+//                                eventListAdapter.notifyDataSetChanged();
 //                            }
 //                        } else {
-//                            Log.d("databaseTag", "Error getting documents: ", task.getException());
+//                            Log.d(TAG, "Error getting documents: ", task.getException());
 //                        }
 //                    }
 //                });
-
-        eventList = findViewById(R.id.event_list);
-        eventListAdapter = new EventListAdapter(this, dataList);
-        eventList.setAdapter(eventListAdapter);
 
         homeButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -128,7 +138,6 @@ public class EventListActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-
 
 
     }

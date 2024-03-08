@@ -29,15 +29,27 @@
             android:orientation="vertical"
             android:padding="20dp">
 
+<!--            <ImageView-->
+<!--                android:id="@+id/event_poster"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="@dimen/event_poster_height"-->
+<!--                android:clickable="true"-->
+<!--                android:contentDescription="@string/event_poster"-->
+<!--                android:focusable="true"-->
+<!--                android:scaleType="centerCrop"-->
+<!--                android:src="@drawable/event_poster">-->
+<!--            </ImageView>-->
+
             <ImageView
                 android:id="@+id/event_poster"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/event_poster_height"
+                android:layout_height="351dp"
                 android:clickable="true"
-                android:contentDescription="@string/event_poster"
                 android:focusable="true"
+                android:onClick="openImage"
                 android:scaleType="centerCrop"
-                android:src="@drawable/event_poster"></ImageView>
+                android:src="@drawable/welcomeevent"
+                android:contentDescription="Display Event Poster" />
 
             <TextView
                 android:id="@+id/event_name"
