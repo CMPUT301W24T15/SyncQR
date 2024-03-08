@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="name_text" type="id" />
+    <item name="picture_text" type="id" />
+    <item name="email_text" type="id" />
+    <item name="phoneNumber_text" type="id" />
+</resources>

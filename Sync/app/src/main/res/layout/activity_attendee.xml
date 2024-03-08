@@ -68,11 +68,11 @@
     <ImageView
         android:id="@+id/welcome_image"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:src="@drawable/welcomeevent"
-        android:contentDescription="@string/welcome_image_desc"
+        android:layout_height="303dp"
         android:layout_marginTop="16dp"
-        android:scaleType="centerCrop"/>
+        android:contentDescription="@string/welcome_image_desc"
+        android:scaleType="centerCrop"
+        android:src="@drawable/welcomeevent" />
 
 
     <!-- Buttons below Welcome Image -->

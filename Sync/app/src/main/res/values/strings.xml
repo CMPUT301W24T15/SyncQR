@@ -4,6 +4,13 @@
     <string name="eventBtn">Event</string>
     <string name="profileBtn">Profile</string>
     <string name="messagesBtn">Messages</string>
-    <string name="event_description_default">This is a long paragraph.This is a long paragraph.This is a long paragraph.This is a long paragraph.This is a long paragraph.This is a long paragraph.This is a long paragraph.This is a long paragraph.This is a long paragraph.This is a long paragraph.This is a long paragraph.This is a long paragraph.This is a long paragraph.This is a long paragraph.This is a long paragraph.This is a long paragraph.This is a long paragraph.This is a long paragraph.This is a long paragraph.This is a long paragraph.This is a long paragraph.This is a long paragraph.</string>
-
+    <string name="profile" />
+    <string name="event" />
+    <string name="messages" />
+    <string name="event_poster" />
+    <string name="home" />
+    <string name="welcome_image_desc" />
+    <string name="event_image_desc" />
+    <string name="event_details" />
+    <string name="event_description_default">\n</string>
 </resources>
