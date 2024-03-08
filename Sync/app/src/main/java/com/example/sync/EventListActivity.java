@@ -106,7 +106,7 @@ public class EventListActivity extends AppCompatActivity {
         profileButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(EventListActivity.this, Profile.class); // Assuming you have a ProfileActivity
+                Intent intent = new Intent(EventListActivity.this, Attendee.class); // Assuming you have a ProfileActivity
                 intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                 startActivity(intent);
             }
