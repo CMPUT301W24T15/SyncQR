@@ -38,6 +38,15 @@ public class Attendee extends User {
 //            }
 //        });
 
+        Button profileButton = findViewById(R.id.profile_button);
+        profileButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Attendee.this, Profile.class); // Assuming you have a ProfileActivity
+                startActivity(intent);
+            }
+        });
+
         Button setNotificationButton = findViewById(R.id.messages_button);
         setNotificationButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -89,7 +98,7 @@ public class Attendee extends User {
                 }
 
                 // Start EventDetailActivity and pass event details
-                Intent intent = new Intent(Attendee.this, EventDetailActivity.class);
+                Intent intent = new Intent(Attendee.this, EventListActivity.class);
                 intent.putExtra("eventDetails", descriptions.toString());
                 startActivity(intent);
             }
