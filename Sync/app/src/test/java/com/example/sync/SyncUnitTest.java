@@ -1,11 +1,13 @@
 package com.example.sync;
 
 import static org.hamcrest.CoreMatchers.any;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import android.util.Log;
 import android.widget.EditText;
 
 import com.google.firebase.database.DatabaseReference;
@@ -15,6 +17,9 @@ import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+
+import java.util.Date;
+import java.util.Map;
 
 public class SyncUnitTest {
     @Mock
@@ -58,5 +63,25 @@ public class SyncUnitTest {
         verify(databaseReference, times(1)).setValue(any(ProfileP.class));
     }
 
+    @Test
+    public void testEventListActivity() {
+
+    }
+
+//    @Test
+//    public void testGetEventName() {
+//        String name = "testGetEventName";
+//        Event event = new Event(name, new Date(100000009), "Edmonton", "Kevin", "Description", "sample poster", 10000009);
+//        Log.d("Test", event.getEventName());
+//        assertEquals(event.getEventName(), name);
+//    }
+//
+//    @Test
+//    public void testGetAttendees() {
+//        String name = "testGetEventName";
+//        Event event = new Event(name, new Date(100000009), "Edmonton", "Kevin", "Description", "sample poster", 10000009);
+//        Map<String, Boolean> attendee = event.getAttendees();
+//        assert(attendee.size() == 0);
+//    }
 
 }
