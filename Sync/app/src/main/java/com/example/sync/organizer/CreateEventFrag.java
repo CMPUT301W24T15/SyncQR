@@ -22,7 +22,9 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
-import com.example.sync.R;
+//import com.example.sync.R;
+
+//import com.example.sync.R;
 
 import java.io.FileNotFoundException;
 import java.io.InputStream;
@@ -67,9 +69,9 @@ public class CreateEventFrag extends Fragment {
                         Log.d("PhotoPicker", "Selected URI: " + uri);
                         try {
                             InputStream inputStream = getContext().getContentResolver().openInputStream(imageuri);
-                            // 将 InputStream 对象解码为 Bitmap 对象
+                            //
                             Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
-                            // 设置 Bitmap 对象给 ImageView
+                            //
                             image.setImageURI(null);
                             image.setImageURI(imageuri);
 
@@ -86,16 +88,16 @@ public class CreateEventFrag extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.create_new_event, container, false);
+        View view = inflater.inflate(com.example.sync.R.layout.create_new_event, container, false);
         return view;
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        toolbar = view.findViewById(R.id.toolbar);
-        upload = view.findViewById(R.id.upload_image_button);
-        image = view.findViewById(R.id.image);
+        toolbar = view.findViewById(com.example.sync.R.id.toolbar);
+        upload = view.findViewById(com.example.sync.R.id.upload_image_button);
+        image = view.findViewById(com.example.sync.R.id.image);
     }
 
     @Override
