@@ -15,7 +15,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.example.sync.Event;
-import com.example.sync.R;
+//import com.example.sync.R;
 
 import java.text.SimpleDateFormat;
 
@@ -53,19 +53,19 @@ public class EventDetailFrag extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.event_detail_organizer, container, false);
+        View view = inflater.inflate(com.example.sync.R.layout.event_detail_organizer, container, false);
         return view;
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        toolbar = view.findViewById(R.id.toolbar);
-        name = view.findViewById(R.id.name);
-        date = view.findViewById(R.id.date);
-        location = view.findViewById(R.id.location);
-        organizer = view.findViewById(R.id.organizer);
-        description = view.findViewById(R.id.description);
+        toolbar = view.findViewById(com.example.sync.R.id.toolbar);
+        name = view.findViewById(com.example.sync.R.id.name);
+        date = view.findViewById(com.example.sync.R.id.date);
+        location = view.findViewById(com.example.sync.R.id.location);
+        organizer = view.findViewById(com.example.sync.R.id.organizer);
+        description = view.findViewById(com.example.sync.R.id.description);
 
     }
 

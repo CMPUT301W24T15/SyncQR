@@ -17,7 +17,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.example.sync.Event;
-import com.example.sync.R;
+//import com.example.sync.R;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -53,15 +53,15 @@ public class ViewEventsFrag extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.view_events, container, false);
+        View view = inflater.inflate(com.example.sync.R.layout.view_events, container, false);
         return view;
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        toolbar = view.findViewById(R.id.toolbar);
-        eventList = view.findViewById(R.id.eventList);
+        toolbar = view.findViewById(com.example.sync.R.id.toolbar);
+        eventList = view.findViewById(com.example.sync.R.id.eventList);
     }
 
     @Override
@@ -87,7 +87,7 @@ public class ViewEventsFrag extends Fragment {
                 EventDetailFrag eventDetailFrag = EventDetailFrag.newInstance(dataList.get(position));
 
                 FragmentTransaction transaction = requireActivity().getSupportFragmentManager().beginTransaction();
-                transaction.replace(R.id.fragment_container, eventDetailFrag);
+                transaction.replace(com.example.sync.R.id.fragment_container, eventDetailFrag);
                 transaction.addToBackStack(null);
                 transaction.hide(self);
                 transaction.commit();
