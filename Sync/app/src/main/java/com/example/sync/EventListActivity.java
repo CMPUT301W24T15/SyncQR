@@ -65,10 +65,10 @@ public class EventListActivity extends AppCompatActivity {
 //                                            new Date(1230123),
 ////                                            formatter.parse(temp.get("eventDate").toString()),
 //                                            temp.get("eventLocation").toString(),
-//                                            temp.get("roganizerName").toString(),
+//                                            temp.get("organizerName").toString(),
 //                                            temp.get("eventDescription").toString(),
 //                                            temp.get("poster").toString(),
-//                                            Integer.parseInt(temp.get("attendees").toString()))
+//                                            Integer.parseInt(temp.get("attendeesCount").toString()))
 //                                            );
 ////                                } catch (ParseException e) {
 ////                                    Log.d(TAG, "Error in parsing");
