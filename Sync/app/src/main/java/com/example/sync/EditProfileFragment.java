@@ -14,7 +14,10 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
 /**
- * This class shows an edit profile fragment
+ * A {@link DialogFragment} subclass used for editing the details of a user profile.
+ * It provides a dialog where the user can edit their name, profile picture URL, email,
+ * and phone number. The edited profile is then passed back to the activity through
+ * an {@link OnFragmentInteractionListener} interface.
  */
 public class EditProfileFragment extends DialogFragment {
 
@@ -22,11 +25,27 @@ public class EditProfileFragment extends DialogFragment {
     private EditText pictureURL;
     private EditText email;
     private EditText phoneNumber;
-    private OnFragmentInteractionListener listener;
-    private ProfileP profileP; // Use ProfileP instead of Profile
 
-    // Update the interface to use ProfileP
+    /**
+     * Listener for fragment interaction events.
+     */
+    private OnFragmentInteractionListener listener;
+
+    /**
+     * The profile currently being edited. This could be a new profile or an existing one.
+     */
+    private ProfileP profileP;
+
+    /**
+     * Interface for receiving interaction events.
+     * Activities containing this fragment MUST implement this interface.
+     */
     public interface OnFragmentInteractionListener {
+        /**
+         * Called when the OK button is pressed and the profile editing is confirmed.
+         *
+         * @param newProfileP The updated or newly created {@link ProfileP} object.
+         */
         void onConfirmPressed(ProfileP newProfileP);
     }
 
@@ -50,7 +69,6 @@ public class EditProfileFragment extends DialogFragment {
         email = view.findViewById(R.id.email_editText);
         phoneNumber = view.findViewById(R.id.phone_number_editText);
 
-        // Initialize fields if editing an existing profile
         if (profileP != null) {
             name.setText(profileP.getName());
             pictureURL.setText(profileP.getProfilePictureUrl());
@@ -72,21 +90,27 @@ public class EditProfileFragment extends DialogFragment {
                         String newEmail = email.getText().toString();
                         String newPhoneNumber = phoneNumber.getText().toString();
 
-                        // Create or update ProfileP instance
                         ProfileP updatedProfileP = new ProfileP(newProfileName, newPicture, newEmail, newPhoneNumber);
                         listener.onConfirmPressed(updatedProfileP);
                     }
                 }).create();
     }
 
-    // Constructor for initializing with an existing ProfileP (for editing)
+    /**
+     * Constructor for initializing a new profile to edit an existing profile.
+     *
+     * @param profileP The {@link ProfileP} object to be edited.
+     */
     public EditProfileFragment(ProfileP profileP) {
         super();
         this.profileP = profileP;
     }
 
-    // Default constructor
+    /**
+     * Use this constructor for creating a new profile without an existing profile.
+     */
     public EditProfileFragment() {
         super();
     }
 }
+

@@ -40,7 +40,6 @@ public class SyncUnitTest {
         MockitoAnnotations.initMocks(this);
     }
 
-    @Ignore
     @Test
     public void testSaveProfileData() {
         // Set up test data

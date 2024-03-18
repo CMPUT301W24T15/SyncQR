@@ -1,6 +1,5 @@
 package com.example.sync;
 
-import com.example.sync.organizer.EventDetailFrag;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.io.Serializable;

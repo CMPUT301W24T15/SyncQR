@@ -12,8 +12,14 @@ public class MyNotificationReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         String eventName = intent.getStringExtra("event_name");
+        // Send local broadcast
+        Intent localIntent = new Intent("com.example.sync.NEW_EVENT_NOTIFICATION");
+        localIntent.putExtra("event_name", eventName);
+        context.sendBroadcast(localIntent);
+        // Optionally show a system notification as well
         showNotification(context, eventName);
     }
+
     /**
      * This is a method that shows the notification
      */
