@@ -10,12 +10,14 @@ public class EventIDGenerator implements Serializable {
     private static final Random random = new Random();
 
     public EventIDGenerator() {
-
         this.eventID = random.nextInt(Integer.MAX_VALUE);
     }
 
     public int getEventID() {
         return eventID;
     }
+
+
+
 
 }

@@ -24,8 +24,12 @@ public class Event implements Serializable {
 
     private transient FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-    public Event(String eventName, Date eventDate, String eventLocation, String organizerName,
-                 String eventDescription, String poster, int organizerId) {
+
+
+    public Event(String eventName, Date eventDate, String eventLocation, String organizerName, String eventDescription, String poster, int organizerId) {
+        EventIDGenerator newEventID = new EventIDGenerator();
+        // Set the eventID using EventIDGenerator.java
+        this.eventId = newEventID.getEventID();
         this.eventName = eventName;
         this.eventDate = eventDate;
         this.eventLocation = eventLocation;
@@ -43,6 +47,7 @@ public class Event implements Serializable {
     // has not modified, it is inconsistent with the constructor
     public void saveEventToDatabase() {
         Map<String, Object> eventData = new HashMap<>();
+        eventData.put("eventId", eventId);
         eventData.put("eventName", eventName);
         eventData.put("eventDate", eventDate);
         eventData.put("eventLocation", eventLocation);
