@@ -47,13 +47,22 @@ public class Attendee extends User implements EditProfileFragment.OnFragmentInte
             }
         });
 
-        Button setNotificationButton = findViewById(R.id.messages_button);
-        setNotificationButton.setOnClickListener(new View.OnClickListener() {
+        Button NotificationButton = findViewById(R.id.messages_button);
+        NotificationButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                setNotification();
+                Intent intent = new Intent(Attendee.this, NotificationActivity.class);
+                startActivity(intent);
             }
         });
+
+//        Button setNotificationButton = findViewById(R.id.messages_button);
+//        setNotificationButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                setNotification();
+//            }
+//        });
 
         Button browseEventButton = findViewById(R.id.event_button);
         browseEventButton.setOnClickListener(new View.OnClickListener() {

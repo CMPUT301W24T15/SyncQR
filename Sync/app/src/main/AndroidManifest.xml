@@ -53,6 +53,7 @@
         <activity android:name=".EventDetailsActivity"/>
 
         <activity android:name=".EventListActivity"/>
+        <activity android:name=".NotificationActivity"/>
 
     </application>
 

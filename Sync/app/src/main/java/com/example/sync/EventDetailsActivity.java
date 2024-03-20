@@ -1,6 +1,5 @@
 package com.example.sync;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -15,14 +14,11 @@ import androidx.appcompat.widget.Toolbar;
 import com.example.sync.organizer.FragListener;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.text.SimpleDateFormat;
-import java.util.HashMap;
-import java.util.Map;
 
 public class EventDetailsActivity extends AppCompatActivity {
     Toolbar toolbar;

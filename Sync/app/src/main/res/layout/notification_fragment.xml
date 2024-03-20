@@ -1,33 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-xmlns:android="http://schemas.android.com/apk/res/android"
-android:layout_width="match_parent"
-android:layout_height="match_parent"
-android:orientation="vertical">
-<TextView
-    android:id="@+id/notificationTitle"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:textSize="18sp"
-    android:textStyle="bold"
-    android:paddingBottom="4dp"/>
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp">
 
-<TextView
-    android:id="@+id/notificationMessage"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:textSize="14sp"/>
+    <RecyclerView
+        android:id="@+id/notificationsRecyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:scrollbars="vertical" />
 
-<RecyclerView
-    android:id="@+id/notificationsRecyclerView"
-    android:layout_width="match_parent"
-    android:layout_height="0dp"
-    android:layout_weight="1"/>
+    <Button
+        android:id="@+id/clearNotificationsButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Clear Notifications"
+        android:layout_marginTop="16dp"/>
 
-
-<Button
-    android:id="@+id/clearNotificationsButton"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:text="Clear Announcements"/>
 </LinearLayout>
