@@ -7,19 +7,14 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import android.util.Log;
 import android.widget.EditText;
 
 import com.google.firebase.database.DatabaseReference;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-
-import java.util.Date;
-import java.util.Map;
 
 public class SyncUnitTest {
     @Mock
@@ -59,7 +54,7 @@ public class SyncUnitTest {
         // Verify that setValue() method is called with correct arguments
         verify(databaseReference, times(1)).push().getKey();
         verify(databaseReference, times(1)).child(anyString());
-        verify(databaseReference, times(1)).setValue(any(ProfileP.class));
+        verify(databaseReference, times(1)).setValue(any(Profile.class));
     }
 
     @Test

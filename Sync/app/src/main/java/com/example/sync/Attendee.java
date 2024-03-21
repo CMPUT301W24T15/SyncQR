@@ -42,7 +42,7 @@ public class Attendee extends User implements EditProfileFragment.OnFragmentInte
         profileButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(Attendee.this, Profile.class);
+                Intent intent = new Intent(Attendee.this, ProfileActivity.class);
                 startActivity(intent);
             }
         });
@@ -115,7 +115,7 @@ public class Attendee extends User implements EditProfileFragment.OnFragmentInte
     }
 
     @Override
-    public void onConfirmPressed(ProfileP newProfile) {
+    public void onConfirmPressed(Profile newProfile) {
         ;
     }
 }

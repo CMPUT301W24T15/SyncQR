@@ -34,7 +34,7 @@ public class EditProfileFragment extends DialogFragment {
     /**
      * The profile currently being edited. This could be a new profile or an existing one.
      */
-    private ProfileP profileP;
+    private Profile profileP;
 
     /**
      * Interface for receiving interaction events.
@@ -44,9 +44,9 @@ public class EditProfileFragment extends DialogFragment {
         /**
          * Called when the OK button is pressed and the profile editing is confirmed.
          *
-         * @param newProfileP The updated or newly created {@link ProfileP} object.
+         * @param newProfileP The updated or newly created {@link Profile} object.
          */
-        void onConfirmPressed(ProfileP newProfileP);
+        void onConfirmPressed(Profile newProfileP);
     }
 
     @Override
@@ -90,7 +90,7 @@ public class EditProfileFragment extends DialogFragment {
                         String newEmail = email.getText().toString();
                         String newPhoneNumber = phoneNumber.getText().toString();
 
-                        ProfileP updatedProfileP = new ProfileP(newProfileName, newPicture, newEmail, newPhoneNumber);
+                        Profile updatedProfileP = new Profile(newProfileName, newPicture, newEmail, newPhoneNumber);
                         listener.onConfirmPressed(updatedProfileP);
                     }
                 }).create();
@@ -99,9 +99,9 @@ public class EditProfileFragment extends DialogFragment {
     /**
      * Constructor for initializing a new profile to edit an existing profile.
      *
-     * @param profileP The {@link ProfileP} object to be edited.
+     * @param profileP The {@link Profile} object to be edited.
      */
-    public EditProfileFragment(ProfileP profileP) {
+    public EditProfileFragment(Profile profileP) {
         super();
         this.profileP = profileP;
     }

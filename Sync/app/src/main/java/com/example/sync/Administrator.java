@@ -51,7 +51,7 @@ public class Administrator extends User {
         profileList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                new EditProfileFragment((ProfileP)profileList.getItemAtPosition(i)).show(getSupportFragmentManager(),"Add/Edit_Profile");
+                new EditProfileFragment((Profile)profileList.getItemAtPosition(i)).show(getSupportFragmentManager(),"Add/Edit_Profile");
 
             }
         });

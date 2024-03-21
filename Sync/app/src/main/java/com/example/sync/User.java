@@ -9,7 +9,7 @@ import java.util.ArrayList;
 public abstract class User extends AppCompatActivity{
     private String username;
     private String password;
-    private Profile profile;
+    private ProfileActivity profile;
     private ArrayList<Event> events;
 
     public User() {
