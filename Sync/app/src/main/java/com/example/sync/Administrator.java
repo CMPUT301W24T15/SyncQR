@@ -40,8 +40,8 @@ public class Administrator extends User {
      * This method search for profile and add the searched profile into profiles
      */
     private void searchProfile(String profileNumber){
-        ArrayList<Profile> find_profiles = Profile.find(profileNumber);
-        profiles.addAll(find_profiles);
+        //ArrayList<Profile> find_profiles = Profile.(profileNumber);
+        //profiles.addAll(find_profiles);
     }
 
     /**

@@ -37,6 +37,7 @@
         <activity android:name=".ProfileActivity"/>
         <activity android:name=".Attendee" />
         <activity android:name=".QRCodeScanActivity"/>
+        <activity android:name=".NotificationActivity"/>
         <!--suppress AndroidDomInspection -->
         <service
             android:name="com.google.android.gms.metadata.ModuleDependencies"
@@ -53,7 +54,6 @@
         <activity android:name=".EventDetailsActivity"/>
 
         <activity android:name=".EventListActivity"/>
-        <activity android:name=".NotificationActivity"/>
 
     </application>
 

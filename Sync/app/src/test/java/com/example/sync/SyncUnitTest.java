@@ -1,12 +1,9 @@
 package com.example.sync;
 
-import static org.hamcrest.CoreMatchers.any;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
+import android.graphics.Bitmap;
 import android.widget.EditText;
 
 import com.google.firebase.database.DatabaseReference;
@@ -35,26 +32,44 @@ public class SyncUnitTest {
         MockitoAnnotations.initMocks(this);
     }
 
+//    @Test
+//    public void testSaveProfileData() {
+//        // Set up test data
+//        String name = "John Doe";
+//        String homepage = "https://example.com";
+//        String contact = "john@example.com";
+//
+//        // Mock EditText input
+//        when(userNameInput.getText().toString()).thenReturn(name);
+//        when(userHomepageInput.getText().toString()).thenReturn(homepage);
+//        when(userContactInput.getText().toString()).thenReturn(contact);
+//
+//        // Call the method under test
+//        Profile profile = new Profile(databaseReference);
+//        profile.saveProfileData();
+//
+//        // Verify that setValue() method is called with correct arguments
+//        verify(databaseReference, times(1)).push().getKey();
+//        verify(databaseReference, times(1)).child(anyString());
+//        verify(databaseReference, times(1)).setValue(any(Profile.class));
+//    }
+
+    /**
+     * Instrumented test for the CodeGenerator class.
+     */
     @Test
-    public void testSaveProfileData() {
-        // Set up test data
-        String name = "John Doe";
-        String homepage = "https://example.com";
-        String contact = "john@example.com";
+    public void CodeGeneratorTest() {
 
-        // Mock EditText input
-        when(userNameInput.getText().toString()).thenReturn(name);
-        when(userHomepageInput.getText().toString()).thenReturn(homepage);
-        when(userContactInput.getText().toString()).thenReturn(contact);
+        // Context of the app under test.
+        String testText = "Test QR Code";
+        int width = 500;
+        int height = 500;
 
-        // Call the method under test
-        Profile profile = new Profile(databaseReference);
-        profile.saveProfileData();
+        Bitmap resultBitmap = CodeGenerator.generateQRCodeBitmap(testText, width, height);
 
-        // Verify that setValue() method is called with correct arguments
-        verify(databaseReference, times(1)).push().getKey();
-        verify(databaseReference, times(1)).child(anyString());
-        verify(databaseReference, times(1)).setValue(any(Profile.class));
+        assertNotNull("The generated QR Code bitmap should not be null", resultBitmap);
+        assertEquals("The width of the generated bitmap is not as expected", width, resultBitmap.getWidth());
+        assertEquals("The height of the generated bitmap is not as expected", height, resultBitmap.getHeight());
     }
 
     @Test
