@@ -7,32 +7,29 @@
     android:orientation="vertical"
     android:padding="16dp">
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+    <ImageView
+        android:id="@+id/profile_image_top_right"
+        android:layout_width="377dp"
+        android:layout_height="50dp"
+        android:src="@mipmap/ic_launcher" />
 
-        <TextView
-            android:id="@+id/attendee_label"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Administrator"
-            android:layout_alignParentStart="true" />
+    <TextView
+        android:id="@+id/administrator_label"
+        android:layout_width="376dp"
+        android:layout_height="wrap_content"
+        android:text="Administrator"
+        android:textAlignment="center"
+        android:textSize="20sp"
+        android:textStyle="bold" />
 
-        <ImageView
-            android:id="@+id/profile_image_top_right"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:src="@mipmap/ic_launcher"
-            android:layout_alignParentEnd="true" />
+    <TextView
+        android:id="@+id/dashboard_label"
+        android:layout_width="376dp"
+        android:layout_height="wrap_content"
+        android:text="Dashboard"
+        android:textAlignment="center"
+        android:textSize="16sp" />
 
-        <Button
-            android:id="@+id/qr_code_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="QR Code"
-            android:layout_toStartOf="@id/profile_image_top_right" />
-
-    </RelativeLayout>
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -51,7 +48,7 @@
             android:id="@+id/administrator_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Confirm"
+            android:text="Search"
             app:layout_constraintBottom_toBottomOf="@id/administrator_text"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/administrator_text"

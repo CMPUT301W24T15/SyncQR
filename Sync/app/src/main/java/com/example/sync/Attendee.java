@@ -21,6 +21,10 @@ public class Attendee extends User implements EditProfileFragment.OnFragmentInte
     private ArrayList<Event> events;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
 
+    public Attendee(String userid, String username, String password, Profile profile, String position) {
+        super(userid, username, password, profile, position);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

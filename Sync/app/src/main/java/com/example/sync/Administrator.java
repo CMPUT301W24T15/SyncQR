@@ -17,14 +17,18 @@ public class Administrator extends User {
     private ListView profileList;
     private ArrayAdapter<Profile> profileArrayAdapter;
 
+    public Administrator(String userid, String username, String password, Profile profile, String position) {
+        super(userid, username, password, profile, position);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_administrator);
+        setContentView(R.layout.dashboard_administrator);
 
-        Button confirmButton = findViewById(R.id.administrator_button);
+        Button searchButton = findViewById(R.id.administrator_button);
         EditText administratorInput = findViewById(R.id.administrator_text);
-        confirmButton.setOnClickListener(new View.OnClickListener() {
+        searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // Call your search function here
@@ -40,7 +44,7 @@ public class Administrator extends User {
      * This method search for profile and add the searched profile into profiles
      */
     private void searchProfile(String profileNumber){
-        //ArrayList<Profile> find_profiles = Profile.(profileNumber);
+        //ArrayList<Profile> find_profiles = Profile.find(profileNumber);
         //profiles.addAll(find_profiles);
     }
 
