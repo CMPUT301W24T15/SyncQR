@@ -4,12 +4,12 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ListView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -20,8 +20,8 @@ import java.util.List;
 
 public class NotificationFragment extends Fragment {
 
-    private RecyclerView recyclerView;
-    private NotificationAdapter adapter;
+    private ListView listView;
+    private ArrayAdapter<Notification> adapter; // Adjust this line based on your Notification object structure
     private List<Notification> notifications;
     private FirebaseFirestore db;
 
@@ -30,12 +30,12 @@ public class NotificationFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.notification_fragment, container, false);
 
-        recyclerView = view.findViewById(R.id.notificationsRecyclerView);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        listView = view.findViewById(R.id.notificationsListView); // Make sure you have a ListView in your XML with this ID
 
         notifications = new ArrayList<>();
-        adapter = new NotificationAdapter(getContext(), notifications);
-        recyclerView.setAdapter(adapter);
+        // Adjust the adapter initialization to fit your needs. This assumes Notification has a toString() method that returns the display string.
+        adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1, notifications);
+        listView.setAdapter(adapter);
 
         Button clearButton = view.findViewById(R.id.clearNotificationsButton);
         clearButton.setOnClickListener(v -> clearNotifications());

@@ -67,6 +67,7 @@ public class SyncUnitTest {
 
         Bitmap resultBitmap = CodeGenerator.generateQRCodeBitmap(testText, width, height);
 
+
         assertNotNull("The generated QR Code bitmap should not be null", resultBitmap);
         assertEquals("The width of the generated bitmap is not as expected", width, resultBitmap.getWidth());
         assertEquals("The height of the generated bitmap is not as expected", height, resultBitmap.getHeight());
