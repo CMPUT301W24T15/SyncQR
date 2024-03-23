@@ -35,7 +35,7 @@ public class NotificationActivity extends AppCompatActivity {
 
         // Fetch notifications from Firestore
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        db.collection("notifications")
+        db.collection("Notifications")
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
                     @Override
                     public void onEvent(QuerySnapshot queryDocumentSnapshots, FirebaseFirestoreException e) {

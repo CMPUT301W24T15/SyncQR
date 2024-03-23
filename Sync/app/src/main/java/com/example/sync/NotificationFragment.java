@@ -48,7 +48,7 @@ public class NotificationFragment extends Fragment {
     }
 
     private void loadNotificationsFromFirestore() {
-        db.collection("notifications")
+        db.collection("Notifications")
                 .get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
