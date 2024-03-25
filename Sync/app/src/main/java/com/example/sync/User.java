@@ -8,7 +8,7 @@ import java.util.ArrayList;
 /**
  * This is a class that contains basic method of users
  */
-public abstract class User extends AppCompatActivity{
+public abstract class User extends AppCompatActivity {
     private String userid = generateUserID();
     private String username = "Visitor";
     private String password = "000000"; //Initial Password
