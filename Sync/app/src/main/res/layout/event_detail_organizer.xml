@@ -1,160 +1,41 @@
-<?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content" >
+    android:layout_height="match_parent">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        app:titleTextColor="@color/black"
+        app:navigationIcon="?attr/homeAsUpIndicator"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/navigation_bar"
+        app:title="Event" />
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/navigation_bar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="50dp"
+        app:layout_constraintTop_toBottomOf="@id/toolbar"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/overview_modify_container"
+        app:menu="@menu/event_detail_menu_organizer"
+        app:itemTextAppearanceActive="@style/BottomNavigationTextStyle"
+        app:itemTextAppearanceInactive="@style/BottomNavigationTextStyle"/>
 
+    <FrameLayout
+        android:id="@+id/overview_modify_container"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toBottomOf="@id/navigation_bar"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
 
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/white"
-            app:titleTextColor="@color/black"
-            app:navigationIcon="?attr/homeAsUpIndicator"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toTopOf="@id/poster"
-            app:title="Event" />
-
-        <ImageView
-            android:id="@+id/poster"
-            android:layout_width="370dp"
-            android:layout_height="370dp"
-            android:src="@drawable/welcomeevent"
-            android:scaleType="fitCenter"
-            android:layout_marginHorizontal="20dp"
-            android:layout_marginVertical="10dp"
-            app:layout_constraintTop_toBottomOf="@id/toolbar"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toTopOf="@id/name"
-            />
-
-        <TextView
-            android:id="@+id/name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="20dp"
-            android:text="halfcheck"
-            android:textSize="30sp"
-            android:textStyle="bold"
-            app:layout_constraintTop_toBottomOf="@id/poster"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintBottom_toTopOf="@+id/date"/>
-
-        <TextView
-            android:id="@+id/date"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="20dp"
-            android:text="Date:  2024.03.08"
-            android:textSize="18sp"
-            app:layout_constraintTop_toBottomOf="@id/name"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintBottom_toTopOf="@+id/location"/>
-
-        <TextView
-            android:id="@+id/location"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="20dp"
-            android:text="Location:  CCIS 1-140"
-            android:textSize="18sp"
-            app:layout_constraintTop_toBottomOf="@id/date"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintBottom_toTopOf="@+id/organizer"/>
-
-        <TextView
-            android:id="@+id/organizer"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="20dp"
-            android:text="Organizer:  Yiqing17"
-            android:textSize="18sp"
-            app:layout_constraintTop_toBottomOf="@id/location"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintBottom_toTopOf="@id/description"/>
-
-        <TextView
-            android:id="@+id/description"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="20dp"
-            android:layout_marginVertical="10dp"
-            android:text="@string/event_description_default"
-            android:textSize="15sp"
-            app:layout_constraintTop_toBottomOf="@id/organizer"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-
-            />
-
-        <Button
-            android:id="@+id/edit"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:layout_marginEnd="10dp"
-            android:layout_marginTop="15dp"
-            android:text="Edit"
-            android:textSize="18sp"
-            app:layout_constraintHorizontal_weight="0.5"
-            app:layout_constraintTop_toBottomOf="@id/description"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/delete"
-            app:layout_constraintBottom_toTopOf="@id/notify"/>
-
-        <Button
-            android:id="@+id/delete"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="20dp"
-            android:layout_marginTop="15dp"
-            android:text="Delete"
-            android:textSize="18sp"
-            app:layout_constraintHorizontal_weight="0.5"
-            app:layout_constraintTop_toBottomOf="@id/description"
-            app:layout_constraintStart_toEndOf="@id/edit"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toTopOf="@id/share"/>
-
-        <Button
-            android:id="@+id/notify"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:layout_marginEnd="10dp"
-            android:layout_marginBottom="20dp"
-            android:layout_marginStart="20dp"
-            android:text="Notify All"
-            android:textSize="18sp"
-            app:layout_constraintHorizontal_weight="0.5"
-            app:layout_constraintTop_toBottomOf="@id/edit"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/share"
-            app:layout_constraintBottom_toBottomOf="parent"/>
-
-        <Button
-            android:id="@+id/share"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="20dp"
-            android:layout_marginEnd="20dp"
-            android:layout_marginTop="5dp"
-            android:text="Share"
-            android:textSize="18sp"
-            app:layout_constraintHorizontal_weight="0.5"
-            app:layout_constraintTop_toBottomOf="@id/delete"
-            app:layout_constraintStart_toEndOf="@id/notify"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"/>
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-</ScrollView>
+</androidx.constraintlayout.widget.ConstraintLayout>
