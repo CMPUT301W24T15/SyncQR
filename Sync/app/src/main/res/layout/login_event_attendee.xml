@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+
     <TextView
         android:id="@+id/titleTextView"
         android:layout_width="0dp"
@@ -95,7 +96,13 @@
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Password: "
+        android:layout_marginBottom="8dp"
+        android:text="Password:"
         android:textSize="18sp"
-        tools:layout_editor_absoluteX="8dp"
-        tools:layout_editor_absoluteY="162dp" />
+        app:layout_constraintBottom_toTopOf="@+id/passwordEditText"
+        app:layout_constraintTop_toBottomOf="@+id/usernameEditText"
+        app:layout_constraintVertical_bias="0.85"
+        tools:layout_editor_absoluteX="9dp" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
