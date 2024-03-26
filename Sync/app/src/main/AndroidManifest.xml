@@ -33,10 +33,11 @@
 
         <activity android:name=".organizer.OrganizerDashboard" />
 
-        <activity android:name=".Administrator" />
-        <activity android:name=".Profile"/>
-        <activity android:name=".Attendee" />
+        <activity android:name=".AdministratorDashboard" />
+        <activity android:name=".ProfileActivity"/>
+        <activity android:name=".AttendeeDashboard" />
         <activity android:name=".QRCodeScanActivity"/>
+        <activity android:name=".NotificationActivity"/>
         <!--suppress AndroidDomInspection -->
         <service
             android:name="com.google.android.gms.metadata.ModuleDependencies"
