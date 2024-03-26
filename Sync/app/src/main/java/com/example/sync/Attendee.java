@@ -15,7 +15,7 @@ public class Attendee extends User implements EditProfileFragment.OnFragmentInte
     }
 
     @Override
-    public void onConfirmPressed(Profile newProfileP) {
+    public void onConfirmPressed(Profile newProfile) {
         ;
     }
 }

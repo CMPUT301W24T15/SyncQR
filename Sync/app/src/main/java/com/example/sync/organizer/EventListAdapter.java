@@ -11,7 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.example.sync.Event;
-//import com.example.sync.R;
+import com.example.sync.R;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -33,7 +33,7 @@ public class EventListAdapter extends ArrayAdapter<Event> {
         // recycle old view or create a new view
         // dynamically link to the outer layout
         if (convertView == null) {
-            view = LayoutInflater.from(getContext()).inflate(com.example.sync.R.layout.event_list_item,
+            view = LayoutInflater.from(getContext()).inflate(R.layout.event_list_item,
                     parent, false);
         } else {
             view = convertView;
@@ -41,8 +41,8 @@ public class EventListAdapter extends ArrayAdapter<Event> {
 
 
         // link to the views
-        TextView eventName  = view.findViewById(com.example.sync.R.id.event_list_item_event_name);
-        TextView eventDate = view.findViewById(com.example.sync.R.id.event_list_item_event_date);
+        TextView eventName  = view.findViewById(R.id.event_name);
+        TextView eventDate = view.findViewById(R.id.event_date);
 
         // set text
         Event event = getItem(position);
