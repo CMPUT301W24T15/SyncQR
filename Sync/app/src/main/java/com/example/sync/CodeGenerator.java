@@ -39,23 +39,23 @@ public class CodeGenerator {
      */
     public static Bitmap generateCheckInQRCode(String checkInInfo, int width, int height) {
         // For check-in, you could structure the checkInInfo in a specific format
-        // Example: "Check-in : eventID : userID"
+        // Example: "CHECKIN:EVENTID"
         return generateQRCodeBitmap(checkInInfo, width, height);
     }
 
     /**
      * Generates a QR Code bitmap that redirects to an event page.
      *
-     * @param eventPageURL The URL of the event page to encode in the QR Code.
+     * @param eventID The ID of the event page to encode in the QR Code.
      * @param width The desired width of the QR Code image.
      * @param height The desired height of the QR Code image.
      * @return A Bitmap containing the QR Code.
      */
-    public static Bitmap generateEventPageQRCode(String eventPageURL, int width, int height) {
+    public static Bitmap generateEventPageQRCode(String eventID, int width, int height) {
         // The eventPageURL should be a fully qualified URL
-        // Example: "https://www.example.com/event_page"
+        // Example: "EVENTID:"
         // This QR code, when scanned, will redirect users to the event page
-        return generateQRCodeBitmap(eventPageURL, width, height);
+        return generateQRCodeBitmap(eventID, width, height);
     }
 }
 
