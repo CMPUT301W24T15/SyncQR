@@ -8,7 +8,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
-//import com.example.sync.R;
+import com.example.sync.R;
 
 public class OrganizerDashboard extends AppCompatActivity implements FragListener {
     private Organizer organizer;
@@ -20,17 +20,17 @@ public class OrganizerDashboard extends AppCompatActivity implements FragListene
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(com.example.sync.R.layout.activity_organizer);
+        setContentView(R.layout.activity_organizer);
 
         // find fragments
-        dashboard = findViewById(com.example.sync.R.id.dashboard);
-        fragmentContainer = findViewById(com.example.sync.R.id.fragment_container);
+        dashboard = findViewById(R.id.dashboard);
+        fragmentContainer = findViewById(R.id.fragment_container);
 
         // set visibility
         fragmentContainer.setVisibility(View.GONE);
 
-        Button createEvent = dashboard.findViewById(com.example.sync.R.id.create_new_event);
-        Button viewEvent = dashboard.findViewById(com.example.sync.R.id.view_my_events);
+        Button createEvent = dashboard.findViewById(R.id.create_new_event);
+        Button viewEvent = dashboard.findViewById(R.id.view_my_events);
 
         // click listeners
         createEvent.setOnClickListener(new View.OnClickListener() {
@@ -38,7 +38,8 @@ public class OrganizerDashboard extends AppCompatActivity implements FragListene
             public void onClick(View v) {
                 CreateEventFrag createEventFrag = CreateEventFrag.newInstance();
                 FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-                transaction.replace(com.example.sync.R.id.fragment_container, createEventFrag);
+                transaction.replace(R.id.fragment_container, createEventFrag);
+                transaction.addToBackStack(null);
                 transaction.commit();
 
                 dashboard.setVisibility(View.GONE);
@@ -51,11 +52,13 @@ public class OrganizerDashboard extends AppCompatActivity implements FragListene
             public void onClick(View v) {
                 ViewEventsFrag viewEventsFrag = ViewEventsFrag.newInstance();
                 FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-                transaction.replace(com.example.sync.R.id.fragment_container, viewEventsFrag);
+                transaction.replace(R.id.fragment_container, viewEventsFrag);
+                transaction.addToBackStack(null);
                 transaction.commit();
 
                 dashboard.setVisibility(View.GONE);
                 fragmentContainer.setVisibility(View.VISIBLE);
+
             }
         });
 
@@ -63,8 +66,7 @@ public class OrganizerDashboard extends AppCompatActivity implements FragListene
 
     @Override
     public void notifyShutDown(Fragment frag) {
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.remove(frag);
+        getSupportFragmentManager().beginTransaction().remove(frag).commit();
         dashboard.setVisibility(View.VISIBLE);
         fragmentContainer.setVisibility(View.GONE);
     }

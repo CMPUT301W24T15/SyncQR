@@ -10,17 +10,14 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 
 import com.example.sync.Event;
-//import com.example.sync.R;
+import com.example.sync.R;
 
 import java.text.SimpleDateFormat;
 
-public class EventDisplayFrag extends Fragment {
-    Toolbar toolbar;
-    FragListener listener;
+public class DisplayFrag extends Fragment {
 
     ImageView poster; // has not been implemented. implement when connect to database
     TextView name;
@@ -28,9 +25,9 @@ public class EventDisplayFrag extends Fragment {
     TextView location;
     TextView organizer;
     TextView description;
-    public static EventDisplayFrag newInstance(Event event) {
+    static DisplayFrag newInstance(Event event) {
         // create the fragment instance
-        EventDisplayFrag fragment = new EventDisplayFrag();
+        DisplayFrag fragment = new DisplayFrag();
 
         Bundle args = new Bundle();
         args.putSerializable("event", event);
@@ -39,32 +36,21 @@ public class EventDisplayFrag extends Fragment {
         return fragment;
     }
 
-    @Override
-    public void onAttach(@NonNull Context context) {
-        super.onAttach(context);
-
-        if (context instanceof FragListener) {
-            listener = (FragListener) context;
-        } else {
-            throw new RuntimeException(context + " must implement FragListener");
-        }
-    }
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(com.example.sync.R.layout.event_detail_organizer, container, false);
+        View view = inflater.inflate(R.layout.overview_organizer, container, false);
         return view;
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        toolbar = view.findViewById(com.example.sync.R.id.toolbar);
-        name = view.findViewById(com.example.sync.R.id.name);
-        date = view.findViewById(com.example.sync.R.id.date);
-        location = view.findViewById(com.example.sync.R.id.location);
-        organizer = view.findViewById(com.example.sync.R.id.organizer);
-        description = view.findViewById(com.example.sync.R.id.description);
+        name = view.findViewById(R.id.name);
+        date = view.findViewById(R.id.date);
+        location = view.findViewById(R.id.location);
+        organizer = view.findViewById(R.id.organizer);
+        description = view.findViewById(R.id.description);
 
     }
 
@@ -89,12 +75,5 @@ public class EventDisplayFrag extends Fragment {
             description.setText(event.getEventDescription());
         }
 
-        // back to view my events
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                requireActivity().getSupportFragmentManager().popBackStack();
-            }
-        });
     }
 }
