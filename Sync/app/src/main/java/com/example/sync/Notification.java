@@ -39,7 +39,7 @@ public class Notification {
         void onSuccess(ArrayList<Notification> notificationArray);
     }
 
-    public static ArrayList<Notification> getNotification(String AttendeeId, Callback callback) {
+    public static void getNotification(String AttendeeId, Callback callback) {
         // Create an array to receive all notifications
         ArrayList<Notification> notificationArray = new ArrayList<Notification>();
 
@@ -102,7 +102,6 @@ public class Notification {
                         }
                     }
                 });
-        return notificationArray;
     }
 
     public void setNotification() {
