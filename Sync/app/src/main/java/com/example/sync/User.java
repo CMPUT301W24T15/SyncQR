@@ -12,7 +12,7 @@ public abstract class User extends AppCompatActivity {
     private String userid = generateUserID();
     private String username = "Visitor";
     private String password = "000000"; //Initial Password
-    private Profile profile = new Profile(username,"https://avatar.iran.liara.run/public","example","0000000000");
+    private Profile profile = new Profile(username,"","example","0000000000");
     private String position = "Attendee";
     private ArrayList<Event> events;
 

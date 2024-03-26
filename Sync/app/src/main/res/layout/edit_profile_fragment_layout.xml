@@ -4,40 +4,47 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:padding="16dp">
 
-
+    <!-- Clickable ImageView for selecting profile picture -->
     <ImageView
-        android:id="@+id/imageView2"
+        android:id="@+id/profile_picture"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         tools:srcCompat="@tools:sample/avatars" />
+
+    <Button
+        android:id="@+id/upload_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textStyle="bold"
+        android:text="Upload"/>
 
     <EditText
         android:id="@+id/name_editText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:hint="Name"
         android:ems="10"
-        android:text="Name" />
+        android:inputType="textPersonName" />
 
-    <EditText
-        android:id="@+id/pictureurl_editText"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:text="PictureURL" />
+    <!-- Removed the EditText for PictureURL as it's not needed anymore -->
 
     <EditText
         android:id="@+id/email_editText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:hint="Email"
         android:ems="10"
-        android:text="Email" />
+        android:inputType="textEmailAddress" />
 
     <EditText
         android:id="@+id/phone_number_editText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:hint="Phone Number"
         android:ems="10"
-        android:text="Phone Number" />
+        android:inputType="phone" />
+
 </LinearLayout>

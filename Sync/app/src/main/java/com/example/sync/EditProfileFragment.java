@@ -2,13 +2,15 @@ package com.example.sync;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.content.Context;
-import android.content.DialogInterface;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
@@ -22,41 +24,27 @@ import androidx.fragment.app.DialogFragment;
 public class EditProfileFragment extends DialogFragment {
 
     private EditText name;
-    private EditText pictureURL;
     private EditText email;
     private EditText phoneNumber;
+    private ImageView profilePicture;
+    private Uri imageUri; // URI of the selected image
 
-    /**
-     * Listener for fragment interaction events.
-     */
     private OnFragmentInteractionListener listener;
+    private Profile profile;
 
-    /**
-     * The profile currently being edited. This could be a new profile or an existing one.
-     */
-    private Profile profileP;
-
-    /**
-     * Interface for receiving interaction events.
-     * Activities containing this fragment MUST implement this interface.
-     */
-    public interface OnFragmentInteractionListener {
-        /**
-         * Called when the OK button is pressed and the profile editing is confirmed.
-         *
-         * @param newProfileP The updated or newly created {@link Profile} object.
-         */
-        void onConfirmPressed(Profile newProfileP);
-    }
+    // This launcher will handle picking image from gallery
+    private ActivityResultLauncher<String> pickMedia;
 
     @Override
-    public void onAttach(@NonNull Context context) {
-        super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            listener = (OnFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString() + " must implement OnFragmentInteractionListener");
-        }
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        pickMedia = registerForActivityResult(new ActivityResultContracts.GetContent(), uri -> {
+            imageUri = uri;
+            if (uri != null) {
+                profilePicture.setImageURI(uri);
+            }
+        });
     }
 
     @NonNull
@@ -65,45 +53,51 @@ public class EditProfileFragment extends DialogFragment {
         View view = LayoutInflater.from(getActivity()).inflate(R.layout.edit_profile_fragment_layout, null);
 
         name = view.findViewById(R.id.name_editText);
-        pictureURL = view.findViewById(R.id.pictureurl_editText);
         email = view.findViewById(R.id.email_editText);
         phoneNumber = view.findViewById(R.id.phone_number_editText);
+        profilePicture = view.findViewById(R.id.profile_picture);
 
-        if (profileP != null) {
-            name.setText(profileP.getName());
-            pictureURL.setText(profileP.getProfilePictureUrl());
-            email.setText(profileP.getEmail());
-            phoneNumber.setText(profileP.getPhoneNumber());
+        profilePicture.setOnClickListener(v -> {
+            // Trigger the image selection
+            pickMedia.launch("image/*");
+        });
+
+        if (profile != null) {
+            name.setText(profile.getName());
+            email.setText(profile.getEmail());
+            phoneNumber.setText(profile.getPhoneNumber());
+            // Assuming you have a method to set the ImageView from a URL
+            // profilePicture.setImageURI(Uri.parse(profile.getProfilePictureUrl()));
         }
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-
-        return builder
-                .setView(view)
+        return builder.setView(view)
                 .setTitle("Edit Profile")
                 .setNegativeButton("Cancel", null)
-                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        String newProfileName = name.getText().toString();
-                        String newPicture = pictureURL.getText().toString();
-                        String newEmail = email.getText().toString();
-                        String newPhoneNumber = phoneNumber.getText().toString();
+                .setPositiveButton("OK", (dialogInterface, i) -> {
+                    String newProfileName = name.getText().toString();
+                    String newEmail = email.getText().toString();
+                    String newPhoneNumber = phoneNumber.getText().toString();
 
-                        Profile updatedProfileP = new Profile(newProfileName, newPicture, newEmail, newPhoneNumber);
-                        listener.onConfirmPressed(updatedProfileP);
-                    }
+                    // Here, instead of directly using the picture URL, you would use the selected imageUri
+                    // You might need to upload the image first and get a URL back
+                    Profile updatedProfile = new Profile(newProfileName, imageUri.toString(), newEmail, newPhoneNumber);
+                    listener.onConfirmPressed(updatedProfile);
                 }).create();
+    }
+
+    public interface OnFragmentInteractionListener {
+        void onConfirmPressed(Profile newProfile);
     }
 
     /**
      * Constructor for initializing a new profile to edit an existing profile.
      *
-     * @param profileP The {@link Profile} object to be edited.
+     * @param profile The {@link Profile} object to be edited.
      */
-    public EditProfileFragment(Profile profileP) {
+    public EditProfileFragment(Profile profile) {
         super();
-        this.profileP = profileP;
+        this.profile = profile;
     }
 
     /**
