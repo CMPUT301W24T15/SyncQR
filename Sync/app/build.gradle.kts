@@ -39,6 +39,7 @@ dependencies {
     implementation("com.google.firebase:firebase-firestore:24.10.3")
     implementation("com.google.firebase:firebase-database:20.3.1")
     implementation("androidx.recyclerview:recyclerview:1.3.2")
+    implementation ("com.google.code.gson:gson:2.8.8")
     // implementation(files("libs/android.jar"))
     testImplementation("junit:junit:4.13.2")
     implementation(platform("com.google.firebase:firebase-bom:32.7.3"))
