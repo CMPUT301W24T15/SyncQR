@@ -17,8 +17,9 @@ public class AttendeeLogin extends AppCompatActivity {
     private EditText usernameEditText;
     private EditText passwordEditText;
     private Button loginButton;
-    private Button helpButton;
+
     private Button guestLoginButton;
+    private Button helpButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
