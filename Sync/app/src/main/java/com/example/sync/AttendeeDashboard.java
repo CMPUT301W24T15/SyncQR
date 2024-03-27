@@ -1,23 +1,27 @@
 package com.example.sync;
 
-import android.Manifest;
+import android.app.AlarmManager;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.Manifest;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.annotation.NonNull;
 
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.util.ArrayList;
 
-public class AttendeeDashboard extends AppCompatActivity implements LocationPermissionDialog.LocationPermissionDialogListener {
+public abstract class AttendeeDashboard extends AppCompatActivity implements LocationPermissionDialog.LocationPermissionDialogListener {
     private ArrayList<Event> signUpEvents;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     @Override
@@ -73,9 +77,9 @@ public class AttendeeDashboard extends AppCompatActivity implements LocationPerm
             }
         });
     }
-//    /**
-//     * This method set notification and sent it to attendee 1 hour before
-//     */
+    /**
+     * This method set notification and sent it to attendee 1 hour before
+     */
 //    public void setNotification(){
 //        // Create the NotificationChannel
 //        NotificationManager notificationManager = getSystemService(NotificationManager.class);
@@ -98,7 +102,7 @@ public class AttendeeDashboard extends AppCompatActivity implements LocationPerm
     /**
      * This method get a few events from firebase and display them
      */
-    private void browseEvent(){
+    public void browseEvent(){
         db.collection("events").get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 StringBuilder descriptions = new StringBuilder();
@@ -177,5 +181,4 @@ public class AttendeeDashboard extends AppCompatActivity implements LocationPerm
             }
         }
     }
-
 }

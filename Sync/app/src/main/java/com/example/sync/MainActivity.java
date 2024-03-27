@@ -10,6 +10,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.sync.organizer.OrganizerDashboard;
 
+import org.checkerframework.checker.units.qual.A;
+
 public class MainActivity extends AppCompatActivity {
 
     @Override
@@ -36,6 +38,9 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // Nothing to add, since it stays in homepage
+                Intent intent = new Intent(MainActivity.this, AttendeeDashboard.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                startActivity(intent);
             }
         });
 
@@ -62,7 +67,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // for now, linked to administrator
-                Intent intent = new Intent(MainActivity.this, Administrator.class);
+                Intent intent = new Intent(MainActivity.this, AdministratorDashboard.class);
                 startActivity(intent);
             }
         });
