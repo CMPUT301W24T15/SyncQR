@@ -91,7 +91,7 @@ public class ProfileActivity extends AppCompatActivity {
 
     private void clearInputs() {
         userNameInput.setText("");
-        userHomepageInput.setText("");
+        userEmailInput.setText("");
         userContactInput.setText("");
     }
     /**
