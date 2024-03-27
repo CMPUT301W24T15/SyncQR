@@ -3,52 +3,63 @@ package com.example.sync;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class CheckinImpl implements Checkin {
-    private final HashMap<String, HashMap<String, String>> checkinUsers = new HashMap<>();
-    private final List<String> currentCheckins = new ArrayList<>();
-    private final HashMap<String, String> userLocations = new HashMap<>();
-    private int nextId = 1; // To generate sequential IDs
+    private final HashMap<String, List<String>> eventSignUpUsers = new HashMap<>();
+    private final HashMap<String, HashMap<String, Integer>> eventCheckinCounts = new HashMap<>();
+    private final HashMap<String, List<String>> eventCurrentCheckins = new HashMap<>();
+    private final HashMap<String, HashMap<String, String>> eventLocations = new HashMap<>();
 
     @Override
-    public void userCheckin(String userId, HashMap<String, String> userDetails, boolean grantLocationPermission) {
-        String checkinId = "user_" + nextId++;
-        checkinUsers.put(checkinId, userDetails);
-        currentCheckins.add(checkinId);
-
-        if (grantLocationPermission) {
-            String location = userDetails.get("location"); // Assuming location is part of userDetails
-            if (location != null) {
-                userLocations.put(checkinId, location);
-            }
-        }
-
-        // Save to Firestore
-        Database.addEntry("checkinUsers", checkinId, userDetails);
-        if (grantLocationPermission) {
-            Database.addEntry("userLocations", checkinId, userDetails); // Adjust this according to how you want to store location info
-        }
+    public void signUpUser(String eventId, String userId) {
+        eventSignUpUsers.computeIfAbsent(eventId, k -> new ArrayList<>()).add(userId);
+        // Consider saving to Firestore here
     }
 
     @Override
-    public void userCheckout(String userId) {
+    public void userCheckin(String eventId, String userId, String location, boolean isFirstCheckin) {
+        // Update check-in counts
+        eventCheckinCounts.computeIfAbsent(eventId, k -> new HashMap<>()).merge(userId, 1, Integer::sum);
+
+        // Add to current check-ins if it's the first time
+        if (isFirstCheckin) {
+            eventCurrentCheckins.computeIfAbsent(eventId, k -> new ArrayList<>()).add(userId);
+        }
+
+        // Update location if provided
+        if (location != null && !location.isEmpty()) {
+            eventLocations.computeIfAbsent(eventId, k -> new HashMap<>()).put(userId, location);
+        }
+
+        // Save updated data to Firestore here
+    }
+
+    @Override
+    public void userCheckout(String eventId, String userId) {
+        // Remove from current check-ins
+        List<String> currentCheckins = eventCurrentCheckins.getOrDefault(eventId, new ArrayList<>());
         currentCheckins.remove(userId);
-        userLocations.remove(userId);
-        // Update Firestore if necessary. This might require fetching the existing document and updating it.
+        // Consider updating Firestore here for checkout
     }
 
     @Override
-    public HashMap<String, HashMap<String, String>> getCheckins() {
-        return checkinUsers;
+    public List<String> getSignUpUsers(String eventId) {
+        return eventSignUpUsers.getOrDefault(eventId, new ArrayList<>());
     }
 
     @Override
-    public List<String> getCurrentCheckins() {
-        return currentCheckins;
+    public HashMap<String, Integer> getCheckinCounts(String eventId) {
+        return eventCheckinCounts.getOrDefault(eventId, new HashMap<>());
     }
 
     @Override
-    public HashMap<String, String> getLocations() {
-        return userLocations;
+    public List<String> getCurrentCheckins(String eventId) {
+        return eventCurrentCheckins.getOrDefault(eventId, new ArrayList<>());
+    }
+
+    @Override
+    public HashMap<String, String> getLocations(String eventId) {
+        return eventLocations.getOrDefault(eventId, new HashMap<>());
     }
 }
