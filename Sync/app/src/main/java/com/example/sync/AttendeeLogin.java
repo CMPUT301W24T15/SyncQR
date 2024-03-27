@@ -3,6 +3,7 @@ package com.example.sync;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -13,8 +14,8 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 public class AttendeeLogin extends AppCompatActivity {
 
-    private TextInputEditText usernameEditText;
-    private TextInputEditText passwordEditText;
+    private EditText usernameEditText;
+    private EditText passwordEditText;
     private Button loginButton;
     private Button helpButton;
     private Button guestLoginButton;
@@ -22,7 +23,7 @@ public class AttendeeLogin extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_attendee);
+        setContentView(R.layout.login_event_attendee);
 
         usernameEditText = findViewById(R.id.usernameEditText);
         passwordEditText = findViewById(R.id.passwordEditText);
