@@ -10,37 +10,64 @@ public class CheckinImpl implements Checkin {
     private final HashMap<String, HashMap<String, Integer>> eventCheckinCounts = new HashMap<>();
     private final HashMap<String, List<String>> eventCurrentCheckins = new HashMap<>();
     private final HashMap<String, HashMap<String, String>> eventLocations = new HashMap<>();
-
+    private final String EVENTS_COLLECTION = "events";
     @Override
     public void signUpUser(String eventId, String userId) {
-        eventSignUpUsers.computeIfAbsent(eventId, k -> new ArrayList<>()).add(userId);
-        // Consider saving to Firestore here
+        List<String> signUpUsers = eventSignUpUsers.computeIfAbsent(eventId, k -> new ArrayList<>());
+        signUpUsers.add(userId);
+
+        // Consider this a subcollection under each event for scalability
+        Database.addEntry(EVENTS_COLLECTION + "/" + eventId + "/signUpUsers", userId, new HashMap<String, String>() {{
+            put("userId", userId);
+        }});
     }
 
     @Override
     public void userCheckin(String eventId, String userId, String location, boolean isFirstCheckin) {
-        // Update check-in counts
-        eventCheckinCounts.computeIfAbsent(eventId, k -> new HashMap<>()).merge(userId, 1, Integer::sum);
+        HashMap<String, Integer> checkinCountsInt = eventCheckinCounts.computeIfAbsent(eventId, k -> new HashMap<>());
+        checkinCountsInt.merge(userId, 1, Integer::sum);
 
-        // Add to current check-ins if it's the first time
+        // Convert check-in counts from Integer to String for Firestore
+        HashMap<String, String> checkinCountsStr = new HashMap<>();
+        for (Map.Entry<String, Integer> entry : checkinCountsInt.entrySet()) {
+            checkinCountsStr.put(entry.getKey(), String.valueOf(entry.getValue()));
+        }
+
         if (isFirstCheckin) {
-            eventCurrentCheckins.computeIfAbsent(eventId, k -> new ArrayList<>()).add(userId);
+            List<String> currentCheckins = eventCurrentCheckins.computeIfAbsent(eventId, k -> new ArrayList<>());
+            currentCheckins.add(userId);
+
+            // Update Firestore for current check-ins
+            Database.addEntry(EVENTS_COLLECTION + "/" + eventId + "/currentCheckins", userId, new HashMap<String, String>() {{
+                put("checkinId", userId); // Assuming you want to track by userId for check-ins
+            }});
         }
 
-        // Update location if provided
         if (location != null && !location.isEmpty()) {
-            eventLocations.computeIfAbsent(eventId, k -> new HashMap<>()).put(userId, location);
+            HashMap<String, String> locations = eventLocations.computeIfAbsent(eventId, k -> new HashMap<>());
+            locations.put(userId, location);
+
+            // Update Firestore for user locations
+            Database.addEntry(EVENTS_COLLECTION + "/" + eventId + "/userLocations", userId, new HashMap<String, String>() {{
+                put("location", location);
+            }});
         }
 
-        // Save updated data to Firestore here
+        // Update Firestore with the String-based check-in counts
+        Database.changeEntry(EVENTS_COLLECTION + "/" + eventId, "checkinCounts", checkinCountsStr);
     }
 
     @Override
     public void userCheckout(String eventId, String userId) {
-        // Remove from current check-ins
         List<String> currentCheckins = eventCurrentCheckins.getOrDefault(eventId, new ArrayList<>());
         currentCheckins.remove(userId);
-        // Consider updating Firestore here for checkout
+
+        // Assuming direct Firestore update for current check-ins on checkout
+        Database.changeEntry(EVENTS_COLLECTION + "/" + eventId + "/currentCheckins", userId, new HashMap<String, String>() {{
+            put("checkedOut", "true"); // Example field update for checkout
+        }});
+
+        // Consider how you want to reflect checkout in Firestore (e.g., removing from current check-ins, updating a status, etc.)
     }
 
     @Override
