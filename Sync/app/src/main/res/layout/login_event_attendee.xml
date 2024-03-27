@@ -20,7 +20,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/helpTextView"
+        android:id="@+id/helpButtonLogin"
         android:layout_width="74dp"
         android:layout_height="43dp"
         android:layout_marginTop="8dp"
@@ -42,7 +42,7 @@
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/helpTextView" />
+        app:layout_constraintTop_toBottomOf="@+id/helpButtonLogin" />
 
     <TextView
         android:id="@+id/usernameHintTextView"
@@ -71,7 +71,7 @@
         app:layout_constraintTop_toBottomOf="@+id/usernameEditText" />
 
     <Button
-        android:id="@+id/guestTextView"
+        android:id="@+id/guestButton"
         android:layout_width="176dp"
         android:layout_height="42dp"
         android:layout_marginStart="16dp"
@@ -90,7 +90,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/guestTextView" />
+        app:layout_constraintTop_toBottomOf="@id/guestButton" />
 
     <TextView
         android:id="@+id/textView"
