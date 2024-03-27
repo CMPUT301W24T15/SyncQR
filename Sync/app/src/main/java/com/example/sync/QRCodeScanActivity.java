@@ -54,8 +54,8 @@ public class QRCodeScanActivity extends AppCompatActivity {
     private void processScannedData(String scannedData) {
         if (scannedData.startsWith("CHECKIN:")) {
             // Extract check-in information and upload to Firestore
-            //uploadCheckInInfo(scannedData.substring("CHECKIN:".length()));
-            int i = 1;
+            uploadCheckInInfo(scannedData.substring("CHECKIN:".length()));
+
         } else if (scannedData.startsWith("EVENTID:")) {
             // Assume it's a URL to an event page and start EventActivity
             Intent intent = new Intent(this, Event.class);
@@ -67,12 +67,12 @@ public class QRCodeScanActivity extends AppCompatActivity {
         }
     }
 
-//    private void uploadCheckInInfo(String checkInInfo) {
-//        // Assuming checkInInfo contains the necessary information for check-in
-//        // Adjust the database path and document structure as needed
-//        db.collection("Checked-in System")
-//                .add(/* Your check-in data model here, e.g., new CheckIn(checkInInfo) */)
-//                .addOnSuccessListener(documentReference -> Toast.makeText(QRCodeScanActivity.this, "Check-in successful", Toast.LENGTH_SHORT).show())
-//                .addOnFailureListener(e -> Toast.makeText(QRCodeScanActivity.this, "Check-in failed", Toast.LENGTH_SHORT).show());
-//    }
+    private void uploadCheckInInfo(String checkInInfo) {
+        // Assuming checkInInfo contains the necessary information for check-in
+        // Adjust the database path and document structure as needed
+        db.collection("Checked-in System")
+                .add(/* Your check-in data model here, e.g., new CheckIn(checkInInfo) */)
+                .addOnSuccessListener(documentReference -> Toast.makeText(QRCodeScanActivity.this, "Check-in successful", Toast.LENGTH_SHORT).show())
+                .addOnFailureListener(e -> Toast.makeText(QRCodeScanActivity.this, "Check-in failed", Toast.LENGTH_SHORT).show());
+    }
 }
