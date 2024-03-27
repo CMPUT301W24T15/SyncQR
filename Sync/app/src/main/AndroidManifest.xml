@@ -43,6 +43,7 @@
         <activity android:name=".ProfileActivity"/>
         <activity android:name=".AttendeeDashboard" />
         <activity android:name=".QRCodeScanActivity"/>
+        <activity android:name=".AttendeeLogin"/>
         <activity android:name=".NotificationActivity"/>
         <!--suppress AndroidDomInspection -->
         <service
