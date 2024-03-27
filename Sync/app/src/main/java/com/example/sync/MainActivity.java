@@ -63,6 +63,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 // for now, linked to administrator
                 Intent intent = new Intent(MainActivity.this, Administrator.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                 startActivity(intent);
             }
         });
@@ -71,6 +72,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, QRCodeScanActivity.class); // Assuming you have a QRCodeScanActivity
+                intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                 startActivity(intent);
             }
         });
@@ -80,7 +82,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 // for now, linked to organizer
                 Intent intent = new Intent(MainActivity.this, OrganizerDashboard.class);
-
+                intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                 // Start the new activity
                 startActivity(intent);
             }

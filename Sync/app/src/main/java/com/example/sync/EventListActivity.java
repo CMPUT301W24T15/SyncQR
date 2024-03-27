@@ -8,13 +8,21 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.sync.organizer.EventListAdapter;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Map;
 
 public class EventListActivity extends AppCompatActivity {
 
@@ -43,44 +51,43 @@ public class EventListActivity extends AppCompatActivity {
 
         String TAG = "kevinTag";
 
-        Event sampleEvent = new Event("Test Meeting 1", new Date(1230123), "Edmonton", "Kevin", "Enjoy your sunny day", "sample poster", 10000009);
-        sampleEvent.setEventId(0);
+//        Event sampleEvent = new Event("Test Meeting 1", new Date(1230123), "Edmonton", "Kevin", "Enjoy your sunny day", "sample poster", 10000009);
+//        sampleEvent.setEventId(0);
 
-        dataList.add(sampleEvent);
+//        dataList.add(sampleEvent);
 
-//        db.collection("events")
-//                .get()
-//                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-//                    @Override
-//                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-//                        if (task.isSuccessful()) {
-//                            for (QueryDocumentSnapshot document : task.getResult()) {
-//                                Log.d(TAG, document.getId() + " => " + document.getData());
-//
-//                                Map<String, Object> temp = document.getData();
-//                                SimpleDateFormat formatter = new SimpleDateFormat("yyyy.MM.dd");
-//
-////                                try {
-//                                    dataList.add(new Event(temp.get("eventName").toString(),
-//                                            new Date(1230123),
-////                                            formatter.parse(temp.get("eventDate").toString()),
-//                                            temp.get("eventLocation").toString(),
-//                                            temp.get("organizerName").toString(),
-//                                            temp.get("eventDescription").toString(),
-//                                            temp.get("poster").toString(),
-//                                            Integer.parseInt(temp.get("attendeesCount").toString()))
-//                                            );
-////                                } catch (ParseException e) {
-////                                    Log.d(TAG, "Error in parsing");
-////                                    throw new RuntimeException(e);
-////                                }
-//                                eventListAdapter.notifyDataSetChanged();
-//                            }
-//                        } else {
-//                            Log.d(TAG, "Error getting documents: ", task.getException());
-//                        }
-//                    }
-//                });
+        db.collection("Events")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                Log.d(TAG, document.getId() + " => " + document.getData());
+
+                                Map<String, Object> temp = document.getData();
+                                SimpleDateFormat formatter = new SimpleDateFormat("yyyy.MM.dd");
+
+                                try {
+                                    dataList.add(new Event(temp.get("eventName").toString(),
+                                            formatter.parse(temp.get("eventDate").toString()),
+                                            temp.get("eventLocation").toString(),
+                                            temp.get("organizerName").toString(),
+                                            temp.get("eventDescription").toString(),
+                                            temp.get("poster").toString(),
+                                            Integer.parseInt(temp.get("attendeesCount").toString()))
+                                            );
+                                } catch (ParseException e) {
+                                    Log.d(TAG, "Error in parsing");
+                                    throw new RuntimeException(e);
+                                }
+                                eventListAdapter.notifyDataSetChanged();
+                            }
+                        } else {
+                            Log.d(TAG, "Error getting documents: ", task.getException());
+                        }
+                    }
+                });
 
         homeButton.setOnClickListener(new View.OnClickListener() {
             @Override
