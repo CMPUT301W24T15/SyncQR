@@ -21,7 +21,7 @@ import java.util.Map;
 public class Notification {
     private final static String TAG = "Notification";
     private final static FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private static String eventQuery;
+    private static ArrayList<String> eventQuery;
     private String eventID;
     private String title;   // event name
     private String message;
@@ -58,44 +58,49 @@ public class Notification {
 
                                 // extract the eventID
                                 Map<String, Object> data = document.getData();
-                                eventQuery = (String) data.get("event");
+                                eventQuery = (ArrayList<String>) data.get("event");
                             }
 
-
+                            if (eventQuery.isEmpty()){
+                                callback.onSuccess(notificationArray);
+                                return;
+                            }
                             // Fetch all notifications
-                            db.collection("Notifications")
-                                    .whereEqualTo("eventID", eventQuery)
-                                    .get()
-                                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                                        @Override
-                                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                            for (String event: eventQuery) {
+                                db.collection("Notifications")
+                                        .whereEqualTo("eventID", eventQuery)
+                                        .get()
+                                        .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
 
-                                            // get query result
-                                            if (task.isSuccessful()) {
-                                                // An event may have many notifications
-                                                for (QueryDocumentSnapshot document : task.getResult()) {
-                                                    Log.d(TAG, document.getId() + " => " + document.getData());
+                                                // get query result
+                                                if (task.isSuccessful()) {
+                                                    // An event may have many notifications
+                                                    for (QueryDocumentSnapshot document : task.getResult()) {
+                                                        Log.d(TAG, document.getId() + " => " + document.getData());
 
-                                                    // extract
-                                                    Map<String, Object> data = document.getData();
-                                                    String id = (String) data.get("eventID");
-                                                    String title = (String) data.get("title");
-                                                    String message = (String) data.get("message");
+                                                        // extract
+                                                        Map<String, Object> data = document.getData();
+                                                        String id = (String) data.get("eventID");
+                                                        String title = (String) data.get("title");
+                                                        String message = (String) data.get("message");
 
-                                                    // create new instance
-                                                    Notification notification = new Notification(id, title, message);
-                                                    notificationArray.add(notification);
+                                                        // create new instance
+                                                        Notification notification = new Notification(id, title, message);
+                                                        notificationArray.add(notification);
+                                                    }
+
+                                                    // call back
+                                                    callback.onSuccess(notificationArray);
+
+                                                } else {
+                                                    // did not find the event
+                                                    Log.d(TAG, "Error getting documents: ", task.getException());
                                                 }
-
-                                                // call back
-                                                callback.onSuccess(notificationArray);
-
-                                            } else {
-                                                // did not find the event
-                                                Log.d(TAG, "Error getting documents: ", task.getException());
                                             }
-                                        }
-                                    });
+                                        });
+                            }
 
                         } else {
                             Log.d(TAG, "Error getting documents: ", task.getException());
