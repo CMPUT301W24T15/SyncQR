@@ -17,7 +17,7 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.util.ArrayList;
 
-public class AttendeeDashboard extends AppCompatActivity{
+public class AttendeeDashboard extends AppCompatActivity {
     private ArrayList<Event> events;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     @Override
