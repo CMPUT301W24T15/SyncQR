@@ -11,7 +11,7 @@ import java.util.Map;
  */
 public class Event implements Serializable {
 
-    private int eventId;
+    private static int eventId = 0; // increment each time
     private String eventName;
     private Date eventDate;
     private String eventLocation;
@@ -20,16 +20,16 @@ public class Event implements Serializable {
     private String eventDescription;
     private String poster;
     private int organizerId;
-    private Map<String, Boolean> attendees;
+
 
     private transient FirebaseFirestore db = FirebaseFirestore.getInstance();
 
 
 
     public Event(String eventName, Date eventDate, String eventLocation, String organizerName, String eventDescription, String poster, int organizerId) {
-        EventIDGenerator newEventID = new EventIDGenerator();
-        // Set the eventID using EventIDGenerator.java
-        this.eventId = newEventID.getEventID();
+
+        // eventID is set to be int, but will always be converted to a string when used for convenience.
+        this.eventId++;
         this.eventName = eventName;
         this.eventDate = eventDate;
         this.eventLocation = eventLocation;
@@ -44,23 +44,20 @@ public class Event implements Serializable {
      * This is a method that save the event information into database
      */
 
-    // has not modified, it is inconsistent with the constructor
     public void saveEventToDatabase() {
         Map<String, Object> eventData = new HashMap<>();
-        eventData.put("eventId", eventId);
+        eventData.put("eventId", Integer.toString(eventId));
         eventData.put("eventName", eventName);
         eventData.put("eventDate", eventDate);
         eventData.put("eventLocation", eventLocation);
         eventData.put("attendeeNumber", attendeeNumber);
         eventData.put("eventDescription", eventDescription);
         eventData.put("poster", poster);
-
-        eventData.put("organizerName", organizerName);  // added to make it consistent with constructor
-
+        eventData.put("organizerName", organizerName);
         eventData.put("organizerId", organizerId);
-        eventData.put("attendees", attendees);
 
-        db.collection("events").document(String.valueOf(eventId)).set(eventData)
+
+        db.collection("Events").document(String.valueOf(eventId)).set(eventData)
                 // Upload successful
                 .addOnSuccessListener(aVoid -> {
                 })
@@ -68,22 +65,13 @@ public class Event implements Serializable {
                 .addOnFailureListener(e -> {
                 });
     }
-    /**
-     * This is a class that keeps track of check in attendance
-     */
-    public void checkInAttendee(String attendeeId) {
-        attendees.put(attendeeId, true);
-        // Recalculate the number of attendees
-        attendeeNumber = attendees.size();
-        // Save the updated attendee list and count
-        saveEventToDatabase();
-    }
+
 
     /**
      * The following methods are the setters and getters
      */
-    public int getEventId() {
-        return eventId;
+    public String getEventId() {
+        return Integer.toString(eventId);
     }
 
     public void setEventId(int eventId) {
@@ -144,16 +132,6 @@ public class Event implements Serializable {
 
     public void setOrganizerId(int organizerId) {
         this.organizerId = organizerId;
-    }
-
-    public Map<String, Boolean> getAttendees() {
-        return attendees;
-    }
-
-    public void setAttendees(Map<String, Boolean> attendees) {
-        this.attendees = attendees;
-        // Update attendee count
-        this.attendeeNumber = attendees.size();
     }
 
     public String getOrganizerName() {

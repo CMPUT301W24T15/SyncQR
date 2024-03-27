@@ -5,16 +5,6 @@ import android.os.Bundle;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
-import com.google.zxing.integration.android.IntentIntegrator;
-import com.google.zxing.integration.android.IntentResult;
-/**
- * This is a class that can scan QR code
- */
-import android.content.Intent;
-import android.os.Bundle;
-import android.widget.Toast;
-
-import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.zxing.integration.android.IntentIntegrator;
@@ -54,7 +44,7 @@ public class QRCodeScanActivity extends AppCompatActivity {
     private void processScannedData(String scannedData) {
         if (scannedData.startsWith("CHECKIN:")) {
             // Extract check-in information and upload to Firestore
-            uploadCheckInInfo(scannedData.substring("CHECKIN:".length()));
+            //uploadCheckInInfo(scannedData.substring("CHECKIN:".length()));
 
         } else if (scannedData.startsWith("EVENTID:")) {
             // Assume it's a URL to an event page and start EventActivity
@@ -67,12 +57,12 @@ public class QRCodeScanActivity extends AppCompatActivity {
         }
     }
 
-    private void uploadCheckInInfo(String checkInInfo) {
-        // Assuming checkInInfo contains the necessary information for check-in
-        // Adjust the database path and document structure as needed
-        db.collection("Checked-in System")
-                .add(/* Your check-in data model here, e.g., new CheckIn(checkInInfo) */)
-                .addOnSuccessListener(documentReference -> Toast.makeText(QRCodeScanActivity.this, "Check-in successful", Toast.LENGTH_SHORT).show())
-                .addOnFailureListener(e -> Toast.makeText(QRCodeScanActivity.this, "Check-in failed", Toast.LENGTH_SHORT).show());
-    }
+//    private void uploadCheckInInfo(String checkInInfo) {
+//        // Assuming checkInInfo contains the necessary information for check-in
+//        // Adjust the database path and document structure as needed
+//        db.collection("Checked-in System")
+//                .add(/* Your check-in data model here, e.g., new CheckIn(checkInInfo) */)
+//                .addOnSuccessListener(documentReference -> Toast.makeText(QRCodeScanActivity.this, "Check-in successful", Toast.LENGTH_SHORT).show())
+//                .addOnFailureListener(e -> Toast.makeText(QRCodeScanActivity.this, "Check-in failed", Toast.LENGTH_SHORT).show());
+//    }
 }

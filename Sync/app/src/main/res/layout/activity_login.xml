@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/white">
+
+    <TextView
+        android:id="@+id/login_starting_page_text"
+        android:layout_width="match_parent"
+        android:layout_height="480dp"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:paddingBottom="220dp"
+        android:textSize="40dp"
+        android:textColor="@color/text_color"
+        android:text="Who are you?"
+        android:textStyle="bold"/>
+
+    <Button
+        android:id="@+id/login_attendee_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:backgroundTint="@color/button_yellow"
+        android:layout_marginLeft="@dimen/medium_margin"
+        android:layout_marginRight="@dimen/medium_margin"
+        android:layout_marginBottom="@dimen/small_margin"
+        android:textSize="@dimen/button_text_size"
+        android:textColor="@color/text_color"
+        android:text="Attendee"
+        android:textStyle="bold"></Button>
+
+    <Button
+        android:id="@+id/login_organizer_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:backgroundTint="@color/button_yellow"
+        android:layout_marginLeft="@dimen/medium_margin"
+        android:layout_marginRight="@dimen/medium_margin"
+        android:layout_marginBottom="@dimen/small_margin"
+        android:textSize="@dimen/button_text_size"
+        android:textColor="@color/text_color"
+        android:text="Organizer"
+        android:textStyle="bold"></Button>
+
+    <Button
+        android:id="@+id/login_administrator_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:backgroundTint="@color/button_yellow"
+        android:layout_marginLeft="@dimen/medium_margin"
+        android:layout_marginRight="@dimen/medium_margin"
+        android:layout_marginBottom="@dimen/small_margin"
+        android:textSize="@dimen/button_text_size"
+        android:textColor="@color/text_color"
+        android:text="Administrator"
+        android:textStyle="bold"></Button>
+
+        <TextView
+            android:id="@+id/login_starting_page_reminder"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:layout_weight="1"
+            android:textColor="@color/text_reminder"
+            android:text="(Login Required)"/>
+
+</LinearLayout>
