@@ -28,6 +28,7 @@ public class Event implements Serializable {
 
     public Event(String eventName, Date eventDate, String eventLocation, String organizerName, String eventDescription, String poster, int organizerId) {
 
+        // eventID is set to be int, but will always be converted to a string when used for convenience.
         this.eventId++;
         this.eventName = eventName;
         this.eventDate = eventDate;
@@ -45,7 +46,7 @@ public class Event implements Serializable {
 
     public void saveEventToDatabase() {
         Map<String, Object> eventData = new HashMap<>();
-        eventData.put("eventId", eventId);
+        eventData.put("eventId", Integer.toString(eventId));
         eventData.put("eventName", eventName);
         eventData.put("eventDate", eventDate);
         eventData.put("eventLocation", eventLocation);
@@ -69,8 +70,8 @@ public class Event implements Serializable {
     /**
      * The following methods are the setters and getters
      */
-    public int getEventId() {
-        return eventId;
+    public String getEventId() {
+        return Integer.toString(eventId);
     }
 
     public void setEventId(int eventId) {

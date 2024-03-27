@@ -21,7 +21,7 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.util.ArrayList;
 
-public abstract class AttendeeDashboard extends AppCompatActivity implements LocationPermissionDialog.LocationPermissionDialogListener {
+public class AttendeeDashboard extends AppCompatActivity implements LocationPermissionDialog.LocationPermissionDialogListener {
     private ArrayList<Event> signUpEvents;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     @Override

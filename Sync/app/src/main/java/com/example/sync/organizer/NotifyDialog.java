@@ -56,7 +56,7 @@ public class NotifyDialog extends DialogFragment {
                         // push the notification
                         Bundle args = getArguments();
                         Event event = (Event) args.getSerializable("event");
-                        String eventID = Integer.toString(event.getEventId());
+                        String eventID = event.getEventId();
                         String title = event.getEventName();
                         Notification notification = new Notification(eventID, title, message);
                         notification.setNotification();
