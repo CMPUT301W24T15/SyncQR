@@ -16,12 +16,8 @@ import java.util.ArrayList;
  * This is a class that contains the methods of profile
  */
 public class ProfileActivity extends AppCompatActivity {
-    private EditText userNameInput, userHomepageInput, userContactInput;
+    private EditText userNameInput, userEmailInput, userContactInput;
     private DatabaseReference databaseReference;
-
-    public static ArrayList<Profile> find(String profileNumber) {
-        return null;
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,7 +31,7 @@ public class ProfileActivity extends AppCompatActivity {
 
         // Initialize UI elements
         userNameInput = findViewById(R.id.user_name_input);
-        userHomepageInput = findViewById(R.id.user_homepage_input);
+        userEmailInput = findViewById(R.id.user_email_input);
         userContactInput = findViewById(R.id.user_contact_input);
         Button saveButton = findViewById(R.id.save_button);
         Button cancelButton = findViewById(R.id.cancel_button);
@@ -55,13 +51,13 @@ public class ProfileActivity extends AppCompatActivity {
         saveButton.setOnClickListener(view -> saveProfileData());
         cancelButton.setOnClickListener(view -> clearInputs());
     }
-    void saveProfileData() {
+    private void saveProfileData() {
         String name = userNameInput.getText().toString().trim();
-        String homepage = userHomepageInput.getText().toString().trim();
+        String email = userEmailInput.getText().toString().trim();
         String contact = userContactInput.getText().toString().trim();
 
         String userId = databaseReference.push().getKey();
-        Profile profile = new Profile(name, "", homepage, contact);
+        Profile profile = new Profile(name, "", email, contact);
         databaseReference.child(userId).setValue(profile);
     }
     /**
@@ -92,20 +88,7 @@ public class ProfileActivity extends AppCompatActivity {
         Intent intent = new Intent(this, QRCodeScanActivity.class); // Updated to correct class
         startActivity(intent);
     }
-    /**
-     * This is a method that save the profile data
-     */
-//    private void saveProfileData() {
-//        String name = userNameInput.getText().toString().trim();
-//        String homepage = userHomepageInput.getText().toString().trim();
-//        String contact = userContactInput.getText().toString().trim();
-//
-//        // Assuming you have a Profile object
-//        String userId = databaseReference.push().getKey(); // Generate a unique ID for the user
-//        ProfileP profile = new Profile(name, "", homepage, contact); // Updated to use correct parameters
-//        databaseReference.child(userId).setValue(profile);
-//    }
-//    /**/
+
     private void clearInputs() {
         userNameInput.setText("");
         userHomepageInput.setText("");
