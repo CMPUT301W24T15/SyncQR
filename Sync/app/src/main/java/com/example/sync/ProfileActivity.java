@@ -88,8 +88,8 @@ public class ProfileActivity extends AppCompatActivity {
     private void loadProfileImage(String imageUrl) {
         Glide.with(this)
                 .load(imageUrl)
-                .placeholder(R.drawable.default_avatar)
-                .error(R.drawable.default_avatar)
+                .placeholder(R.drawable.uploadimage)
+                .error(R.drawable.uploadimage)
                 .into(userImageInput);
     }
 }

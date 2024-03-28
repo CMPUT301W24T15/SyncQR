@@ -6,6 +6,7 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -13,6 +14,8 @@ import android.Manifest;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 import androidx.core.content.ContextCompat;
 import androidx.annotation.NonNull;
 
@@ -24,6 +27,7 @@ import java.util.ArrayList;
 public class AttendeeDashboard extends AppCompatActivity implements LocationPermissionDialog.LocationPermissionDialogListener {
     private ArrayList<Event> signUpEvents;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,14 +65,6 @@ public class AttendeeDashboard extends AppCompatActivity implements LocationPerm
             }
         });
 
-//        Button setNotificationButton = findViewById(R.id.messages_button);
-//        setNotificationButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                setNotification();
-//            }
-//        });
-
         Button browseEventButton = findViewById(R.id.event_button);
         browseEventButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -77,32 +73,11 @@ public class AttendeeDashboard extends AppCompatActivity implements LocationPerm
             }
         });
     }
-    /**
-     * This method set notification and sent it to attendee 1 hour before
-     */
-//    public void setNotification(){
-//        // Create the NotificationChannel
-//        NotificationManager notificationManager = getSystemService(NotificationManager.class);
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-//            NotificationChannel channel = new NotificationChannel("event_channel_id",
-//                    "Event Channel",
-//                    NotificationManager.IMPORTANCE_DEFAULT);
-//            notificationManager.createNotificationChannel(channel);
-//        }
-//        // Schedule the notification
-//        AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
-//        Intent notificationIntent = new Intent(this, MyNotificationReceiver.class);
-//        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-//
-//        // Set the time for the notification (1 hour before the event)
-//        long eventTimeInMillis = events.get(0).getEventDate().getTime(); // calculate the event time in milliseconds
-//        long notificationTime = eventTimeInMillis - 3600000; // 1 hour before the event
-//        alarmManager.set(AlarmManager.RTC_WAKEUP, notificationTime, pendingIntent);
-//    }
+
     /**
      * This method get a few events from firebase and display them
      */
-    public void browseEvent(){
+    public void browseEvent() {
         db.collection("events").get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 StringBuilder descriptions = new StringBuilder();
@@ -118,6 +93,7 @@ public class AttendeeDashboard extends AppCompatActivity implements LocationPerm
             }
         });
     }
+
     /**
      * Fetches events that a user has signed up for.
      * @param userID The ID of the user whose signed-up events are to be fetched.
@@ -145,6 +121,7 @@ public class AttendeeDashboard extends AppCompatActivity implements LocationPerm
                 });
 
     }
+
     private static final int YOUR_PERMISSION_REQUEST_CODE = 123;
 
     // Implement the interface method
@@ -155,6 +132,7 @@ public class AttendeeDashboard extends AppCompatActivity implements LocationPerm
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, YOUR_PERMISSION_REQUEST_CODE);
         }
     }
+
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
 
     private void requestLocationPermission() {
@@ -181,4 +159,38 @@ public class AttendeeDashboard extends AppCompatActivity implements LocationPerm
             }
         }
     }
+
+    private void createNotification(String title, String body) {
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "default_notification_channel_id")
+                .setSmallIcon(R.drawable.ic_notification)
+                .setContentTitle(title)
+                .setContentText(body)
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT);
+
+        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
+        notificationManager.notify(0, builder.build());
+    }
+    private void createNotificationChannel() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            CharSequence name = getString(R.string.channel_name);
+            String description = getString(R.string.channel_description);
+            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+            NotificationChannel channel = new NotificationChannel("default_notification_channel_id", name, importance);
+            channel.setDescription(description);
+            NotificationManager notificationManager = getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channel);
+        }
+    }
+
+
 }

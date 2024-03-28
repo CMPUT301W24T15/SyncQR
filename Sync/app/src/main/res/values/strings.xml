@@ -13,4 +13,7 @@
     <string name="event_image_desc" />
     <string name="event_details" />
     <string name="event_description_default">\n</string>
+    <string name="default_notification_channel_id">default_channel_id</string>
+    <string name="channel_name">Notification Channel</string>
+    <string name="channel_description">Channel to receive Notification</string>
 </resources>
