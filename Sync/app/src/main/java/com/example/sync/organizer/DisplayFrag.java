@@ -63,8 +63,8 @@ public class DisplayFrag extends Fragment {
             Event event = (Event) args.getSerializable("event");
             name.setText(event.getEventName());
 
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd");
-            date.setText(sdf.format(event.getEventDate()));
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd HH:mm");
+            date.setText(sdf.format(event.getEventDate().toDate()));
 
             String event_location = "Location:  " + event.getEventLocation();
             location.setText(event_location);

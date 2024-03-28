@@ -48,13 +48,15 @@
 
         <TextView
             android:id="@+id/location"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="20dp"
+            android:layout_marginVertical="7dp"
             android:text="Location:  CCIS 1-140"
-            android:textSize="18sp"
+            android:textSize="17sp"
             app:layout_constraintTop_toBottomOf="@id/date"
             app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toTopOf="@+id/organizer"/>
 
         <TextView
@@ -63,7 +65,7 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="20dp"
             android:text="Organizer:  Yiqing17"
-            android:textSize="18sp"
+            android:textSize="17sp"
             app:layout_constraintTop_toBottomOf="@id/location"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintBottom_toTopOf="@id/description"/>

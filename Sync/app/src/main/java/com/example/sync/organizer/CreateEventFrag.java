@@ -71,9 +71,6 @@ public class CreateEventFrag extends Fragment {
                         Log.d("PhotoPicker", "Selected URI: " + uri);
                         try {
                             InputStream inputStream = getContext().getContentResolver().openInputStream(imageuri);
-                            // 将 InputStream 对象解码为 Bitmap 对象
-                            Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
-                            // 设置 Bitmap 对象给 ImageView
                             image.setImageURI(null);
                             image.setImageURI(imageuri);
 
