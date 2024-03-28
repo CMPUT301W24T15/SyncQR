@@ -2,13 +2,13 @@ package com.example.sync.organizer;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
+import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -19,10 +19,9 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.example.sync.Event;
+import com.example.sync.Notification;
 import com.example.sync.R;
-
 import java.util.ArrayList;
-import java.util.Calendar;
 
 public class ViewEventsFrag extends Fragment{
 
@@ -71,19 +70,19 @@ public class ViewEventsFrag extends Fragment{
     public void onStart() {
         super.onStart();
 
-        // event mock
-        Calendar eventDate = Calendar.getInstance();
-        eventDate.set(2024, Calendar.MARCH, 8);
-        Event event = new Event("halfcheck", eventDate.getTime(), "Edmonton", "yiqing liu","its time to finish", "", 0);
-        Event event2 = new Event("finalcheck", eventDate.getTime(), "Edmonton", "yiqing liu","its time to finish", "", 0);
 
+        // ** Need login system to access all created event
         // list set up
         dataList = new ArrayList<Event>();
-        dataList.add(event);
-        dataList.add(event2);
-        eventListAdapter = new EventListAdapter(requireContext(), dataList);
-        eventList.setAdapter(eventListAdapter);
-        System.out.println("2");
+        Event.getEventFromDatabase("1123", new Event.Callback() {
+            @Override
+            public void onSuccess(Event event) {
+                dataList.add(event);
+                eventListAdapter = new EventListAdapter(requireContext(), dataList);
+                eventList.setAdapter(eventListAdapter);
+            }
+        });
+
 
         // click list item
         eventList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -97,7 +96,15 @@ public class ViewEventsFrag extends Fragment{
                         // If the event is deleted, then its relevant fragments will be destroyed.
                         FragmentManager manager = requireActivity().getSupportFragmentManager();
                         manager.popBackStack("event_detail", FragmentManager.POP_BACK_STACK_INCLUSIVE);
+
+                        // Next, delete it from the datalist and the database
                         dataList.remove(event);
+                        event.deleteEvent(event.getEventId());
+
+                        // Finally, make an announcement for both organizer and the attendees
+                        Notification notification = new Notification(event.getEventId(), event.getEventName(), "This event has been deleted by the organizer / administrator.");
+                        notification.setNotification();
+                        Toast.makeText(getContext(), "Event has been successfully deleted!", Toast.LENGTH_LONG).show();
                     }
                 });
 
@@ -117,16 +124,6 @@ public class ViewEventsFrag extends Fragment{
                 listener.notifyShutDown(self);
             }
         });
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        // Reload data source if needed
-        // Update adapter and notify data set changed
-        //dataList.remove(1);
-        System.out.println("1");
-        eventListAdapter.notifyDataSetChanged();
     }
 
 

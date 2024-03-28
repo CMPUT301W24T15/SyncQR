@@ -1,8 +1,23 @@
 package com.example.sync;
 
+import android.telecom.Call;
+import android.util.Log;
+
+import androidx.annotation.NonNull;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.Timestamp;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.io.Serializable;
+import java.sql.Time;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -11,34 +26,132 @@ import java.util.Map;
  */
 public class Event implements Serializable {
 
-    private static int eventId = 0; // increment each time
+    private static String TAG = "Event";
+    private static FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private  String eventId;
     private String eventName;
-    private Date eventDate;
+    private Timestamp eventDate;
     private String eventLocation;
-    private int attendeeNumber;
+    private Long attendeeNumber;
     private String organizerName;
     private String eventDescription;
     private String poster;
-    private int organizerId;
-
-
-    private transient FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private Long organizerId;
 
 
 
-    public Event(String eventName, Date eventDate, String eventLocation, String organizerName, String eventDescription, String poster, int organizerId) {
 
-        // eventID is set to be int, but will always be converted to a string when used for convenience.
-        this.eventId++;
+    public Event(String eventName, Timestamp eventDate, String eventLocation, Long attendeeNumber, String organizerName, String eventDescription, String poster, Long organizerId) {
+
+        // eventID
+        // is set to a string for convenience!!
+
+        this.eventId = Integer.toString(EventIDGenerator.generate());
         this.eventName = eventName;
         this.eventDate = eventDate;
         this.eventLocation = eventLocation;
-        this.attendeeNumber = 0;
+        this.attendeeNumber = attendeeNumber;
         this.eventDescription = eventDescription;
         this.poster = poster;
         this.organizerId = organizerId;
         this.organizerName = organizerName;
     }
+
+    public interface Callback{
+        default void onSuccess(Event event) {
+        }
+
+        default void onSuccess(ArrayList<Event> eventArrayList) {
+        }
+    }
+
+
+    public static void getEventFromDatabase(String eventID, Callback callback){
+        db.collection("Events")
+                .whereEqualTo("eventId", eventID)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+
+                        // check if the query is completed
+                        if (task.isSuccessful()){
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                // record log
+                                Log.d(TAG, document.getId() + " => " + document.getData());
+
+                                // Obtain all fields
+                                Map<String, Object> data = document.getData();
+                                String name = (String) data.get("eventName");
+                                Timestamp date = (Timestamp) data.get("eventDate");
+                                String location = (String) data.get("eventLocation") ;
+                                Long limit = (Long) data.get("attendeeNumber");
+                                String organizerName = (String) data.get("organizerName");
+                                Long organizerId = (Long) data.get("organizerId");
+                                String eventDescription = (String) data.get("eventDescription");
+                                String poster = (String) data.get("poster");
+
+                                // Create a new event instance, make sure to manually assigned the eventID
+                                // so that it restores the original event object, or creates a new one otherwise
+                                Event event = new Event(name, date, location, limit, organizerName, eventDescription, poster, organizerId);
+                                event.setEventId(eventID);
+
+                                // notify finished
+                                callback.onSuccess(event);
+                            }
+                        }
+                    }
+                });
+    }
+
+    /***
+     * This method return all events after current time
+     * @param callback when event array is ready, it return the event array
+     */
+    public static void getAllEventFromDatabase(Callback callback){
+        Timestamp current = new Timestamp(new Date());
+        db.collection("Events")
+                .whereGreaterThanOrEqualTo("eventDate", current)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+
+                        // check if the query is completed
+                        if (task.isSuccessful()){
+                            ArrayList<Event> eventArrayList = new ArrayList<Event>();
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                // record log
+                                Log.d(TAG, document.getId() + " => " + document.getData());
+
+                                // Obtain all fields
+                                Map<String, Object> data = document.getData();
+                                String id = (String) data.get("eventId");
+                                String name = (String) data.get("eventName");
+                                Timestamp date = (Timestamp) data.get("eventDate");
+                                String location = (String) data.get("eventLocation") ;
+                                Long limit = (Long) data.get("attendeeNumber");
+                                String organizerName = (String) data.get("organizerName");
+                                Long organizerId = (Long) data.get("organizerId");
+                                String eventDescription = (String) data.get("eventDescription");
+                                String poster = (String) data.get("poster");
+
+                                // Create a new event instance, make sure to manually assigned the eventID
+                                // so that it restores the original event object, or creates a new one otherwise
+                                Event event = new Event(name, date, location, limit, organizerName, eventDescription, poster, organizerId);
+                                event.setEventId(id);
+
+                                // add to list
+                                eventArrayList.add(event);
+                            }
+
+                            // notify finished
+                            callback.onSuccess(eventArrayList);
+                        }
+                    }
+                });
+    }
+
 
     /**
      * This is a method that save the event information into database
@@ -46,7 +159,7 @@ public class Event implements Serializable {
 
     public void saveEventToDatabase() {
         Map<String, Object> eventData = new HashMap<>();
-        eventData.put("eventId", Integer.toString(eventId));
+        eventData.put("eventId", eventId);
         eventData.put("eventName", eventName);
         eventData.put("eventDate", eventDate);
         eventData.put("eventLocation", eventLocation);
@@ -66,17 +179,35 @@ public class Event implements Serializable {
                 });
     }
 
+    public void deleteEvent(String eventId){
+        DocumentReference doc = db.collection("Events").document(eventId);
+        doc.delete()
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d(TAG, "Document successfully deleted!");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG, "Error deleting document", e);
+                    }
+                });
+    }
+
 
     /**
      * The following methods are the setters and getters
      */
     public String getEventId() {
-        return Integer.toString(eventId);
+        return eventId;
     }
 
-    public void setEventId(int eventId) {
+    public void setEventId(String eventId) {
         this.eventId = eventId;
     }
+
 
     public String getEventName() {
         return eventName;
@@ -86,11 +217,11 @@ public class Event implements Serializable {
         this.eventName = eventName;
     }
 
-    public Date getEventDate() {
+    public Timestamp getEventDate() {
         return eventDate;
     }
 
-    public void setEventDate(Date eventDate) {
+    public void setEventDate(Timestamp eventDate) {
         this.eventDate = eventDate;
     }
 
@@ -102,11 +233,11 @@ public class Event implements Serializable {
         this.eventLocation = eventLocation;
     }
 
-    public int getAttendeeNumber() {
+    public Long getAttendeeNumber() {
         return attendeeNumber;
     }
 
-    public void setAttendeeNumber(int attendeeNumber) {
+    public void setAttendeeNumber(Long attendeeNumber) {
         this.attendeeNumber = attendeeNumber;
     }
 
@@ -126,11 +257,11 @@ public class Event implements Serializable {
         this.poster = poster;
     }
 
-    public int getOrganizerId() {
+    public Long getOrganizerId() {
         return organizerId;
     }
 
-    public void setOrganizerId(int organizerId) {
+    public void setOrganizerId(Long organizerId) {
         this.organizerId = organizerId;
     }
 

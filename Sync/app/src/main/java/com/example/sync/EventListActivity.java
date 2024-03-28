@@ -56,38 +56,14 @@ public class EventListActivity extends AppCompatActivity {
 
 //        dataList.add(sampleEvent);
 
-        db.collection("Events")
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                Log.d(TAG, document.getId() + " => " + document.getData());
+        Event.getAllEventFromDatabase(new Event.Callback() {
+            @Override
+            public void onSuccess(ArrayList<Event> eventArrayList) {
+                dataList = eventArrayList;
+                eventListAdapter.notifyDataSetChanged();
+            }
+        });
 
-                                Map<String, Object> temp = document.getData();
-                                SimpleDateFormat formatter = new SimpleDateFormat("yyyy.MM.dd");
-
-                                try {
-                                    dataList.add(new Event(temp.get("eventName").toString(),
-                                            formatter.parse(temp.get("eventDate").toString()),
-                                            temp.get("eventLocation").toString(),
-                                            temp.get("organizerName").toString(),
-                                            temp.get("eventDescription").toString(),
-                                            temp.get("poster").toString(),
-                                            Integer.parseInt(temp.get("attendeesCount").toString()))
-                                            );
-                                } catch (ParseException e) {
-                                    Log.d(TAG, "Error in parsing");
-                                    throw new RuntimeException(e);
-                                }
-                                eventListAdapter.notifyDataSetChanged();
-                            }
-                        } else {
-                            Log.d(TAG, "Error getting documents: ", task.getException());
-                        }
-                    }
-                });
 
         homeButton.setOnClickListener(new View.OnClickListener() {
             @Override
