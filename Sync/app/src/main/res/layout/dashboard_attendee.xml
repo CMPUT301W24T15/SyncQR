@@ -71,7 +71,6 @@
     </LinearLayout>
 
     <!-- Welcome Image Section -->
-    <!-- Welcome Image Section -->
     <ImageView
         android:id="@+id/welcome_image"
         android:layout_width="match_parent"

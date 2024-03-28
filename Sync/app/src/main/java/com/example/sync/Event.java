@@ -28,7 +28,7 @@ public class Event implements Serializable {
 
     private static String TAG = "Event";
     private static FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private  String eventId;
+    private String eventId;
     private String eventName;
     private Timestamp eventDate;
     private String eventLocation;

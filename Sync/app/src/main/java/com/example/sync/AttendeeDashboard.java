@@ -1,9 +1,7 @@
 package com.example.sync;
 
-import android.app.AlarmManager;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
@@ -31,7 +29,7 @@ public class AttendeeDashboard extends AppCompatActivity implements LocationPerm
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_attendee);
+        setContentView(R.layout.dashboard_attendee);
         Button locationPermissionButton = findViewById(R.id.location_permission_button);
         locationPermissionButton.setOnClickListener(v -> new LocationPermissionDialog().show(getSupportFragmentManager(), "LocationPermissionDialog"));
 
@@ -65,31 +63,12 @@ public class AttendeeDashboard extends AppCompatActivity implements LocationPerm
             }
         });
 
-        Button browseEventButton = findViewById(R.id.event_button);
-        browseEventButton.setOnClickListener(new View.OnClickListener() {
+        Button eventButton = findViewById(R.id.event_button);
+        eventButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                browseEvent();
-            }
-        });
-    }
-
-    /**
-     * This method get a few events from firebase and display them
-     */
-    public void browseEvent() {
-        db.collection("events").get().addOnCompleteListener(task -> {
-            if (task.isSuccessful()) {
-                StringBuilder descriptions = new StringBuilder();
-                for (QueryDocumentSnapshot document : task.getResult()) {
-                    Event event = document.toObject(Event.class);
-                    descriptions.append(event.getEventName()).append("\n\n");
-                }
-
-                // Start EventDetailActivity and pass event details
                 Intent intent = new Intent(AttendeeDashboard.this, EventListActivity.class);
-                intent.putExtra("eventDetails", descriptions.toString());
-                startActivity(intent);
+                startActivity(intent);;
             }
         });
     }

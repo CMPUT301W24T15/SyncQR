@@ -17,10 +17,10 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import java.util.ArrayList;
 
 public class AdministratorDashboard extends AppCompatActivity {
-    private ArrayList<Profile> profiles;
+    private ArrayList<Profile> profiles = new ArrayList<>();
     private ListView list;
     private ArrayAdapter<Profile> profileArrayAdapter;
-    private ArrayList<Event> events;
+    private ArrayList<Event> events = new ArrayList<>();
     private ArrayAdapter<Event> eventArrayAdapter;
 
     @Override
@@ -69,7 +69,7 @@ public class AdministratorDashboard extends AppCompatActivity {
         });
 
         list.setOnItemClickListener((parent, view, position, id) -> {
-            Profile selectedProfile = profiles.get(position); // Assuming 'profiles' is your ArrayList<Profile>
+            Profile selectedProfile = profiles.get(position);
             new AlertDialog.Builder(AdministratorDashboard.this)
                     .setTitle("Confirm Delete")
                     .setMessage("Are you sure you want to delete this profile?")

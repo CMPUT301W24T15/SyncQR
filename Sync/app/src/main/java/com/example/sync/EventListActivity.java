@@ -1,5 +1,7 @@
 package com.example.sync;
 
+import static android.os.Build.ID;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -42,28 +44,19 @@ public class EventListActivity extends AppCompatActivity {
         Button eventButton = findViewById(R.id.event_button);
         Button messagesButton = findViewById(R.id.messages_button);
 
-        dataList = new ArrayList<Event>();
+        dataList = new ArrayList<>();
         eventList = findViewById(R.id.event_list);
         eventListAdapter = new EventListAdapter(this, dataList);
         eventList.setAdapter(eventListAdapter);
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-
-        String TAG = "kevinTag";
-
-//        Event sampleEvent = new Event("Test Meeting 1", new Date(1230123), "Edmonton", "Kevin", "Enjoy your sunny day", "sample poster", 10000009);
-//        sampleEvent.setEventId(0);
-
-//        dataList.add(sampleEvent);
-
         Event.getAllEventFromDatabase(new Event.Callback() {
             @Override
             public void onSuccess(ArrayList<Event> eventArrayList) {
-                dataList = eventArrayList;
+                dataList.addAll(eventArrayList);
                 eventListAdapter.notifyDataSetChanged();
             }
         });
-
 
         homeButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -104,12 +97,12 @@ public class EventListActivity extends AppCompatActivity {
         eventList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                Event event = dataList.get(position);
-//                Intent intent = new Intent(EventListActivity.this, EventDetailsActivity.class);
-//                intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-//                Integer ID = event.getEventId();
-//                intent.putExtra("eventID", ID.toString());
-//                startActivity(intent);
+                Event event = dataList.get(position);
+                Intent intent = new Intent(EventListActivity.this, EventDetailsActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                String eventID = event.getEventId();
+                intent.putExtra("eventID", ID.toString());
+                startActivity(intent);
             }
         });
 

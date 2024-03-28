@@ -34,7 +34,7 @@
         android:id="@+id/administrator_text"
         android:layout_width="379dp"
         android:layout_height="wrap_content"
-        android:text="Search for Event/Profile/Image"
+        android:text="ID for Event/Profile"
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -46,29 +46,21 @@
 
         <Button
             android:id="@+id/event_search_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Event"
+            android:layout_width="189dp"
+            android:layout_height="36dp"
+            android:text="Search Event"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <Button
             android:id="@+id/profile_search_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Profile"
+            android:layout_width="190dp"
+            android:layout_height="36dp"
+            android:text="Search Profile"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
-
-        <Button
-            android:id="@+id/image_search_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Image"
-            app:layout_constraintEnd_toStartOf="@+id/profile_search_button"
-            app:layout_constraintStart_toEndOf="@+id/event_search_button" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
