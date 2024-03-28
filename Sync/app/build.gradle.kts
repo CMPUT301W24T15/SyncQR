@@ -1,3 +1,5 @@
+import com.android.tools.r8.internal.de
+
 plugins {
     id("com.android.application")
     id("com.google.gms.google-services")
@@ -48,4 +50,7 @@ dependencies {
     androidTestImplementation("androidx.test.espresso:espresso-core:3.4.0")
     implementation("com.journeyapps:zxing-android-embedded:4.3.0")
     testImplementation ("org.mockito:mockito-core:3.11.2")
+    implementation ("de.hdodenhof:circleimageview:3.1.0")
+    implementation ("com.github.bumptech.glide:glide:4.12.0")
+    annotationProcessor ("com.github.bumptech.glide:compiler:4.12.0")
 }

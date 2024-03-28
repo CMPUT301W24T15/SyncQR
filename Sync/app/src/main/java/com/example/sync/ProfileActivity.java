@@ -8,21 +8,19 @@ import android.widget.EditText;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.bumptech.glide.Glide;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-import java.util.ArrayList;
-/**
- * This is a class that contains the methods of profile
- */
 public class ProfileActivity extends AppCompatActivity {
     private EditText userNameInput, userEmailInput, userContactInput;
+    private AvatarView userImageInput;
     private DatabaseReference databaseReference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_profile); // Ensure this matches your XML file name
+        setContentView(R.layout.activity_profile);
 
         Log.d("kevinTag", "Created Profile Instance");
 
@@ -31,6 +29,7 @@ public class ProfileActivity extends AppCompatActivity {
 
         // Initialize UI elements
         userNameInput = findViewById(R.id.user_name_input);
+        userImageInput = findViewById(R.id.profile_image_middle); // Initialize AvatarView
         userEmailInput = findViewById(R.id.user_email_input);
         userContactInput = findViewById(R.id.user_contact_input);
         Button saveButton = findViewById(R.id.save_button);
@@ -43,7 +42,6 @@ public class ProfileActivity extends AppCompatActivity {
 
         // Set click listeners
         homeButton.setOnClickListener(view -> navigateToAttendee());
-        // Profile button does not need a listener as we are already on the profile page
         eventButton.setOnClickListener(view -> navigateToEvent());
         messagesButton.setOnClickListener(view -> navigateToMyNotificationReceiver());
         qrCodeButton.setOnClickListener(view -> navigateToQRCodeScanActivity());
@@ -51,6 +49,7 @@ public class ProfileActivity extends AppCompatActivity {
         saveButton.setOnClickListener(view -> saveProfileData());
         cancelButton.setOnClickListener(view -> clearInputs());
     }
+
     private void saveProfileData() {
         String name = userNameInput.getText().toString().trim();
         String email = userEmailInput.getText().toString().trim();
@@ -60,32 +59,24 @@ public class ProfileActivity extends AppCompatActivity {
         Profile profile = new Profile(name, "", email, contact);
         databaseReference.child(userId).setValue(profile);
     }
-    /**
-     * This is a method that goes to attendee page
-     */
+
     private void navigateToAttendee() {
-        Intent intent = new Intent(this, Attendee.class); // Updated to correct class
+        Intent intent = new Intent(this, Attendee.class);
         startActivity(intent);
     }
-    /**
-     * This is a method that goes to events page
-     */
+
     private void navigateToEvent() {
-        Intent intent = new Intent(this, Event.class); // Updated to correct class
+        Intent intent = new Intent(this, Event.class);
         startActivity(intent);
     }
-    /**
-     * This is a method that goes to notification page
-     */
+
     private void navigateToMyNotificationReceiver() {
-        Intent intent = new Intent(this, MyNotificationReceiver.class); // Assuming this is an activity you intend to navigate to
+        Intent intent = new Intent(this, MyNotificationReceiver.class);
         startActivity(intent);
     }
-    /**
-     * This is a method that goes to QRCode scan page
-     */
+
     private void navigateToQRCodeScanActivity() {
-        Intent intent = new Intent(this, QRCodeScanActivity.class); // Updated to correct class
+        Intent intent = new Intent(this, QRCodeScanActivity.class);
         startActivity(intent);
     }
 
@@ -94,9 +85,12 @@ public class ProfileActivity extends AppCompatActivity {
         userEmailInput.setText("");
         userContactInput.setText("");
     }
-    /**
-     * These are methods of getters and setters
-     */
-
+    private void loadProfileImage(String imageUrl) {
+        Glide.with(this)
+                .load(imageUrl)
+                .placeholder(R.drawable.default_avatar)
+                .error(R.drawable.default_avatar)
+                .into(userImageInput);
+    }
 }
 

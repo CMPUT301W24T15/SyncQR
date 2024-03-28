@@ -35,7 +35,9 @@ public class MainActivity extends AppCompatActivity {
         homeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Nothing to add, since it stays in homepage
+                Intent intent = new Intent(MainActivity.this, AttendeeDashboard.class); // Assuming you have an EventDetailsActivity
+                intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                startActivity(intent);
             }
         });
 
@@ -62,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // for now, linked to administrator
-                Intent intent = new Intent(MainActivity.this, Administrator.class);
+                Intent intent = new Intent(MainActivity.this, LoginActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                 startActivity(intent);
             }

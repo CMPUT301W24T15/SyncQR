@@ -63,7 +63,7 @@
             android:text="Messages" />
     </LinearLayout>
 
-    <ImageView
+    <com.example.sync.AvatarView
         android:id="@+id/profile_image_middle"
         android:layout_width="100dp"
         android:layout_height="100dp"
