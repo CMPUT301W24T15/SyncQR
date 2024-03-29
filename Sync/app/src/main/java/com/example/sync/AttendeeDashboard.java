@@ -23,7 +23,7 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import java.util.ArrayList;
 
 public class AttendeeDashboard extends AppCompatActivity implements LocationPermissionDialog.LocationPermissionDialogListener {
-    private ArrayList<Event> signUpEvents;
+    private ArrayList<String> signUpEventIDs;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     @Override
@@ -68,7 +68,10 @@ public class AttendeeDashboard extends AppCompatActivity implements LocationPerm
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(AttendeeDashboard.this, SignUpEventListActivity.class);
-                startActivity(intent);;
+                signUpEventIDs = new ArrayList<>();
+                signUpEventIDs.add("1234");
+                intent.putStringArrayListExtra("eventIDs", signUpEventIDs);
+                startActivity(intent);
             }
         });
 
