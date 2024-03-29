@@ -33,7 +33,7 @@ public class AttendeeLogin extends AppCompatActivity {
         helpButton = findViewById(R.id.helpButtonLogin);
 
         // Make sure this ID exists in your layout
-        guestLoginButton = findViewById(R.id.guestButton); // The correct ID should be used here
+        guestLoginButton = findViewById(R.id.guestButton);
 
         loginButton.setOnClickListener(view -> {
             String username = usernameEditText.getText().toString();
