@@ -148,7 +148,7 @@ public class EventDetailsActivity extends AppCompatActivity {
                     if (task.isSuccessful()) {
                         for (QueryDocumentSnapshot document : task.getResult()) {
                             // Found the user document, now update it
-                            DocumentReference userRef = db.collection("accounts").document(document.getId());
+                            DocumentReference userRef = db.collection("accounts").document(userIdValue);
                             userRef.update("event", FieldValue.arrayUnion(eventId))
                                     .addOnSuccessListener(aVoid -> Log.d(TAG, "Event added to user's signed-up events successfully."))
                                     .addOnFailureListener(e -> Log.w(TAG, "Error adding event to user's signed-up events.", e));
