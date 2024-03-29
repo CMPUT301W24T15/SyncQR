@@ -1,11 +1,17 @@
 package com.example.sync;
 
+import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
+
+import static java.lang.Boolean.FALSE;
+import static java.lang.Boolean.TRUE;
+
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.Manifest;
@@ -17,6 +23,8 @@ import androidx.core.app.NotificationManagerCompat;
 import androidx.core.content.ContextCompat;
 import androidx.annotation.NonNull;
 
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
@@ -25,6 +33,7 @@ import java.util.ArrayList;
 public class AttendeeDashboard extends AppCompatActivity implements LocationPermissionDialog.LocationPermissionDialogListener {
     private ArrayList<String> signUpEventIDs;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    boolean userCheckedIn = FALSE;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,12 +87,39 @@ public class AttendeeDashboard extends AppCompatActivity implements LocationPerm
             }
         });
 
+        Button checkInButton = findViewById(R.id.check_in_with_qr_button);
+        checkInButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                userCheckedIn = TRUE;
+                Button quitEventButton = findViewById(R.id.quit_event_button);
+                if (userCheckedIn) {
+                    quitEventButton.setVisibility(View.VISIBLE);
+                } else {
+                    quitEventButton.setVisibility(View.GONE);
+                }
+                Intent intent = new Intent(AttendeeDashboard.this, QRCodeScanActivity.class);
+                startActivity(intent);
+            }
+        });
+
         Button browseEventButton = findViewById(R.id.browse_event_button);
         browseEventButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(AttendeeDashboard.this, EventListActivity.class);
                 startActivity(intent);;
+            }
+        });
+        Button quitEventButton = findViewById(R.id.quit_event_button);
+        quitEventButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Retrieve the user's ID (assuming it's available)
+                String userId = "1718521"; // Replace this with your actual way of getting the user's ID
+
+                // Remove the user's ID from the check-in system
+                removeFromCheckInSystem(userId);
             }
         });
     }
@@ -185,5 +221,14 @@ public class AttendeeDashboard extends AppCompatActivity implements LocationPerm
             NotificationManager notificationManager = getSystemService(NotificationManager.class);
             notificationManager.createNotificationChannel(channel);
         }
+    }
+    private void removeFromCheckInSystem(String userId) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        DocumentReference checkInRef = db.collection("Check-in System").document("your_check_in_system_id");
+
+        // Remove the user's ID from the "signup" field
+        checkInRef.update("signup", FieldValue.arrayRemove(userId))
+                .addOnSuccessListener(aVoid -> Log.d(TAG, "User removed from check-in system successfully."))
+                .addOnFailureListener(e -> Log.w(TAG, "Error removing user from check-in system.", e));
     }
 }

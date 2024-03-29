@@ -34,7 +34,7 @@
             android:id="@+id/permission_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Location"
+            android:text="Permission"
             android:layout_toStartOf="@id/qr_code_button"/>
 
     </RelativeLayout>
@@ -94,6 +94,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Check-in with QR" />
+
+        <Button
+            android:id="@+id/quit_event_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Quit Event"
+            android:visibility="gone" />
 
         <Button
             android:id="@+id/browse_event_button"
