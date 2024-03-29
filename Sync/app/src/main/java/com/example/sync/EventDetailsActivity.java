@@ -20,6 +20,7 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.text.SimpleDateFormat;
 
@@ -84,7 +85,7 @@ public class EventDetailsActivity extends AppCompatActivity {
                 String eventId = getIntent().getStringExtra("eventID");
                 // Update the user's document in Firestore
                 updateUserEventsInFirestore("1718521", eventId);
-                Checkin.signUpForUser(eventId, "1718521");
+                Checkin.addUserToSignUpList(eventId, "1718521");
             }
         });
 
@@ -140,19 +141,17 @@ public class EventDetailsActivity extends AppCompatActivity {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
         // Query for the user document with the matching userId
-        db.collection("accounts").whereEqualTo("userId", userIdValue).get()
+        db.collection("accounts")
+                .whereEqualTo("userId", userIdValue)
+                .get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
-                        for (DocumentSnapshot document : task.getResult()) {
-                            if (document.exists()) {
-                                // Found the user document, now update it
-                                DocumentReference userRef = document.getReference();
-                                userRef.update("event", FieldValue.arrayUnion(eventId))
-                                        .addOnSuccessListener(aVoid -> Log.d(TAG, "Event added to user's signed-up events successfully."))
-                                        .addOnFailureListener(e -> Log.w(TAG, "Error adding event to user's signed-up events.", e));
-                            } else {
-                                Log.d(TAG, "No such user document with given userId");
-                            }
+                        for (QueryDocumentSnapshot document : task.getResult()) {
+                            // Found the user document, now update it
+                            DocumentReference userRef = db.collection("accounts").document(document.getId());
+                            userRef.update("event", FieldValue.arrayUnion(eventId))
+                                    .addOnSuccessListener(aVoid -> Log.d(TAG, "Event added to user's signed-up events successfully."))
+                                    .addOnFailureListener(e -> Log.w(TAG, "Error adding event to user's signed-up events.", e));
                         }
                     } else {
                         Log.d(TAG, "Error finding user document: ", task.getException());

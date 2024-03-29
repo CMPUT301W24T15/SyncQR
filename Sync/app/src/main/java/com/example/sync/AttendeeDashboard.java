@@ -34,6 +34,7 @@ public class AttendeeDashboard extends AppCompatActivity implements LocationPerm
     private ArrayList<String> signUpEventIDs;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     boolean userCheckedIn = FALSE;
+    String userId = "1718521";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -224,7 +225,7 @@ public class AttendeeDashboard extends AppCompatActivity implements LocationPerm
     }
     private void removeFromCheckInSystem(String userId) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        DocumentReference checkInRef = db.collection("Check-in System").document("your_check_in_system_id");
+        DocumentReference checkInRef = db.collection("Check-in System").document(userId);
 
         // Remove the user's ID from the "signup" field
         checkInRef.update("signup", FieldValue.arrayRemove(userId))

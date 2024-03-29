@@ -2,14 +2,18 @@ package com.example.sync;
 
 import android.util.Log;
 
+import androidx.annotation.NonNull;
+
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.type.LatLng;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class Checkin {
     private String eventId;
@@ -51,19 +55,43 @@ public class Checkin {
         collection.document(eventId).set(data);
 
     }
-
     /**
-     * Adds the user's ID to the "signup" list in the "Checkin" system for a specific event.
+     * Adds the user's ID to the "sign-up" list in the "check-ins" system for a specific event,
+     * if the sign-up count does not exceed the attendee limit.
      *
      * @param eventId The ID of the event for which to add the user's ID to the "sign-up" list.
      * @param userId  The ID of the user who signed up for the event.
      * @see DocumentReference
      */
-    public static void signUpForUser(String eventId, String userId) {
-        DocumentReference doc = collection.document(eventId);
-        doc.update("signup", FieldValue.arrayUnion(userId))
-                .addOnSuccessListener(aVoid -> Log.d(TAG, "User added to sign-up list successfully."))
-                .addOnFailureListener(e -> Log.w(TAG, "Error adding user to sign-up list.", e));
+    public static void addUserToSignUpList(@NonNull String eventId, @NonNull String userId) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        DocumentReference checkInRef = db.collection("Check-in System").document(eventId);
+
+        // Get the document reference for the event
+        DocumentReference eventRef = db.collection("events").document(eventId);
+
+        // Fetch the current sign-up count and attendee limit
+        db.runTransaction(transaction -> {
+            DocumentSnapshot eventSnapshot = transaction.get(eventRef);
+            DocumentSnapshot checkInSnapshot = transaction.get(checkInRef);
+
+            long signUpCount = checkInSnapshot.contains("sign-up") && checkInSnapshot.get("sign-up") != null ?
+                    ((List<?>) checkInSnapshot.get("sign-up")).size() : 0;
+            long attendeeLimit = eventSnapshot.getLong("attendeenumber") != null ?
+                    eventSnapshot.getLong("attendeenumber") : 0;
+
+            // Check if sign-up count exceeds attendee limit
+            if (signUpCount < attendeeLimit) {
+                // Add the user to the sign-up list
+                transaction.update(checkInRef, "sign-up", FieldValue.arrayUnion(userId));
+                Log.d(TAG, "User added to sign-up list successfully.");
+            } else {
+                // Attendee limit exceeded, notify the user or handle accordingly
+                Log.w(TAG, "Attendee limit exceeded. User cannot sign up for the event.");
+                // You can notify the user or handle this case as per your application's requirements
+            }
+            return null;
+        }).addOnFailureListener(e -> Log.w(TAG, "Error adding user to sign-up list.", e));
     }
 
     public String getEventId() {
