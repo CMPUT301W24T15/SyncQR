@@ -84,7 +84,7 @@ public class EventDetailsActivity extends AppCompatActivity {
                 String eventId = getIntent().getStringExtra("eventID");
                 // Update the user's document in Firestore
                 updateUserEventsInFirestore("1718521", eventId);
-                addUserToSignUpList(eventId, "1718521");
+                Checkin.signUpForUser(eventId, "1718521");
             }
         });
 
@@ -127,22 +127,7 @@ public class EventDetailsActivity extends AppCompatActivity {
         }
 
     }
-    /**
-     * Adds the user's ID to the "sign-up" list in the "check-ins" system for a specific event.
-     *
-     * @param eventId The ID of the event for which to add the user's ID to the "sign-up" list.
-     * @param userId  The ID of the user who signed up for the event.
-     */
-    private void addUserToSignUpList(@NonNull String eventId, @NonNull String userId) {
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        // Assuming "check-ins" is a document related to the eventID in some way
-        DocumentReference checkInRef = db.collection("Check-in System").document(eventId);
 
-        // Use update method to add the userId to the "sign-up" list
-        checkInRef.update("sign-up", FieldValue.arrayUnion(userId))
-                .addOnSuccessListener(aVoid -> Log.d(TAG, "User added to sign-up list successfully."))
-                .addOnFailureListener(e -> Log.w(TAG, "Error adding user to sign-up list.", e));
-    }
     /**
      * Updates the Firestore document corresponding to the user's account to add the eventId
      * to the "event" field, which is an ArrayList<String> containing the IDs of events the user
