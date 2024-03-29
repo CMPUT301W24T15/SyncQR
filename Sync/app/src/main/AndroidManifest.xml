@@ -8,6 +8,7 @@
 
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.INTERNET" />
+    <!-- To request push notification permission -->
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <!-- To request access to location in the foreground -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>

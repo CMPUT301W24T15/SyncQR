@@ -16,12 +16,13 @@ public abstract class User extends AppCompatActivity {
     private String position = "Attendee";
     private ArrayList<Event> events;
 
-    public User(String userid, String username, String password, Profile profile, String position) {
+    public User(String userid, String username, String password, Profile profile, String position, ArrayList<Event> events) {
         this.userid = userid;
         this.username = username;
         this.password = password;
         this.profile = profile;
         this.position = position;
+        this.events = events;
     }
 
     public void scanQRCode(){

@@ -31,7 +31,7 @@
             android:layout_toStartOf="@id/profile_image_top_right" />
 
         <Button
-            android:id="@+id/location_permission_button"
+            android:id="@+id/permission_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Location"

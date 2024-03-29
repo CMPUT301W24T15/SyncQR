@@ -30,8 +30,11 @@ public class AttendeeDashboard extends AppCompatActivity implements LocationPerm
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.dashboard_attendee);
-        Button locationPermissionButton = findViewById(R.id.location_permission_button);
-        locationPermissionButton.setOnClickListener(v -> new LocationPermissionDialog().show(getSupportFragmentManager(), "LocationPermissionDialog"));
+        Button permissionButton = findViewById(R.id.permission_button);
+        permissionButton.setOnClickListener(v -> new LocationPermissionDialog().show(getSupportFragmentManager(), "LocationPermissionDialog"));
+
+        // Create notification channel
+        createNotificationChannel();
 
         Button homeButton = findViewById(R.id.home_button);
         homeButton.setOnClickListener(new View.OnClickListener() {
@@ -85,6 +88,7 @@ public class AttendeeDashboard extends AppCompatActivity implements LocationPerm
         });
     }
 
+    // https://developer.android.com/develop/ui/views/notifications/build-notification#notify Android Studio, Android Developers. Downloaded 2024-03-27
     /**
      * Fetches events that a user has signed up for.
      * @param userID The ID of the user whose signed-up events are to be fetched.
@@ -112,9 +116,9 @@ public class AttendeeDashboard extends AppCompatActivity implements LocationPerm
                 });
 
     }
-
     private static final int YOUR_PERMISSION_REQUEST_CODE = 123;
 
+    // Chatgpt, OpenAI. Downloaded 2024-03-29
     // Implement the interface method
     @Override
     public void onRequestLocationPermission() {
@@ -151,26 +155,26 @@ public class AttendeeDashboard extends AppCompatActivity implements LocationPerm
         }
     }
 
+    // Function to create a notification
     private void createNotification(String title, String body) {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+            // Handle case where permission is not granted
+            return;
+        }
+
+        // Build the notification
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "default_notification_channel_id")
                 .setSmallIcon(R.drawable.ic_notification)
                 .setContentTitle(title)
                 .setContentText(body)
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT);
 
+        // Show the notification
         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
-            return;
-        }
         notificationManager.notify(0, builder.build());
     }
+
+    // Function to create a notification channel (required for Android Oreo and above)
     private void createNotificationChannel() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             CharSequence name = getString(R.string.channel_name);
@@ -182,6 +186,4 @@ public class AttendeeDashboard extends AppCompatActivity implements LocationPerm
             notificationManager.createNotificationChannel(channel);
         }
     }
-
-
 }
