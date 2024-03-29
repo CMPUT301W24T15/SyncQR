@@ -17,7 +17,7 @@ public class AdministratorLogin extends AppCompatActivity {
     private EditText passwordEditText;
     private Button loginButton;
 
-    private Button guestLoginButton;
+
     private Button helpButton;
 
     @Override
@@ -30,8 +30,6 @@ public class AdministratorLogin extends AppCompatActivity {
         loginButton = findViewById(R.id.loginButton);
         helpButton = findViewById(R.id.helpButtonLogin);
 
-        // Make sure this ID exists in your layout
-        guestLoginButton = findViewById(R.id.guestButton); // The correct ID should be used here
 
         loginButton.setOnClickListener(view -> {
             String username = usernameEditText.getText().toString();
