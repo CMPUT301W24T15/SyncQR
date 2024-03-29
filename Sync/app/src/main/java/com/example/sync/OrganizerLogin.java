@@ -18,7 +18,6 @@ public class OrganizerLogin extends AppCompatActivity {
     private EditText passwordEditText;
     private Button loginButton;
 
-
     private Button helpButton;
 
     @Override

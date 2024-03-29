@@ -10,8 +10,4 @@ public class EventIDGenerator {
         return random.nextInt(Integer.MAX_VALUE);
     }
 
-
-
-
-
 }

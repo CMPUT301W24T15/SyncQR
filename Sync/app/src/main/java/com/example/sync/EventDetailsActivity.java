@@ -148,16 +148,30 @@ public class EventDetailsActivity extends AppCompatActivity {
      * to the "event" field, which is an ArrayList<String> containing the IDs of events the user
      * has signed up for.
      *
-     * @param userId  The ID of the user whose account is being updated.
+     * @param userIdValue  The ID of the user whose account is being updated.
      * @param eventId The ID of the event to add to the user's list of signed-up events.
      */
-    private void updateUserEventsInFirestore(@NonNull String userId, @NonNull String eventId) {
+    private void updateUserEventsInFirestore(@NonNull String userIdValue, @NonNull String eventId) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        DocumentReference userRef = db.collection("users").document(userId);
 
-        // Update the "events" field in the user's document with the new event ID
-        userRef.update("event", FieldValue.arrayUnion(eventId))
-                .addOnSuccessListener(aVoid -> Log.d(TAG, "Event added to user's signed-up events successfully."))
-                .addOnFailureListener(e -> Log.w(TAG, "Error adding event to user's signed-up events.", e));
+        // Query for the user document with the matching userId
+        db.collection("accounts").whereEqualTo("userId", userIdValue).get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        for (DocumentSnapshot document : task.getResult()) {
+                            if (document.exists()) {
+                                // Found the user document, now update it
+                                DocumentReference userRef = document.getReference();
+                                userRef.update("event", FieldValue.arrayUnion(eventId))
+                                        .addOnSuccessListener(aVoid -> Log.d(TAG, "Event added to user's signed-up events successfully."))
+                                        .addOnFailureListener(e -> Log.w(TAG, "Error adding event to user's signed-up events.", e));
+                            } else {
+                                Log.d(TAG, "No such user document with given userId");
+                            }
+                        }
+                    } else {
+                        Log.d(TAG, "Error finding user document: ", task.getException());
+                    }
+                });
     }
 }
