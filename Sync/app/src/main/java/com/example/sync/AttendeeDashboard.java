@@ -67,6 +67,15 @@ public class AttendeeDashboard extends AppCompatActivity implements LocationPerm
         eventButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Intent intent = new Intent(AttendeeDashboard.this, SignUpEventListActivity.class);
+                startActivity(intent);;
+            }
+        });
+
+        Button browseEventButton = findViewById(R.id.browse_event_button);
+        browseEventButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
                 Intent intent = new Intent(AttendeeDashboard.this, EventListActivity.class);
                 startActivity(intent);;
             }
