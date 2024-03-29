@@ -72,11 +72,18 @@
                 android:layout_height="wrap_content"
                 android:text="Description:"/>
 
-<!--            <TextView-->
-<!--                android:id="@+id/event_registered_attendee_count"-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:text="Attendee Limit:"/>-->
+            <TextView
+                android:id="@+id/event_registered_attendee_count"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Attendee Limit:"/>
+
+            <Button
+                android:id="@+id/sign_up_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Sign up">
+            </Button>
 
             <Button
                 android:id="@+id/check_in_button"

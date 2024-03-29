@@ -10,11 +10,22 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
+/**
+ * Activity to handle QR code scanning and processing the scanned data.
+ * It can initiate actions based on the scanned data, such as navigating to event details
+ * or processing check-in information.
+ */
 public class QRCodeScanActivity extends AppCompatActivity {
 
     // Firestore instance
     private FirebaseFirestore db;
 
+    /**
+     * Initializes the activity, setting up Firestore and starting the QR code scanner.
+     * @param savedInstanceState If the activity is being re-initialized after previously being shut down,
+     *                           this Bundle contains the data it most recently supplied in onSaveInstanceState(Bundle).
+     *                           Otherwise, it is null.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -24,16 +35,20 @@ public class QRCodeScanActivity extends AppCompatActivity {
         new IntentIntegrator(this).initiateScan();
     }
 
-    // Get the results:
+    /**
+     * Handles the result of the QR code scan.
+     * @param requestCode The integer request code originally supplied to startActivityForResult(),
+     *                    allowing you to identify who this result came from.
+     * @param resultCode The integer result code returned by the child activity through its setResult().
+     * @param data An Intent, which can return result data to the caller (various data can be attached to Intent "extras").
+     */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
         if (result != null) {
             if (result.getContents() == null) {
-                // Handle scan failure
                 Toast.makeText(this, "Cancelled", Toast.LENGTH_LONG).show();
             } else {
-                // Handle scan success
                 processScannedData(result.getContents());
             }
         } else {
@@ -41,28 +56,21 @@ public class QRCodeScanActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Processes the scanned QR code data.
+     * Can handle different types of data encoded in QR codes, such as event IDs or check-in information.
+     * @param scannedData The raw data obtained from scanning a QR code.
+     */
     private void processScannedData(String scannedData) {
         if (scannedData.startsWith("CHECKIN:")) {
-            // Extract check-in information and upload to Firestore
-            //uploadCheckInInfo(scannedData.substring("CHECKIN:".length()));
-
+            // Handle check-in logic here
         } else if (scannedData.startsWith("EVENTID:")) {
-            // Assume it's a URL to an event page and start EventActivity
-            Intent intent = new Intent(this, Event.class);
-            intent.putExtra("EVENTID", scannedData);
-            startActivity(intent);
+            // Extract the event ID from the scanned data
+            String eventId = scannedData.substring("EVENTID:".length());
+            // Start EventDetailsActivity with the extracted event ID
+            EventDetailsActivity.startWithEventId(this, eventId);
         } else {
-            // Handle other types of data, if necessary
             Toast.makeText(this, "Scanned: " + scannedData, Toast.LENGTH_LONG).show();
         }
     }
-
-//    private void uploadCheckInInfo(String checkInInfo) {
-//        // Assuming checkInInfo contains the necessary information for check-in
-//        // Adjust the database path and document structure as needed
-//        db.collection("Checked-in System")
-//                .add(/* Your check-in data model here, e.g., new CheckIn(checkInInfo) */)
-//                .addOnSuccessListener(documentReference -> Toast.makeText(QRCodeScanActivity.this, "Check-in successful", Toast.LENGTH_SHORT).show())
-//                .addOnFailureListener(e -> Toast.makeText(QRCodeScanActivity.this, "Check-in failed", Toast.LENGTH_SHORT).show());
-//    }
 }
