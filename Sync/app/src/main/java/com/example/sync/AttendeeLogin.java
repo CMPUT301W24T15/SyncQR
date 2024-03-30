@@ -26,6 +26,7 @@ public class AttendeeLogin extends AppCompatActivity {
     private Button loginButton;
     private Button guestLoginButton;
     private Button helpButton;
+    private String desiredPosition = "Attendee";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,7 +59,7 @@ public class AttendeeLogin extends AppCompatActivity {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
         db.collection("Accounts")
-                .whereEqualTo("userName", username)
+                .whereEqualTo("username", username)
                 .whereEqualTo("password", password)
                 .get()
                 .addOnCompleteListener(task -> {
@@ -71,13 +72,17 @@ public class AttendeeLogin extends AppCompatActivity {
                             // Obtain all fields
                             Map<String, Object> data = document.getData();
                             String userID = (String) data.get("userID");
-
-                        // If login successful, pass the userId to MainActivity
-                        Intent intent = new Intent(AttendeeLogin.this, AttendeeDashboard.class);
-                        intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-                        intent.putExtra("userID", userID);
-                        startActivity(intent);
-                        Toast.makeText(AttendeeLogin.this, "Login Successful", Toast.LENGTH_SHORT).show();
+                            String position = (String) data.get("position");
+                            if (position.equals(desiredPosition)) {
+                                // If login successful, pass the userId to MainActivity
+                                Intent intent = new Intent(AttendeeLogin.this, AttendeeDashboard.class);
+                                intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                                intent.putExtra("userID", userID);
+                                startActivity(intent);
+                                Toast.makeText(AttendeeLogin.this, "Login Successful", Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(AttendeeLogin.this, "Login Failed: Incorrect Role.", Toast.LENGTH_SHORT).show();
+                            }
                         }
                     } else {
                         // Login failed due to user and password not being present
