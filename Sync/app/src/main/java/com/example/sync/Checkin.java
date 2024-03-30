@@ -97,7 +97,7 @@ public class Checkin {
 
                 // Obtain the map
                 if (document.exists()) {
-                    HashMap<String, Object> counts = document.get("checkinCounts", HashMap.class);
+                    HashMap <String, Object> counts = (HashMap<String, Object>) document.getData().get("checkinCounts");
 
                     // handle new value
                     if (counts != null && counts.containsKey(userId)) {
