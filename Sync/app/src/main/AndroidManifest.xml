@@ -80,7 +80,7 @@
 
 
         <activity android:name=".EventDetailsActivity"/>
-
+        <activity android:name=".SignUpEventListActivity"/>
         <activity android:name=".EventListActivity"/>
 
     </application>

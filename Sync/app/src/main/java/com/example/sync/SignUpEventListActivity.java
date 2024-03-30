@@ -74,7 +74,7 @@ public class SignUpEventListActivity extends EventListActivity {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
         for (String eventId : eventIDs) {
-            db.collection("events").document(eventId).get().addOnSuccessListener(documentSnapshot -> {
+            db.collection("Accounts").document(eventId).get().addOnSuccessListener(documentSnapshot -> {
                 Event event = documentSnapshot.toObject(Event.class);
                 if (event != null) {
                     dataList.add(event);

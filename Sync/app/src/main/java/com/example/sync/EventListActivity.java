@@ -67,7 +67,7 @@ public class EventListActivity extends AppCompatActivity {
                 Intent intent = new Intent(EventListActivity.this, EventDetailsActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                 String eventID = event.getEventId();
-                intent.putExtra("eventID", ID.toString());
+                intent.putExtra("eventID", eventID);
                 startActivity(intent);
             }
         });
