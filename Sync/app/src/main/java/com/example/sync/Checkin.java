@@ -2,6 +2,7 @@ package com.example.sync;
 
 import static com.google.firebase.firestore.FieldValue.arrayRemove;
 
+import android.net.Uri;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -10,6 +11,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -20,6 +22,8 @@ import com.google.type.LatLng;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class Checkin {
     private String eventId;
@@ -30,6 +34,10 @@ public class Checkin {
     private static FirebaseFirestore db = FirebaseFirestore.getInstance();
     private static CollectionReference collection = db.collection("Checkin System");
     private static final String TAG = "Checkin System";
+
+    public interface Callback {
+        void onSuccess(Map<String, Object> counts, ArrayList<String> current, ArrayList<String> signup);
+    }
 
     /**
      * Construct a new Checkin system instance
@@ -89,11 +97,11 @@ public class Checkin {
 
                 // Obtain the map
                 if (document.exists()) {
-                    HashMap<String, Long> counts = document.get("checkinCounts", HashMap.class);
+                    HashMap<String, Object> counts = document.get("checkinCounts", HashMap.class);
 
                     // handle new value
                     if (counts != null && counts.containsKey(userId)) {
-                        long newCount = counts.get(userId) + 1;
+                        long newCount = (long) counts.get(userId) + 1;
                         counts.put(userId, newCount);
                     } else {
                         counts.put(userId, (long) 1);
@@ -152,6 +160,45 @@ public class Checkin {
                 .addOnFailureListener(e -> Log.w(TAG, "Error removing user from checkinCurrent list.", e));
     }
 
+    /**
+     * Obtain three lists (map) from the database
+     * @param eventId The id of the correspondent event
+     * @param callback A callback returned all three list when data fetch finished
+     */
+    public static void getListFromDatabase(String eventId, Callback callback) {
+        DocumentReference doc = collection.document(eventId);
+
+        doc.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                DocumentSnapshot document = task.getResult();
+
+                // Obtain the map
+                if (document.exists()) {
+                    HashMap <String, Object> counts = (HashMap<String, Object>) document.getData().get("checkinCounts");
+                    ArrayList<String> current = (ArrayList<String>) document.getData().get("checkinCurrent");
+                    ArrayList<String> signup = (ArrayList<String>) document.getData().get("signup");
+
+                    callback.onSuccess(counts, current, signup);
+                }
+            }
+        });
+    }
+
+    /**
+     * Save the generated qr code to the database
+     * @param eventId The id of the correspondent event
+     * @param uri The uri of the qrcode
+     */
+
+    public static void saveQRcodeToDatabase(String eventId, Uri uri) {
+        String qrcode = uri.toString();
+        DocumentReference doc = collection.document(eventId);
+        doc.update("qrcode", qrcode)
+                .addOnSuccessListener(aVoid -> Log.d(TAG, "Update qrcode successfully."))
+                .addOnFailureListener(e -> Log.w(TAG, "Error adding qrcode.", e));
+    }
+
     public String getEventId() {
         return eventId;
     }
@@ -194,3 +241,4 @@ public class Checkin {
 
 
 }
+
