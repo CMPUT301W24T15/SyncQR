@@ -97,7 +97,7 @@ public class Checkin {
 
                 // Obtain the map
                 if (document.exists()) {
-                    HashMap<String, Object> counts = document.get("checkinCounts", HashMap.class);
+                    HashMap <String, Object> counts = (HashMap<String, Object>) document.getData().get("checkinCounts");
 
                     // handle new value
                     if (counts != null && counts.containsKey(userId)) {
@@ -185,12 +185,12 @@ public class Checkin {
         });
     }
 
+
     /**
      * Save the generated qr code to the database
      * @param eventId The id of the correspondent event
      * @param uri The uri of the qrcode
      */
-
     public static void saveQRcodeToDatabase(String eventId, Uri uri) {
         String qrcode = uri.toString();
         DocumentReference doc = collection.document(eventId);
