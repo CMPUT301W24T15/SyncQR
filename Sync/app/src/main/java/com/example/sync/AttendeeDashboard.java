@@ -31,10 +31,13 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import java.util.ArrayList;
 
 public class AttendeeDashboard extends AppCompatActivity implements LocationPermissionDialog.LocationPermissionDialogListener {
+
+    private static String TAG = "Kevin";
     private ArrayList<String> signUpEventIDs;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     boolean userCheckedIn = FALSE;
-    String userId = "1718521";
+    private String userID;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +45,11 @@ public class AttendeeDashboard extends AppCompatActivity implements LocationPerm
         setContentView(R.layout.dashboard_attendee);
         Button permissionButton = findViewById(R.id.permission_button);
         permissionButton.setOnClickListener(v -> new LocationPermissionDialog().show(getSupportFragmentManager(), "LocationPermissionDialog"));
+
+        Log.d(TAG, "Entered AttendeeDashboard");
+
+        Bundle extras = getIntent().getExtras();
+        userID = getIntent().getStringExtra("userID");
 
         // Create notification channel
         createNotificationChannel();
@@ -117,10 +125,10 @@ public class AttendeeDashboard extends AppCompatActivity implements LocationPerm
             @Override
             public void onClick(View v) {
                 // Retrieve the user's ID (assuming it's available)
-                String userId = "1718521"; // Replace this with your actual way of getting the user's ID
+//                String userID = this.userID; // Replace this with your actual way of getting the user's ID
 
                 // Remove the user's ID from the check-in system
-                removeFromCheckInSystem(userId);
+                removeFromCheckInSystem(userID);
             }
         });
     }
@@ -223,12 +231,12 @@ public class AttendeeDashboard extends AppCompatActivity implements LocationPerm
             notificationManager.createNotificationChannel(channel);
         }
     }
-    private void removeFromCheckInSystem(String userId) {
+    private void removeFromCheckInSystem(String userID) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        DocumentReference checkInRef = db.collection("Check-in System").document(userId);
+        DocumentReference checkInRef = db.collection("Check-in System").document(userID);
 
         // Remove the user's ID from the "signup" field
-        checkInRef.update("signup", FieldValue.arrayRemove(userId))
+        checkInRef.update("signup", FieldValue.arrayRemove(userID))
                 .addOnSuccessListener(aVoid -> Log.d(TAG, "User removed from check-in system successfully."))
                 .addOnFailureListener(e -> Log.w(TAG, "Error removing user from check-in system.", e));
     }

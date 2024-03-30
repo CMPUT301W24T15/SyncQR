@@ -20,7 +20,7 @@ import java.util.Map;
 
 public class AttendeeLogin extends AppCompatActivity {
 
-    private static String TAG = "AttendeeLogin";
+    private static String TAG = "Kevin";
     private EditText usernameEditText;
     private EditText passwordEditText;
     private Button loginButton;
@@ -49,8 +49,8 @@ public class AttendeeLogin extends AppCompatActivity {
 
         guestLoginButton.setOnClickListener(v -> {
             // for guest login, generate userID and pass to continueAsGuest
-            String guestUserId = UserIDGenerator.generateUserID();
-            continueAsGuest(guestUserId);
+            String guestUserID = UserIDGenerator.generateUserID();
+            continueAsGuest(guestUserID);
         });
     }
 
@@ -73,9 +73,9 @@ public class AttendeeLogin extends AppCompatActivity {
                             String userID = (String) data.get("userID");
 
                         // If login successful, pass the userId to MainActivity
-                        Intent intent = new Intent(AttendeeLogin.this, MainActivity.class);
+                        Intent intent = new Intent(AttendeeLogin.this, AttendeeDashboard.class);
                         intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-                        intent.putExtra("userId", userID);
+                        intent.putExtra("userID", userID);
                         startActivity(intent);
                         Toast.makeText(AttendeeLogin.this, "Login Successful", Toast.LENGTH_SHORT).show();
                         }
@@ -87,12 +87,14 @@ public class AttendeeLogin extends AppCompatActivity {
                 }).addOnFailureListener(e -> Toast.makeText(AttendeeLogin.this, "Login Failed: " + e.getMessage(), Toast.LENGTH_SHORT).show());
     }
 
-    private void continueAsGuest(String guestUserId) {
+    private void continueAsGuest(String guestUserID) {
         // Create an intent for the MainActivity
-        Intent intent = new Intent(AttendeeLogin.this, MainActivity.class);
-
+        User user = new User(guestUserID);
+        user.saveUser();
+        Intent intent = new Intent(AttendeeLogin.this, AttendeeDashboard.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
         // Put the generated guest user ID as an extra in the intent and start activity
-        intent.putExtra("userId", guestUserId);
+        intent.putExtra("userID", guestUserID);
         startActivity(intent);
     }
 }
