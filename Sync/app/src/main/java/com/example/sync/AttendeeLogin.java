@@ -50,8 +50,8 @@ public class AttendeeLogin extends AppCompatActivity {
     private void login(String username, String password, String userId) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-        db.collection("users")
-                .whereEqualTo("username", username)
+        db.collection("Account")
+                .whereEqualTo("user", username)
                 .whereEqualTo("password", password)
                 .get()
                 .addOnCompleteListener(task -> {
