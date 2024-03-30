@@ -73,7 +73,7 @@
                 android:text="Description:"/>
 
             <TextView
-                android:id="@+id/event_registered_attendee_count"
+                android:id="@+id/event_attendee_limit"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Attendee Limit:"/>

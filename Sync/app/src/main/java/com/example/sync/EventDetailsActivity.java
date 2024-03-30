@@ -16,12 +16,14 @@ import androidx.appcompat.widget.Toolbar;
 import com.example.sync.organizer.FragListener;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * Activity that displays the details of an event.
@@ -33,10 +35,10 @@ public class EventDetailsActivity extends AppCompatActivity {
     ImageView poster; // has not been implemented. implement when connect to database
     TextView name;
     TextView location;
-
     TextView date;
     //    TextView organizer;
     TextView description;
+    TextView limit;
 
     String TAG = "EventDetailsActivity";
 
@@ -62,6 +64,7 @@ public class EventDetailsActivity extends AppCompatActivity {
         location = findViewById(R.id.event_location);
         date = findViewById(R.id.event_date_time);
         description = findViewById(R.id.event_description);
+        limit = findViewById(R.id.event_attendee_limit);
 
         Button backButton = findViewById(R.id.back_button);
 
@@ -90,10 +93,10 @@ public class EventDetailsActivity extends AppCompatActivity {
 
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
-            String eventID = extras.getString("eventID");
+            String eventId = getIntent().getStringExtra("eventID");
 
             FirebaseFirestore db = FirebaseFirestore.getInstance();
-            DocumentReference eventRef = db.collection("events").document(eventID);
+            DocumentReference eventRef = db.collection("Events").document(eventId);
 
 //            final Map<String, Object> data;
             eventRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -110,11 +113,17 @@ public class EventDetailsActivity extends AppCompatActivity {
                             String event_location = "Location:  " + document.getData().get("eventLocation");
                             location.setText(event_location);
 
-                            SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd");
-                            date.setText(sdf.format(document.getData().get("eventDate")));
+//                            SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd HH:mm");
+//                            date.setText(sdf.format(document.getData().get("eventDate")));
+                            Timestamp eventTimestamp = document.getTimestamp("eventDate");
+                            date.setText(eventTimestamp.toString());
+
 
                             String event_description = "Description: " + document.getData().get("eventDescription");
                             description.setText(event_description);
+
+                            String attendee_limit = "Attendee Limit: " + document.getData().get("attendeeNumber").toString();
+                            limit.setText((attendee_limit));
 
                         } else {
                             Log.d(TAG, "No such document");
