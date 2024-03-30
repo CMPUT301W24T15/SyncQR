@@ -2,6 +2,7 @@ package com.example.sync;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -9,11 +10,17 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+
+import java.util.ArrayList;
+import java.util.Map;
 
 public class AttendeeLogin extends AppCompatActivity {
 
+    private static String TAG = "AttendeeLogin";
     private EditText usernameEditText;
     private EditText passwordEditText;
     private Button loginButton;
@@ -36,8 +43,8 @@ public class AttendeeLogin extends AppCompatActivity {
             // Generate userID for account and pass to login() which will then pass to main activity
             String username = usernameEditText.getText().toString();
             String password = passwordEditText.getText().toString();
-            String userId = UserIDGenerator.generateUserID();
-            login(username, password, userId);
+//            String userId = UserIDGenerator.generateUserID();
+            login(username, password);
         });
 
         guestLoginButton.setOnClickListener(v -> {
@@ -47,21 +54,31 @@ public class AttendeeLogin extends AppCompatActivity {
         });
     }
 
-    private void login(String username, String password, String userId) {
+    private void login(String username, String password) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-        db.collection("Account")
-                .whereEqualTo("user", username)
+        db.collection("Accounts")
+                .whereEqualTo("userName", username)
                 .whereEqualTo("password", password)
                 .get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful() && task.getResult() != null && !task.getResult().isEmpty()) {
 
+                        for (QueryDocumentSnapshot document : task.getResult()) {
+                            // record log
+                            Log.d(TAG, document.getId() + " => " + document.getData());
+
+                            // Obtain all fields
+                            Map<String, Object> data = document.getData();
+                            String userID = (String) data.get("userID");
+
                         // If login successful, pass the userId to MainActivity
                         Intent intent = new Intent(AttendeeLogin.this, MainActivity.class);
-                        intent.putExtra("userId", userId);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                        intent.putExtra("userId", userID);
                         startActivity(intent);
                         Toast.makeText(AttendeeLogin.this, "Login Successful", Toast.LENGTH_SHORT).show();
+                        }
                     } else {
                         // Login failed due to user and password not being present
                         Toast.makeText(AttendeeLogin.this, "Login Failed: Incorrect username or password.", Toast.LENGTH_SHORT).show();
