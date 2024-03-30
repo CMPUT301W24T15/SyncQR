@@ -85,7 +85,7 @@ public class EventDetailsActivity extends AppCompatActivity {
                 String eventId = getIntent().getStringExtra("eventID");
                 // Update the user's document in Firestore
                 updateUserEventsInFirestore("1718521", eventId);
-                Checkin.addUserToSignUpList(eventId, "1718521");
+                Checkin.signUpForUser(eventId, "1718521");
             }
         });
 
