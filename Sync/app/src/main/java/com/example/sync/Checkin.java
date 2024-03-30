@@ -1,19 +1,28 @@
 package com.example.sync;
 
+import static com.google.firebase.firestore.FieldValue.arrayRemove;
+
 import android.util.Log;
 
 import androidx.annotation.NonNull;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.type.LatLng;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class Checkin {
     private String eventId;
@@ -21,7 +30,6 @@ public class Checkin {
     private ArrayList<String> signup;
     private HashMap<String, Integer> checkinCounts;
     private ArrayList<String> checkinCurrent;
-    private HashMap<String, LatLng> location;
     private static FirebaseFirestore db = FirebaseFirestore.getInstance();
     private static CollectionReference collection = db.collection("Checkin System");
     private static final String TAG = "Checkin System";
@@ -36,7 +44,6 @@ public class Checkin {
         this.signup = new ArrayList<>();
         this.checkinCounts = new HashMap<>();
         this.checkinCurrent = new ArrayList<>();
-        this.location = new HashMap<>();
     }
 
     /**
@@ -50,26 +57,102 @@ public class Checkin {
         data.put("signup", signup);
         data.put("checkinCounts", checkinCounts);
         data.put("checkinCurrent", checkinCurrent);
-        data.put("location", location);
 
         collection.document(eventId).set(data);
 
     }
+
     /**
-     * Adds the user's ID to the "sign-up" list in the "check-ins" system for a specific event.
+     * Adds the user's ID to the "signup" list in the "Checkin" system for a specific event.
      *
      * @param eventId The ID of the event for which to add the user's ID to the "sign-up" list.
      * @param userId  The ID of the user who signed up for the event.
+     * @see DocumentReference
      */
-    private void addUserToSignUpList(@NonNull String eventId, @NonNull String userId) {
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        // Assuming "check-ins" is a document related to the eventID in some way
-        DocumentReference checkInRef = db.collection("Check-in System").document(eventId);
-
-        // Use update method to add the userId to the "sign-up" list
-        checkInRef.update("sign-up", FieldValue.arrayUnion(userId))
+    public static void signUpForUser(String eventId, String userId) {
+        DocumentReference doc = collection.document(eventId);
+        doc.update("signup", FieldValue.arrayUnion(userId))
                 .addOnSuccessListener(aVoid -> Log.d(TAG, "User added to sign-up list successfully."))
                 .addOnFailureListener(e -> Log.w(TAG, "Error adding user to sign-up list.", e));
+    }
+
+
+    /**
+     * Keep track and update the number of checkin times regarding the user
+     * @param eventId The id of the correspondent event
+     * @param userId The id of the correspondent user
+     */
+    public static void updateCheckinCounts(String eventId, String userId) {
+        DocumentReference doc = collection.document(eventId);
+
+        doc.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                DocumentSnapshot document = task.getResult();
+
+                // Obtain the map
+                if (document.exists()) {
+                    HashMap<String, Long> counts = document.get("checkinCounts", HashMap.class);
+
+                    // handle new value
+                    if (counts != null && counts.containsKey(userId)) {
+                        long newCount = counts.get(userId) + 1;
+                        counts.put(userId, newCount);
+                    } else {
+                        counts.put(userId, (long) 1);
+                    }
+
+                    // update
+                    doc.update("checkinCounts", counts)
+                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void aVoid) {
+                                    Log.d(TAG, "DocumentSnapshot successfully updated!");
+                                }
+                            })
+                            .addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    Log.w(TAG, "Error updating document", e);
+                                }
+                            });
+                }
+            }
+        });
+    }
+
+    /**
+     * Keep track current users who checked in.
+     * @param eventId The id of the correspondent event
+     * @param userId The id of the correspondent user
+     */
+    public static void updateCheckinCurrent(String eventId, String userId) {
+        DocumentReference doc = collection.document(eventId);
+        doc.update("checkinCurrent", FieldValue.arrayUnion(userId))
+                .addOnSuccessListener(aVoid -> Log.d(TAG, "User added to checkinCurrent list successfully."))
+                .addOnFailureListener(e -> Log.w(TAG, "Error adding user to checkinCurrent list.", e));
+    }
+
+    /**
+     * When the qr code is scanned, updated the two of the lists at the same time
+     * @param eventId The id of the correspondent event
+     * @param userId The id of the correspondent user
+     */
+    public static void checkInForUser(String eventId, String userId) {
+        updateCheckinCurrent(eventId, userId);
+        updateCheckinCounts(eventId, userId);
+    }
+
+    /**
+     * When the user wants to quit a event, the current checkin list should be updated.
+     * @param eventId The id of the correspondent event
+     * @param userId The id of the correspondent user
+     */
+    public static void quitCheckin(String eventId, String userId) {
+        DocumentReference doc = collection.document(eventId);
+        doc.update("checkinCurrent", arrayRemove(userId))
+                .addOnSuccessListener(aVoid -> Log.d(TAG, "User deleted from checkinCurrent list successfully."))
+                .addOnFailureListener(e -> Log.w(TAG, "Error removing user from checkinCurrent list.", e));
     }
 
     public String getEventId() {
@@ -112,13 +195,6 @@ public class Checkin {
         this.checkinCurrent = checkinCurrent;
     }
 
-    public HashMap<String, LatLng> getLocation() {
-        return location;
-    }
-
-    public void setLocation(HashMap<String, LatLng> location) {
-        this.location = location;
-    }
 
 }
 
