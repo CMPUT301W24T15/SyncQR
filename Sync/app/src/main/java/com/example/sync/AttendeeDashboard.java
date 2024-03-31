@@ -52,9 +52,6 @@ public class AttendeeDashboard extends AppCompatActivity implements LocationPerm
             userID = getIntent().getStringExtra("userID");
         }
 
-        // Create notification channel
-        createNotificationChannel();
-
         Button homeButton = findViewById(R.id.home_button);
         homeButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -198,37 +195,6 @@ public class AttendeeDashboard extends AppCompatActivity implements LocationPerm
         }
     }
 
-    // Function to create a notification
-    private void createNotification(String title, String body) {
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
-            // Handle case where permission is not granted
-            return;
-        }
-
-        // Build the notification
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "default_notification_channel_id")
-                .setSmallIcon(R.drawable.ic_notification)
-                .setContentTitle(title)
-                .setContentText(body)
-                .setPriority(NotificationCompat.PRIORITY_DEFAULT);
-
-        // Show the notification
-        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
-        notificationManager.notify(0, builder.build());
-    }
-
-    // Function to create a notification channel (required for Android Oreo and above)
-    private void createNotificationChannel() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            CharSequence name = getString(R.string.channel_name);
-            String description = getString(R.string.channel_description);
-            int importance = NotificationManager.IMPORTANCE_DEFAULT;
-            NotificationChannel channel = new NotificationChannel("default_notification_channel_id", name, importance);
-            channel.setDescription(description);
-            NotificationManager notificationManager = getSystemService(NotificationManager.class);
-            notificationManager.createNotificationChannel(channel);
-        }
-    }
     private void removeFromCheckInSystem(String userID) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         DocumentReference checkInRef = db.collection("Check-in System").document(userID);

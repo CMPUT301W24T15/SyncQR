@@ -71,7 +71,7 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     private void navigateToMyNotificationReceiver() {
-        Intent intent = new Intent(this, MyNotificationReceiver.class);
+        Intent intent = new Intent(this, NotificationFragment.class);
         startActivity(intent);
     }
 

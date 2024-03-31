@@ -70,15 +70,6 @@
                 android:name="photopicker_activity:0:required"
                 android:value="" />
         </service>
-        <service
-            android:name=".MyFirebaseMessagingService"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="com.google.firebase.MESSAGING_EVENT" />
-            </intent-filter>
-        </service>
-
-
         <activity android:name=".EventDetailsActivity"/>
         <activity android:name=".SignUpEventListActivity"/>
         <activity android:name=".EventListActivity"/>
