@@ -1,7 +1,5 @@
 package com.example.sync;
 
-import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
-
 import static java.lang.Boolean.FALSE;
 import static java.lang.Boolean.TRUE;
 
@@ -15,6 +13,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.Manifest;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
@@ -37,7 +36,7 @@ public class AttendeeDashboard extends AppCompatActivity implements LocationPerm
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     boolean userCheckedIn = FALSE;
     private String userID;
-
+    public String username;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,7 +48,9 @@ public class AttendeeDashboard extends AppCompatActivity implements LocationPerm
         Log.d(TAG, "Entered AttendeeDashboard");
 
         Bundle extras = getIntent().getExtras();
-        userID = getIntent().getStringExtra("userID");
+        if (extras != null){
+            userID = getIntent().getStringExtra("userID");
+        }
 
         // Create notification channel
         createNotificationChannel();
@@ -124,9 +125,6 @@ public class AttendeeDashboard extends AppCompatActivity implements LocationPerm
         quitEventButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Retrieve the user's ID (assuming it's available)
-//                String userID = this.userID; // Replace this with your actual way of getting the user's ID
-
                 // Remove the user's ID from the check-in system
                 removeFromCheckInSystem(userID);
             }
@@ -240,4 +238,5 @@ public class AttendeeDashboard extends AppCompatActivity implements LocationPerm
                 .addOnSuccessListener(aVoid -> Log.d(TAG, "User removed from check-in system successfully."))
                 .addOnFailureListener(e -> Log.w(TAG, "Error removing user from check-in system.", e));
     }
+
 }

@@ -40,32 +40,37 @@ public class ComparisonHelper {
                     if (attendeeNumber != null) {
                         Log.d("ComparisonHelper", "Attendee Number: " + attendeeNumber);
 
-                        // Get sign-up count from check-in system
-                        db.collection("Checkin System").document(eventId)
-                                .get()
-                                .addOnSuccessListener(signUpSnapshot -> {
-                                    if (signUpSnapshot.exists()) {
-                                        List<String> signUpList = (List<String>) signUpSnapshot.get("signup");
-                                        if (signUpList != null) {
-                                            long signUpCount = signUpList.size();
-                                            Log.d("ComparisonHelper", "Sign-up Count: " + signUpCount);
+                        if (attendeeNumber == 0) {
+                            // Infinite attendee limit, no need to compare with sign-up count
+                            listener.onComparisonResult(true);
+                        } else {
+                            // Get sign-up count from check-in system
+                            db.collection("Checkin System").document(eventId)
+                                    .get()
+                                    .addOnSuccessListener(signUpSnapshot -> {
+                                        if (signUpSnapshot.exists()) {
+                                            List<String> signUpList = (List<String>) signUpSnapshot.get("signup");
+                                            if (signUpList != null) {
+                                                long signUpCount = signUpList.size();
+                                                Log.d("ComparisonHelper", "Sign-up Count: " + signUpCount);
 
-                                            // Compare attendee number with sign-up count
-                                            boolean result = attendeeNumber > signUpCount;
-                                            listener.onComparisonResult(result);
+                                                // Compare attendee number with sign-up count
+                                                boolean result = attendeeNumber > signUpCount;
+                                                listener.onComparisonResult(result);
+                                            } else {
+                                                Log.d("ComparisonHelper", "Sign-up list is null or empty");
+                                                listener.onComparisonResult(false);
+                                            }
                                         } else {
-                                            Log.d("ComparisonHelper", "Sign-up list is null or empty");
+                                            Log.d("ComparisonHelper", "No sign-up snapshot found");
                                             listener.onComparisonResult(false);
                                         }
-                                    } else {
-                                        Log.d("ComparisonHelper", "No sign-up snapshot found");
-                                        listener.onComparisonResult(false);
-                                    }
-                                })
-                                .addOnFailureListener(e -> {
-                                    Log.e("ComparisonHelper", "Error getting sign-up count: " + e.getMessage());
-                                    listener.onComparisonResult(false); // Assume failure, prevent sign-up
-                                });
+                                    })
+                                    .addOnFailureListener(e -> {
+                                        Log.e("ComparisonHelper", "Error getting sign-up count: " + e.getMessage());
+                                        listener.onComparisonResult(false); // Assume failure, prevent sign-up
+                                    });
+                        }
                     } else {
                         Log.e("ComparisonHelper", "Attendee number is null");
                         listener.onComparisonResult(false); // Assume failure, prevent sign-up
@@ -76,4 +81,5 @@ public class ComparisonHelper {
                     listener.onComparisonResult(false); // Assume failure, prevent sign-up
                 });
     }
+
 }
