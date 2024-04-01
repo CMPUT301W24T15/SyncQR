@@ -57,7 +57,7 @@ public class User extends AppCompatActivity {
         userData.put("userID", userID);
         userData.put("username", username);
         userData.put("password", password);
-        userData.put("profile", profile);
+        //userData.put("profile", profile);
         userData.put("position", position);
         userData.put("events", events);
 
