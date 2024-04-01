@@ -8,7 +8,6 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.content.Context;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -43,7 +42,6 @@ public class EventDetailsActivity extends AppCompatActivity {
 
     String TAG = "EventDetailsActivity";
 
-    // Chatgpt, OpenAI. Downloaded 2024-03-27
     /**
      * Static method to launch the EventDetailsActivity.
      * This method creates an intent, puts the event ID as an extra, and starts the activity.
@@ -87,21 +85,9 @@ public class EventDetailsActivity extends AppCompatActivity {
             public void onClick(View v) {
                 // Assume eventId is the ID of the event being viewed
                 String eventId = getIntent().getStringExtra("eventID");
-
-                // Check if attendee number is greater than sign-up count
-                ComparisonHelper.compareAttendeeAndSignUpNumbers(eventId, new ComparisonHelper.ComparisonListener() {
-                    @Override
-                    public void onComparisonResult(boolean result) {
-                        if (result) {
-                            // If true, update user's events in Firestore and sign up the user
-                            updateUserEventsInFirestore("1718521", eventId);
-                            Checkin.signUpForUser(eventId, "1718521");
-                        } else {
-                            // Attendee number is not greater than sign-up count, handle accordingly
-                            Toast.makeText(EventDetailsActivity.this, "Event is full. Cannot sign up.", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });
+                // Update the user's document in Firestore
+                updateUserEventsInFirestore("1718521", eventId);
+                Checkin.signUpForUser(eventId, "1718521");
             }
         });
 
@@ -112,6 +98,7 @@ public class EventDetailsActivity extends AppCompatActivity {
             FirebaseFirestore db = FirebaseFirestore.getInstance();
             DocumentReference eventRef = db.collection("Events").document(eventId);
 
+//            final Map<String, Object> data;
             eventRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                 @Override
                 public void onComplete(@NonNull Task<DocumentSnapshot> task) {
@@ -126,11 +113,10 @@ public class EventDetailsActivity extends AppCompatActivity {
                             String event_location = "Location:  " + document.getData().get("eventLocation");
                             location.setText(event_location);
 
-                            // https://stackoverflow.com/questions/18929929/convert-timestamp-into-current-date-in-android, Emil, Stack overflow. Downloaded 2024-03-30
+//                            SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd HH:mm");
+//                            date.setText(sdf.format(document.getData().get("eventDate")));
                             Timestamp eventTimestamp = document.getTimestamp("eventDate");
-                            SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd HH:mm");
-                            String event_Time = sdf.format(eventTimestamp.toDate());
-                            date.setText(event_Time);
+                            date.setText(eventTimestamp.toString());
 
 
                             String event_description = "Description: " + document.getData().get("eventDescription");
@@ -151,7 +137,6 @@ public class EventDetailsActivity extends AppCompatActivity {
 
     }
 
-    // Chatgpt, OpenAI. Downloaded 2024-03-29
     /**
      * Updates the Firestore document corresponding to the user's account to add the eventId
      * to the "event" field, which is an ArrayList<String> containing the IDs of events the user

@@ -34,7 +34,7 @@
         android:id="@+id/administrator_text"
         android:layout_width="379dp"
         android:layout_height="wrap_content"
-        android:text="ID for Event/Profile"
+        android:hint="Name for Event/Profile"
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -58,6 +58,30 @@
             android:layout_width="190dp"
             android:layout_height="36dp"
             android:text="Search Profile"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <Button
+            android:id="@+id/event_browse_button"
+            android:layout_width="189dp"
+            android:layout_height="36dp"
+            android:text="Browse Event"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/profile_browse_button"
+            android:layout_width="190dp"
+            android:layout_height="36dp"
+            android:text="Browse Profile"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />

@@ -1,5 +1,6 @@
 package com.example.sync;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -37,8 +38,6 @@ public class AdministratorDashboard extends AppCompatActivity {
         list.setAdapter(eventArrayAdapter);
 
         Button eventSearchButton = findViewById(R.id.event_search_button);
-
-
         eventSearchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -56,6 +55,15 @@ public class AdministratorDashboard extends AppCompatActivity {
                         removeProfile(String.valueOf(selectedEvent.getEventId()));
                     })
                     .setNegativeButton(android.R.string.no, null).show();
+        });
+
+        Button eventBrowseButton = findViewById(R.id.event_browse_button);
+        eventBrowseButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(AdministratorDashboard.this, EventListActivity.class);
+                startActivity(intent);;
+            }
         });
 
         Button profileSearchButton = findViewById(R.id.profile_search_button);
@@ -77,6 +85,15 @@ public class AdministratorDashboard extends AppCompatActivity {
                         removeProfile(selectedProfile.getName());
                     })
                     .setNegativeButton(android.R.string.no, null).show();
+        });
+
+        Button profileBrowseButton = findViewById(R.id.profile_browse_button);
+        profileBrowseButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(AdministratorDashboard.this, ProfileListActivity.class);
+                startActivity(intent);;
+            }
         });
     }
 

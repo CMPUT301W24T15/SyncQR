@@ -1,23 +1,24 @@
 package com.example.sync;
 
 public class Profile {
-    private static String name;
-    private static String imageUrl;
-    private static String email;
-    private static String phoneNumber;
+    private String name;
+    private String imageUrl;
+    private String email;
+    private String phoneNumber;
 
-    // Default constructor required for calls to DataSnapshot.getValue(UserProfile.class)
+    // Default constructor required for calls to DataSnapshot.getValue(Profile.class)
     public Profile() {
     }
 
     // Constructor with parameters
-    public Profile(String name, String profilePictureUrl, String email, String phoneNumber) {
+    public Profile(String name, String imageUrl, String email, String phoneNumber) {
         this.name = name;
-        this.imageUrl = profilePictureUrl;
+        this.imageUrl = imageUrl;
         this.email = email;
         this.phoneNumber = phoneNumber;
     }
-    public static String getName() {
+
+    public String getName() {
         return name;
     }
 
@@ -25,15 +26,15 @@ public class Profile {
         this.name = name;
     }
 
-    public static String getProfilePictureUrl() {
+    public String getImageUrl() {
         return imageUrl;
     }
 
-    public void setProfilePictureUrl(String profilePictureUrl) {
-        this.imageUrl = profilePictureUrl;
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 
-    public static String getEmail() {
+    public String getEmail() {
         return email;
     }
 
@@ -41,7 +42,7 @@ public class Profile {
         this.email = email;
     }
 
-    public static String getPhoneNumber() {
+    public String getPhoneNumber() {
         return phoneNumber;
     }
 
