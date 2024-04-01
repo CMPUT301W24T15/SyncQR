@@ -159,8 +159,23 @@ public class ProfileActivity extends AppCompatActivity {
         // userImageInput.setInitialsFromName(name);
 
         String userId = databaseReference.push().getKey();
-        Profile profile = new Profile(name, "", email, contact);
-        databaseReference.child(userId).setValue(profile);
+        //Profile profile = new Profile(name, "", email, contact);
+        if (userId != null) {
+            Profile profile = new Profile(name, "", email, contact); // Assuming the second parameter is for the image, which seems to be missing in your current approach
+            databaseReference.child(userId).setValue(profile)
+                    .addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            Log.d(TAG, "Profile saved successfully");
+                            // Optionally, show a success message to the user or navigate to another activity
+                        } else {
+                            Log.e(TAG, "Failed to save profile", task.getException());
+                            // Optionally, show an error message to the user
+                        }
+                    });
+        } else {
+            Log.e(TAG, "Failed to generate a unique key for the profile");
+            // Handle the error, perhaps by informing the user to try again
+        }
     }
 
     private void navigateToAttendee() {
