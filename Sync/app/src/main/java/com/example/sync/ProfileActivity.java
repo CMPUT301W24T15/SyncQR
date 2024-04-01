@@ -1,11 +1,13 @@
 package com.example.sync;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
@@ -15,6 +17,8 @@ import com.google.firebase.database.FirebaseDatabase;
 public class ProfileActivity extends AppCompatActivity {
     private EditText userNameInput, userEmailInput, userContactInput;
     private AvatarView userImageInput;
+    private static final int PICK_IMAGE_REQUEST = 1;
+    private Uri imageUri;
     private DatabaseReference databaseReference;
 
     @Override
@@ -39,6 +43,9 @@ public class ProfileActivity extends AppCompatActivity {
         Button eventButton = findViewById(R.id.event_button);
         Button messagesButton = findViewById(R.id.messages_button);
         Button qrCodeButton = findViewById(R.id.qr_code_button);
+        Button uploadpicButton = findViewById(R.id.upload_picture_button);
+        Button removepicButton = findViewById(R.id.remove_picture_button);
+
 
         // Set click listeners
         homeButton.setOnClickListener(view -> navigateToAttendee());
@@ -46,7 +53,8 @@ public class ProfileActivity extends AppCompatActivity {
         messagesButton.setOnClickListener(view -> navigateToMyNotificationReceiver());
         qrCodeButton.setOnClickListener(view -> navigateToQRCodeScanActivity());
 
-        saveButton.setOnClickListener(view -> saveProfileData());
+        uploadpicButton.setOnClickListener(view -> openImageSelector());
+        removepicButton.setOnClickListener(view -> removeProfileImage());        saveButton.setOnClickListener(view -> saveProfileData());
         cancelButton.setOnClickListener(view -> clearInputs());
     }
 
@@ -54,6 +62,8 @@ public class ProfileActivity extends AppCompatActivity {
         String name = userNameInput.getText().toString().trim();
         String email = userEmailInput.getText().toString().trim();
         String contact = userContactInput.getText().toString().trim();
+
+        userImageInput.setInitialsFromName(name);
 
         String userId = databaseReference.push().getKey();
         Profile profile = new Profile(name, "", email, contact);
@@ -85,6 +95,7 @@ public class ProfileActivity extends AppCompatActivity {
         userEmailInput.setText("");
         userContactInput.setText("");
     }
+
     private void loadProfileImage(String imageUrl) {
         Glide.with(this)
                 .load(imageUrl)
@@ -92,5 +103,26 @@ public class ProfileActivity extends AppCompatActivity {
                 .error(R.drawable.uploadimage)
                 .into(userImageInput);
     }
+    private void openImageSelector() {
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST);
+    }
+    private void removeProfileImage() {
+        // Set to default image or clear
+        userImageInput.setImageResource(R.drawable.uploadimage); // Assuming 'uploadimage' is your default/placeholder image
+    }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
+            imageUri = data.getData();
+            loadProfileImage(imageUri.toString());
+        }
+    }
+
+
+
 }
 
