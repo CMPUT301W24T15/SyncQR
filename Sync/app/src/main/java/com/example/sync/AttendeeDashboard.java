@@ -1,7 +1,5 @@
 package com.example.sync;
 
-import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
-
 import static java.lang.Boolean.FALSE;
 import static java.lang.Boolean.TRUE;
 
@@ -15,6 +13,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.Manifest;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
@@ -31,10 +30,13 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import java.util.ArrayList;
 
 public class AttendeeDashboard extends AppCompatActivity implements LocationPermissionDialog.LocationPermissionDialogListener {
+
+    private static String TAG = "Kevin";
     private ArrayList<String> signUpEventIDs;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     boolean userCheckedIn = FALSE;
-    String userId = "1718521";
+    private String userID;
+    public String username;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,8 +45,12 @@ public class AttendeeDashboard extends AppCompatActivity implements LocationPerm
         Button permissionButton = findViewById(R.id.permission_button);
         permissionButton.setOnClickListener(v -> new LocationPermissionDialog().show(getSupportFragmentManager(), "LocationPermissionDialog"));
 
-        // Create notification channel
-        createNotificationChannel();
+        Log.d(TAG, "Entered AttendeeDashboard");
+
+        Bundle extras = getIntent().getExtras();
+        if (extras != null){
+            userID = getIntent().getStringExtra("userID");
+        }
 
         Button homeButton = findViewById(R.id.home_button);
         homeButton.setOnClickListener(new View.OnClickListener() {
@@ -116,11 +122,8 @@ public class AttendeeDashboard extends AppCompatActivity implements LocationPerm
         quitEventButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Retrieve the user's ID (assuming it's available)
-                String userId = "1718521"; // Replace this with your actual way of getting the user's ID
-
                 // Remove the user's ID from the check-in system
-                removeFromCheckInSystem(userId);
+                removeFromCheckInSystem(userID);
             }
         });
     }
@@ -192,44 +195,14 @@ public class AttendeeDashboard extends AppCompatActivity implements LocationPerm
         }
     }
 
-    // Function to create a notification
-    private void createNotification(String title, String body) {
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
-            // Handle case where permission is not granted
-            return;
-        }
-
-        // Build the notification
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "default_notification_channel_id")
-                .setSmallIcon(R.drawable.ic_notification)
-                .setContentTitle(title)
-                .setContentText(body)
-                .setPriority(NotificationCompat.PRIORITY_DEFAULT);
-
-        // Show the notification
-        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
-        notificationManager.notify(0, builder.build());
-    }
-
-    // Function to create a notification channel (required for Android Oreo and above)
-    private void createNotificationChannel() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            CharSequence name = getString(R.string.channel_name);
-            String description = getString(R.string.channel_description);
-            int importance = NotificationManager.IMPORTANCE_DEFAULT;
-            NotificationChannel channel = new NotificationChannel("default_notification_channel_id", name, importance);
-            channel.setDescription(description);
-            NotificationManager notificationManager = getSystemService(NotificationManager.class);
-            notificationManager.createNotificationChannel(channel);
-        }
-    }
-    private void removeFromCheckInSystem(String userId) {
+    private void removeFromCheckInSystem(String userID) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        DocumentReference checkInRef = db.collection("Check-in System").document(userId);
+        DocumentReference checkInRef = db.collection("Check-in System").document(userID);
 
         // Remove the user's ID from the "signup" field
-        checkInRef.update("signup", FieldValue.arrayRemove(userId))
+        checkInRef.update("signup", FieldValue.arrayRemove(userID))
                 .addOnSuccessListener(aVoid -> Log.d(TAG, "User removed from check-in system successfully."))
                 .addOnFailureListener(e -> Log.w(TAG, "Error removing user from check-in system.", e));
     }
+
 }

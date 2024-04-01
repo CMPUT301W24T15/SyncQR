@@ -2,7 +2,7 @@ package com.example.sync;
 
 public class Profile {
     private static String name;
-    private static String profilePictureUrl;
+    private static String imageUrl;
     private static String email;
     private static String phoneNumber;
 
@@ -13,7 +13,7 @@ public class Profile {
     // Constructor with parameters
     public Profile(String name, String profilePictureUrl, String email, String phoneNumber) {
         this.name = name;
-        this.profilePictureUrl = profilePictureUrl;
+        this.imageUrl = profilePictureUrl;
         this.email = email;
         this.phoneNumber = phoneNumber;
     }
@@ -26,11 +26,11 @@ public class Profile {
     }
 
     public static String getProfilePictureUrl() {
-        return profilePictureUrl;
+        return imageUrl;
     }
 
     public void setProfilePictureUrl(String profilePictureUrl) {
-        this.profilePictureUrl = profilePictureUrl;
+        this.imageUrl = profilePictureUrl;
     }
 
     public static String getEmail() {

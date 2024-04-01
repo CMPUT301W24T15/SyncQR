@@ -39,8 +39,6 @@ public class Event implements Serializable {
     private Long organizerId;
 
 
-
-
     public Event(String eventName, Timestamp eventDate, String eventLocation, Long attendeeNumber, String organizerName, String eventDescription, String poster, Long organizerId) {
 
         // eventID
