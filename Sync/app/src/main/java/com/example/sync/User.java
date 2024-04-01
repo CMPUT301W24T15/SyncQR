@@ -57,7 +57,7 @@ public class User extends AppCompatActivity {
         userData.put("userID", userID);
         userData.put("username", username);
         userData.put("password", password);
-//        userData.put("profile", profile);
+        userData.put("profile", profile);
         userData.put("position", position);
         userData.put("events", events);
 
@@ -93,6 +93,7 @@ public class User extends AppCompatActivity {
 
     public void setUsername(String username) {
         this.username = username;
+        this.profile.setName(username);
     }
 
     public String getPassword() {
@@ -103,12 +104,18 @@ public class User extends AppCompatActivity {
         this.password = password;
     }
 
-    public Profile getProfile() {
-        return profile;
+    public String getProfileEmail() {
+        return profile.getEmail();
+    }
+    public void setProfileEmail(String email) {
+        this.profile.setEmail(email);
     }
 
-    public void setProfile(Profile profile) {
-        this.profile = profile;
+    public String getProfilePhoneNumber() {
+        return profile.getPhoneNumber();
+    }
+    public void setProfilePhoneNumber(String phoneNumber) {
+        this.profile.setPhoneNumber(phoneNumber);
     }
 
     public String getPosition() {
