@@ -157,7 +157,7 @@ public class EventDetailsActivity extends AppCompatActivity {
                             if (document.exists()) {
                                 // Found the user document, now update it
                                 DocumentReference userRef = document.getReference();
-                                userRef.update("event", FieldValue.arrayUnion(eventId))
+                                userRef.update("signupevent", FieldValue.arrayUnion(eventId))
                                         .addOnSuccessListener(aVoid -> Log.d(TAG, "Event added to user's signed-up events successfully."))
                                         .addOnFailureListener(e -> Log.w(TAG, "Error adding event to user's signed-up events.", e));
                             } else {

@@ -22,6 +22,11 @@ import androidx.core.app.NotificationManagerCompat;
 import androidx.core.content.ContextCompat;
 import androidx.annotation.NonNull;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -86,11 +91,29 @@ public class AttendeeDashboard extends AppCompatActivity implements LocationPerm
         eventButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(AttendeeDashboard.this, SignUpEventListActivity.class);
-                signUpEventIDs = new ArrayList<>();
-                signUpEventIDs.add("1234");
-                intent.putStringArrayListExtra("eventIDs", signUpEventIDs);
-                startActivity(intent);
+                FirebaseDatabase database = FirebaseDatabase.getInstance();
+                DatabaseReference myRef = database.getReference("Accounts").child(userID).child("signUpEvents");
+
+                myRef.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        ArrayList<String> signUpEventIDs = new ArrayList<>();
+                        for (DataSnapshot childSnapshot: dataSnapshot.getChildren()) {
+                            String eventID = childSnapshot.getValue(String.class);
+                            signUpEventIDs.add(eventID);
+                        }
+
+                        Intent intent = new Intent(AttendeeDashboard.this, SignUpEventListActivity.class);
+                        intent.putStringArrayListExtra("eventIDs", signUpEventIDs);
+                        startActivity(intent);
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
+
             }
         });
 

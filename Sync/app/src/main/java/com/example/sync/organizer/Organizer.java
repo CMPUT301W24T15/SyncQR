@@ -11,8 +11,9 @@ import java.util.ArrayList;
  */
 public class Organizer extends User {
 
-    public Organizer(String userid, String username, String password, Profile profile, String position, ArrayList<Event> events) {
-        super(userid, username, password, profile, position, events);
+
+    public Organizer(String userID, String username, String password, Profile profile, String position, ArrayList<Event> signupevents, ArrayList<Event> createdevents) {
+        super(userID, username, password, profile, position, signupevents, createdevents);
     }
 
     @Override

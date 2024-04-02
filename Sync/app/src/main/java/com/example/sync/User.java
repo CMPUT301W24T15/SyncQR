@@ -23,16 +23,8 @@ public class User extends AppCompatActivity {
     private String password;
     private Profile profile;
     private String position;
-    private ArrayList<Event> events;
-
-    public User() {
-        userID = generateUserID();
-        username = "User" + userID;
-        password = "";
-        profile = new Profile(username,"https://avatar.iran.liara.run/public","example@com","0000000000");
-        position = "Attendee";
-        events = new ArrayList<Event>();
-    }
+    private ArrayList<Event> signupevents;
+    private ArrayList<Event> createdevents;
 
     public User(String userID) {
         this.userID = userID;
@@ -40,16 +32,18 @@ public class User extends AppCompatActivity {
         password = "";
         profile = new Profile(username,"https://avatar.iran.liara.run/public","example@com","0000000000");
         position = "Attendee";
-        events = new ArrayList<Event>();
+        signupevents = new ArrayList<Event>();
+        createdevents = new ArrayList<Event>();
     }
 
-    public User(String userid, String username, String password, Profile profile, String position, ArrayList<Event> events) {
+    public User(String userID, String username, String password, Profile profile, String position, ArrayList<Event> signupevents, ArrayList<Event> createdevents) {
         this.userID = userID;
         this.username = username;
         this.password = password;
         this.profile = profile;
         this.position = position;
-        this.events = events;
+        this.signupevents = signupevents;
+        this.createdevents = createdevents;
     }
 
     public void saveUser() {
@@ -57,9 +51,10 @@ public class User extends AppCompatActivity {
         userData.put("userID", userID);
         userData.put("username", username);
         userData.put("password", password);
-        //userData.put("profile", profile);
+        userData.put("profile", profile);
         userData.put("position", position);
-        userData.put("events", events);
+        userData.put("signupevents", signupevents);
+        userData.put("createdevents", createdevents);
 
 
         db.collection("Accounts").document(userID).set(userData)
@@ -126,11 +121,19 @@ public class User extends AppCompatActivity {
         this.position = position;
     }
 
-    public ArrayList<Event> getEvents() {
-        return events;
+    public ArrayList<Event> getSignUpEvents() {
+        return signupevents;
     }
 
-    public void setEvents(ArrayList<Event> events) {
-        this.events = events;
+    public void setSignUpEvents(ArrayList<Event> events) {
+        this.signupevents = events;
+    }
+
+    public ArrayList<Event> getCreatedEvents() {
+        return createdevents;
+    }
+
+    public void setCreatedEvents(ArrayList<Event> events) {
+        this.createdevents = events;
     }
 }
