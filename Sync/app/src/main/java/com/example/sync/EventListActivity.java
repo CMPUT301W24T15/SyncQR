@@ -1,7 +1,5 @@
 package com.example.sync;
 
-import static android.os.Build.ID;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -66,8 +64,14 @@ public class EventListActivity extends AppCompatActivity {
                 Event event = dataList.get(position);
                 Intent intent = new Intent(EventListActivity.this, EventDetailsActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+
+                // Get and pass eventID
                 String eventID = event.getEventId();
                 intent.putExtra("eventID", eventID);
+
+                // Get and pass userID
+                String userID = getIntent().getStringExtra("userID");
+                intent.putExtra("userID", userID);
                 startActivity(intent);
             }
         });

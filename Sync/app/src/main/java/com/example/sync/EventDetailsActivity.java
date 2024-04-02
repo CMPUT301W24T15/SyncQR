@@ -85,9 +85,10 @@ public class EventDetailsActivity extends AppCompatActivity {
             public void onClick(View v) {
                 // Assume eventId is the ID of the event being viewed
                 String eventId = getIntent().getStringExtra("eventID");
+                String userID = getIntent().getStringExtra("userID");
                 // Update the user's document in Firestore
-                updateUserEventsInFirestore("1718521", eventId);
-                Checkin.signUpForUser(eventId, "1718521");
+                updateUserEventsInFirestore(userID, eventId);
+                Checkin.signUpForUser(eventId, userID);
             }
         });
 
@@ -113,10 +114,10 @@ public class EventDetailsActivity extends AppCompatActivity {
                             String event_location = "Location:  " + document.getData().get("eventLocation");
                             location.setText(event_location);
 
-//                            SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd HH:mm");
-//                            date.setText(sdf.format(document.getData().get("eventDate")));
                             Timestamp eventTimestamp = document.getTimestamp("eventDate");
-                            date.setText(eventTimestamp.toString());
+                            SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd HH:mm");
+                            String event_Time = sdf.format(eventTimestamp.toDate());
+                            date.setText(event_Time);
 
 
                             String event_description = "Description: " + document.getData().get("eventDescription");
