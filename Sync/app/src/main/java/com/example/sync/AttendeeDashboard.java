@@ -35,10 +35,7 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import java.util.ArrayList;
 
 public class AttendeeDashboard extends AppCompatActivity implements LocationPermissionDialog.LocationPermissionDialogListener {
-
     private static String TAG = "Kevin";
-    private ArrayList<String> signUpEventIDs;
-    private FirebaseFirestore db = FirebaseFirestore.getInstance();
     boolean userCheckedIn = FALSE;
     private String userID;
     public String username;
@@ -91,29 +88,10 @@ public class AttendeeDashboard extends AppCompatActivity implements LocationPerm
         eventButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                FirebaseDatabase database = FirebaseDatabase.getInstance();
-                DatabaseReference myRef = database.getReference("Accounts").child(userID).child("signupevents");
-
-                myRef.addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        for (DataSnapshot childSnapshot: dataSnapshot.getChildren()) {
-                            String eventID = childSnapshot.getValue(String.class);
-                            signUpEventIDs.add(eventID);
-                        }
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
-                        Log.d("SignUpEventListActivity", "Failed to read value.", error.toException());
-                    }
-                });
-
-                // Now that we have the event list, start the next activity and pass the list.
                 Intent intent = new Intent(AttendeeDashboard.this, SignUpEventListActivity.class);
-                intent.putStringArrayListExtra("eventIDs", signUpEventIDs);
+                String userID = getIntent().getStringExtra("userID");
+                intent.putExtra("userID", userID);
                 startActivity(intent);
-
             }
         });
 
@@ -152,35 +130,6 @@ public class AttendeeDashboard extends AppCompatActivity implements LocationPerm
                 removeFromCheckInSystem(userID);
             }
         });
-    }
-
-    // https://developer.android.com/develop/ui/views/notifications/build-notification#notify Android Studio, Android Developers. Downloaded 2024-03-27
-    /**
-     * Fetches events that a user has signed up for.
-     * @param userID The ID of the user whose signed-up events are to be fetched.
-     * @param callback The callback to handle the fetched events.
-     */
-    public static void getSignUpEvents(String userID, EventCallback callback) {
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        ArrayList<Event> signedUpEvents = new ArrayList<>();
-
-        db.collection("events")
-                // Query for events where the attendees map has the userID as a key
-                .whereEqualTo("attendees." + userID, true)
-                .get()
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        for (QueryDocumentSnapshot document : task.getResult()) {
-                            Event event = document.toObject(Event.class);
-                            signedUpEvents.add(event);
-                        }
-                        callback.onCallback(signedUpEvents);
-                    } else {
-                        // Handle the error. For simplicity, we're just calling the callback with an empty list.
-                        callback.onCallback(signedUpEvents);
-                    }
-                });
-
     }
     private static final int YOUR_PERMISSION_REQUEST_CODE = 123;
 

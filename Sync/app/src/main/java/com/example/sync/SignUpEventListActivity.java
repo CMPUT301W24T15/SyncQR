@@ -43,37 +43,54 @@ public class SignUpEventListActivity extends EventListActivity {
         eventListAdapter = new EventListAdapter(this, dataList);
         eventList.setAdapter(eventListAdapter);
 
-        // Retrieve and process the event IDs passed to this activity
-        ArrayList<String> eventIDs = getIntent().getStringArrayListExtra("eventIDs");
-        // Check if the signUpEventIDs is not null and log its content
-        if (eventIDs != null) {
-            Log.d("SignUpEventListActivity", "Event IDs: " + eventIDs.toString());
+        // Retrieve and process the userID passed to this activity
+        String userID = getIntent().getStringExtra("userID");
+        // Check if the userID is not null and log its content
+        if (userID != null) {
+            Log.d("SignUpEventListActivity", "User ID: " + userID);
+            // Fetch sign-up events for the user
+            fetchUserSignUpEvents(userID);
         } else {
-            Log.d("SignUpEventListActivity", "No Event IDs found");
+            Log.d("SignUpEventListActivity", "No User ID found");
         }
-        if (eventIDs != null && !eventIDs.isEmpty()) {
-            fetchEventsByIds(eventIDs);
-        }
+
         setupItemClickListener();
     }
 
-    /**
-     * Fetches events by their IDs and updates the list.
-     *
-     * @param eventIDs A list of event IDs to fetch from the database.
-     */
-    private void fetchEventsByIds(ArrayList<String> eventIDs) {
+    private void fetchUserSignUpEvents(String userID) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        for (String eventId : eventIDs) {
-            db.collection("Accounts").document(eventId).get().addOnSuccessListener(documentSnapshot -> {
-                Event event = documentSnapshot.toObject(Event.class);
-                if (event != null) {
-                    dataList.add(event);
-                    eventListAdapter.notifyDataSetChanged();
-                }
-            }).addOnFailureListener(e -> Log.e("SignUpEventListActivity", "Error fetching event", e));
-        }
+        db.collection("Accounts").document(userID)
+                .get()
+                .addOnSuccessListener(documentSnapshot -> {
+                    if (documentSnapshot.exists()) {
+                        ArrayList<String> signUpEventIDs = (ArrayList<String>) documentSnapshot.get("signupevents");
+                        if (signUpEventIDs != null && !signUpEventIDs.isEmpty()) {
+                            for (String eventID : signUpEventIDs) {
+                                db.collection("Events").document(eventID)
+                                        .get()
+                                        .addOnSuccessListener(eventDocument -> {
+                                            if (eventDocument.exists()) {
+                                                Event event = eventDocument.toObject(Event.class);
+                                                if (event != null) {
+                                                    dataList.add(event);
+                                                    eventListAdapter.notifyDataSetChanged();
+                                                }
+                                            } else {
+                                                Log.d("SignUpEventListActivity", "Event with ID " + eventID + " does not exist");
+                                            }
+                                        })
+                                        .addOnFailureListener(e -> Log.e("SignUpEventListActivity", "Error fetching event with ID " + eventID, e));
+                            }
+                        } else {
+                            Log.d("SignUpEventListActivity", "No sign-up events found for user with ID " + userID);
+                        }
+                    } else {
+                        Log.d("SignUpEventListActivity", "User with ID " + userID + " does not exist");
+                    }
+                })
+                .addOnFailureListener(e -> Log.e("SignUpEventListActivity", "Error fetching user with ID " + userID, e));
     }
+
 
     /**
      * Sets up the item click listener for the event list.

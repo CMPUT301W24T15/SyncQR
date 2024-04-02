@@ -38,6 +38,10 @@ public class Event implements Serializable {
     private String poster;
     private Long organizerId;
 
+    // Empty constructor required by Firestore
+    public Event() {
+        // Default constructor required for Firestore
+    }
 
     public Event(String eventName, Timestamp eventDate, String eventLocation, Long attendeeNumber, String organizerName, String eventDescription, String poster, Long organizerId) {
 
