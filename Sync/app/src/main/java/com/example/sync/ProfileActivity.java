@@ -56,7 +56,8 @@ public class ProfileActivity extends AppCompatActivity {
         qrCodeButton.setOnClickListener(view -> navigateToQRCodeScanActivity());
 
         uploadpicButton.setOnClickListener(view -> openImageSelector());
-        removepicButton.setOnClickListener(view -> removeProfileImage());        saveButton.setOnClickListener(view -> saveProfileData());
+        removepicButton.setOnClickListener(view -> removeProfileImage());
+        saveButton.setOnClickListener(view -> saveProfileData());
         cancelButton.setOnClickListener(view -> clearInputs());
     }
 
@@ -64,28 +65,28 @@ public class ProfileActivity extends AppCompatActivity {
         String name = userNameInput.getText().toString().trim();
         String email = userEmailInput.getText().toString().trim();
         String contact = userContactInput.getText().toString().trim();
-
+        userImageInput.removeInitialsAndImage();
         userImageInput.setInitialsFromName(name);
 
         String userId = databaseReference.push().getKey();
         if (userId != null) {
-            Profile profile = new Profile(name, "", email, contact); // Assuming the second parameter is for the image, which seems to be missing in your current approach
+            Profile profile = new Profile(name, imageUri != null ? imageUri.toString() : "", email, contact);
+            // Assuming you have a way to handle image URIs in your Profile class
+            // This assumes 'imageUri' is the Uri of the uploaded image or null if no image has been uploaded
             databaseReference.child(userId).setValue(profile)
                     .addOnCompleteListener(task -> {
                         if (task.isSuccessful()) {
-                            Log.d(
-                                    TAG, "Profile saved successfully");
-                            // Optionally, show a success message to the user or navigate to another activity
+                            Log.d(TAG, "Profile saved successfully");
+                            // Optionally, show a success message or navigate to another activity
                         } else {
                             Log.e(TAG, "Failed to save profile", task.getException());
-                            // Optionally, show an error message to the user
+                            // Optionally, show an error message
                         }
                     });
         } else {
             Log.e(TAG, "Failed to generate a unique key for the profile");
             // Handle the error, perhaps by informing the user to try again
         }
-        //databaseReference.child(userId).setValue(profile);
     }
 
     private void navigateToAttendee() {
@@ -136,7 +137,8 @@ public class ProfileActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
             imageUri = data.getData();
-            loadProfileImage(imageUri.toString());
+            // Assuming loadImage is a method to load image from URI using Glide or similar
+            userImageInput.setImageUri(imageUri); // Update this line to use the new method
         }
     }
 

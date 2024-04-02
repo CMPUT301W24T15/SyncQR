@@ -2,17 +2,24 @@ package com.example.sync;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.util.AttributeSet;
 import android.graphics.Typeface;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatImageView;
+import com.bumptech.glide.Glide;
+import java.util.Random;
 
 public class AvatarView extends AppCompatImageView {
     private int borderColor;
     private int borderWidth;
+    private int backgroundColor;
     private String initials = "";
+    private boolean isImageLoaded = false;
+    
     public AvatarView(Context context) {
         super(context);
         init();
@@ -29,17 +36,37 @@ public class AvatarView extends AppCompatImageView {
     }
 
     private void init() {
-        // Initialize any default properties or values
         borderColor = getResources().getColor(android.R.color.black);
         borderWidth = 4; // Default border width
+        backgroundColor = generateRandomColor();
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
-        super.onDraw(canvas);
-        drawBorder(canvas);
-        drawInitials(canvas);
+        if (!isImageLoaded) {
+            // Only draw the background and initials if no image has been loaded
+            Paint backgroundPaint = new Paint();
+            backgroundPaint.setColor(backgroundColor);
+            canvas.drawRect(0, 0, getWidth(), getHeight(), backgroundPaint);
+
+            if (!initials.isEmpty()) {
+                // Draw initials if they are set
+                drawInitials(canvas);
+            }
+        }
+
+        if (!isImageLoaded || initials.isEmpty()) {
+            // Draw the border unless we've loaded an image and initials are not set
+            drawBorder(canvas);
+        }
+
+        if (isImageLoaded) {
+            // If an image is loaded, skip the above and let super.onDraw handle it
+            super.onDraw(canvas);
+        }
     }
+
+
 
     private void drawBorder(Canvas canvas) {
         Paint paint = new Paint();
@@ -58,9 +85,9 @@ public class AvatarView extends AppCompatImageView {
     private void drawInitials(Canvas canvas) {
         if (!initials.isEmpty()) {
             Paint textPaint = new Paint();
-            textPaint.setColor(borderColor); // Use the border color for text for simplicity
-            textPaint.setTextSize(60); // Example text size, adjust as needed
-            textPaint.setTypeface(Typeface.DEFAULT_BOLD);
+            textPaint.setColor(Color.WHITE); // Set text color to white for contrast
+            textPaint.setTextSize(120); // Increased text size for bigger and bolder letters
+            textPaint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD)); // Ensure the font is bold
             textPaint.setTextAlign(Paint.Align.CENTER);
 
             float centerX = getWidth() / 2f;
@@ -70,7 +97,8 @@ public class AvatarView extends AppCompatImageView {
     }
     public void setInitialsFromName(String name) {
         this.initials = getInitials(name);
-        invalidate(); // Trigger redraw
+        isImageLoaded = false; // No image is being displayed, showing initials instead
+        invalidate(); // Trigger a redraw
     }
     private String getInitials(String name) {
         if (name == null || name.isEmpty()) return "";
@@ -85,4 +113,24 @@ public class AvatarView extends AppCompatImageView {
         }
         return initials;
     }
+    private int generateRandomColor() {
+        Random rnd = new Random();
+        return Color.argb(255, rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256));
+    }
+    public void removeInitialsAndImage() {
+        this.initials = ""; // Clear initials
+        isImageLoaded = false; // Reset the flag as no image is now loaded
+        setImageDrawable(null); // Remove any set image
+        invalidate(); // Trigger a redraw to ensure correct state is shown
+    }
+    public void setImageUri(Uri uri) {
+        this.initials = ""; // Clear initials
+        isImageLoaded = true; // Mark that an image has been loaded
+
+        Glide.with(getContext())
+                .load(uri)
+                .fitCenter() // Ensure the image fits within the ImageView bounds
+                .into(this);
+    }
+
 }
