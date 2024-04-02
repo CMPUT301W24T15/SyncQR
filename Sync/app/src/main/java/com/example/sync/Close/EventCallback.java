@@ -1,4 +1,6 @@
-package com.example.sync;
+package com.example.sync.Close;
+
+import com.example.sync.Open.Event;
 
 import java.util.List;
 

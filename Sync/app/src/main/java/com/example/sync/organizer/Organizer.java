@@ -1,6 +1,6 @@
 package com.example.sync.organizer;
 
-import com.example.sync.Event;
+import com.example.sync.Open.Event;
 import com.example.sync.Profile;
 import com.example.sync.User;
 

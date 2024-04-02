@@ -3,37 +3,30 @@ package com.example.sync;
 import static java.lang.Boolean.FALSE;
 import static java.lang.Boolean.TRUE;
 
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.Manifest;
-import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
-import androidx.core.app.NotificationCompat;
-import androidx.core.app.NotificationManagerCompat;
 import androidx.core.content.ContextCompat;
 import androidx.annotation.NonNull;
 
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
+import com.example.sync.Close.EventListActivity;
+import com.example.sync.Close.LocationPermissionDialog;
+import com.example.sync.Close.NotificationActivity;
+import com.example.sync.Close.SignUpEventListActivity;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
 
-import java.util.ArrayList;
-
+/**
+ * Activity representing the dashboard for attendees.
+ */
 public class AttendeeDashboard extends AppCompatActivity implements LocationPermissionDialog.LocationPermissionDialogListener {
     private static String TAG = "Kevin";
     boolean userCheckedIn = FALSE;
@@ -71,6 +64,8 @@ public class AttendeeDashboard extends AppCompatActivity implements LocationPerm
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(AttendeeDashboard.this, ProfileActivity.class);
+                String userID = getIntent().getStringExtra("userID");
+                intent.putExtra("userID", userID);
                 startActivity(intent);
             }
         });
@@ -80,6 +75,8 @@ public class AttendeeDashboard extends AppCompatActivity implements LocationPerm
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(AttendeeDashboard.this, NotificationActivity.class);
+                String userID = getIntent().getStringExtra("userID");
+                intent.putExtra("userID", userID);
                 startActivity(intent);
             }
         });
@@ -144,7 +141,10 @@ public class AttendeeDashboard extends AppCompatActivity implements LocationPerm
     }
 
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
-
+    /**
+     * Requests location permission from the user.
+     * If permission is already granted, nothing happens. Otherwise, a permission request dialog is displayed.
+     */
     private void requestLocationPermission() {
         if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_FINE_LOCATION)) {
             // Explain to the user why the permission is needed

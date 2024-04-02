@@ -1,4 +1,4 @@
-package com.example.sync;
+package com.example.sync.Close;
 
 import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
 
@@ -9,6 +9,7 @@ import android.widget.ListView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.sync.R;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
@@ -18,6 +19,9 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Activity to display notifications fetched from Firestore.
+ */
 public class NotificationActivity extends AppCompatActivity {
     private ArrayAdapter<String> adapter;
     private List<String> notificationsList = new ArrayList<>();
@@ -60,5 +64,3 @@ public class NotificationActivity extends AppCompatActivity {
                 });
     }
 }
-
-

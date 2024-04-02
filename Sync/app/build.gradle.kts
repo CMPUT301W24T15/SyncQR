@@ -42,6 +42,7 @@ dependencies {
     implementation("com.google.firebase:firebase-database:20.3.1")
     implementation("androidx.recyclerview:recyclerview:1.3.2")
     implementation ("com.google.code.gson:gson:2.10.1")
+    implementation("androidx.test:monitor:1.6.1")
     testImplementation("junit:junit:4.13.2")
     implementation(platform("com.google.firebase:firebase-bom:32.8.0"))
     testImplementation("org.junit.jupiter:junit-jupiter:5.10.2")
@@ -55,4 +56,12 @@ dependencies {
     implementation ("com.google.firebase:firebase-messaging:23.4.1")
     implementation ("com.github.bumptech.glide:glide:4.16.0")
     annotationProcessor ("com.github.bumptech.glide:compiler:4.16.0")
+    androidTestImplementation ("androidx.test.espresso:espresso-core:3.4.0")
+    androidTestImplementation ("androidx.test.espresso:espresso-contrib:3.4.0")
+    androidTestImplementation ("androidx.test.espresso:espresso-intents:3.4.0")
+    androidTestImplementation ("androidx.test.ext:junit:1.1.3")
+    androidTestImplementation ("androidx.test:core:1.4.0")
+
+
+
 }

@@ -1,11 +1,10 @@
 package com.example.sync;
 
-import static com.example.sync.UserIDGenerator.generateUserID;
-
 import android.util.Log;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.sync.Open.Event;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
@@ -28,8 +27,8 @@ public class User extends AppCompatActivity {
 
     public User(String userID) {
         this.userID = userID;
-        username = "User" + userID;
-        password = "";
+        username = "Visitor";
+        password = "000000";
         profile = new Profile(username,"https://avatar.iran.liara.run/public","example@com","0000000000");
         position = "Attendee";
         signupevents = new ArrayList<Event>();

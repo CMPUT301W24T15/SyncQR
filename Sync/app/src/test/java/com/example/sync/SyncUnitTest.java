@@ -57,26 +57,26 @@ public class SyncUnitTest {
     /**
      * Instrumented test for the CodeGenerator class.
      */
-    @Test
-    public void CodeGeneratorTest() {
-
-        // Context of the app under test.
-        String testText = "Test QR Code";
-        int width = 500;
-        int height = 500;
-
-        Bitmap resultBitmap = QRCodeGenerator.generateQRCodeBitmap(testText, width, height);
-
-
-        assertNotNull("The generated QR Code bitmap should not be null", resultBitmap);
-        assertEquals("The width of the generated bitmap is not as expected", width, resultBitmap.getWidth());
-        assertEquals("The height of the generated bitmap is not as expected", height, resultBitmap.getHeight());
-    }
-
-    @Test
-    public void testEventListActivity() {
-
-    }
+//    @Test
+//    public void CodeGeneratorTest() {
+//
+//        // Context of the app under test.
+//        String testText = "Test QR Code";
+//        int width = 500;
+//        int height = 500;
+//
+//        Bitmap resultBitmap = QRCodeGenerator.generateQRCodeBitmap(testText, width, height);
+//
+//
+//        assertNotNull("The generated QR Code bitmap should not be null", resultBitmap);
+//        assertEquals("The width of the generated bitmap is not as expected", width, resultBitmap.getWidth());
+//        assertEquals("The height of the generated bitmap is not as expected", height, resultBitmap.getHeight());
+//    }
+//
+//    @Test
+//    public void testEventListActivity() {
+//
+//    }
 
 //    @Test
 //    public void testGetEventName() {

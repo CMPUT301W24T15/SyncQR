@@ -11,12 +11,10 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.DialogFragment;
 
-import com.example.sync.Event;
-import com.example.sync.Notification;
+import com.example.sync.Open.Event;
+import com.example.sync.Close.Notification;
 import com.example.sync.R;
 import com.google.android.material.textfield.TextInputEditText;
-
-import java.util.ArrayList;
 
 public class NotifyDialog extends DialogFragment {
 

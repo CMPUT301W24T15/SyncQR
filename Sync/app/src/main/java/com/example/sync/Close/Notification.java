@@ -1,4 +1,4 @@
-package com.example.sync;
+package com.example.sync.Close;
 
 import android.util.Log;
 
@@ -18,6 +18,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Class for managing notifications.
+ */
 public class Notification {
     private final static String TAG = "Notification";
     private final static FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -28,17 +31,37 @@ public class Notification {
     private CollectionReference collection = db.collection("Notifications");
     private DocumentReference document = collection.document();
 
-
+    /**
+     * Constructor for creating a notification.
+     *
+     * @param id      The ID of the event associated with the notification.
+     * @param title   The title of the notification.
+     * @param message The message content of the notification.
+     */
     public Notification(String id, String title, String message) {
         this.eventID = id;
         this.title = title;
         this.message = message;
     }
 
+    /**
+     * Interface for handling notification retrieval callbacks.
+     */
     public interface Callback {
+        /**
+         * Callback method invoked when notifications are successfully retrieved.
+         *
+         * @param notificationArray An ArrayList containing the retrieved notifications.
+         */
         void onSuccess(ArrayList<Notification> notificationArray);
     }
 
+    /**
+     * Retrieves notifications for a specific attendee.
+     *
+     * @param AttendeeId The ID of the attendee to retrieve notifications for.
+     * @param callback   The callback listener to handle the retrieved notifications.
+     */
     public static void getNotification(String AttendeeId, Callback callback) {
         // Create an array to receive all notifications
         ArrayList<Notification> notificationArray = new ArrayList<Notification>();
@@ -109,6 +132,9 @@ public class Notification {
                 });
     }
 
+    /**
+     * Sets the notification in the Firestore database.
+     */
     public void setNotification() {
         // put information into the hashmap
         Map<String, Object> notification = new HashMap<>();

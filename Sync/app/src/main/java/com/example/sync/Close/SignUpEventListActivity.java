@@ -1,4 +1,4 @@
-package com.example.sync;
+package com.example.sync.Close;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -7,10 +7,12 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
+import com.example.sync.Open.Event;
+import com.example.sync.R;
 import com.example.sync.organizer.EventListAdapter;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
-import com.google.firebase.firestore.FirebaseFirestore;
 
 /**
  * Activity to display a list of events that the user can sign up for.

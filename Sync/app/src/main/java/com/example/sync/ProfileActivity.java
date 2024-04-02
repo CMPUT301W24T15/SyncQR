@@ -13,25 +13,37 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
+import com.example.sync.Close.EventListActivity;
+import com.example.sync.Close.NotificationFragment;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
+/**
+ * Activity for managing user profile.
+ */
 public class ProfileActivity extends AppCompatActivity {
+    // Class variables
     private EditText userNameInput, userEmailInput, userContactInput;
     private AvatarView userImageInput;
     private static final int PICK_IMAGE_REQUEST = 1;
     private Uri imageUri;
-    private DatabaseReference databaseReference;
 
+    /**
+     * Called when the activity is starting.
+     *
+     * @param savedInstanceState If the activity is being re-initialized after previously being shut down
+     *                           then this Bundle contains the data it most recently supplied in onSaveInstanceState(Bundle).
+     *                           Otherwise, it is null.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
 
         Log.d("kevinTag", "Created Profile Instance");
-
-        // Initialize Firebase Database
-        databaseReference = FirebaseDatabase.getInstance().getReference("Profiles");
 
         // Initialize UI elements
         userNameInput = findViewById(R.id.user_name_input);
@@ -48,6 +60,37 @@ public class ProfileActivity extends AppCompatActivity {
         Button uploadpicButton = findViewById(R.id.upload_picture_button);
         Button removepicButton = findViewById(R.id.remove_picture_button);
 
+        // Get the user ID from the intent
+        String userID = getIntent().getStringExtra("userID");
+
+        // Assuming you have a reference to the Firebase database
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference accountsRef = database.getReference("Accounts").child(userID).child("profile");
+
+        accountsRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    // Retrieve profile information from the dataSnapshot
+                    String name = dataSnapshot.child("name").getValue(String.class);
+                    String email = dataSnapshot.child("email").getValue(String.class);
+                    String contact = dataSnapshot.child("phoneNumber").getValue(String.class);
+
+                    // Set the retrieved profile information to the EditText fields
+                    userNameInput.setText(name);
+                    userEmailInput.setText(email);
+                    userContactInput.setText(contact);
+                } else {
+                    Log.d(TAG, "No profile information found for user ID: " + userID);
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Log.e(TAG, "Error retrieving profile information", databaseError.toException());
+            }
+        });
+
 
         // Set click listeners
         homeButton.setOnClickListener(view -> navigateToAttendee());
@@ -61,6 +104,10 @@ public class ProfileActivity extends AppCompatActivity {
         cancelButton.setOnClickListener(view -> clearInputs());
     }
 
+    /**
+     * Saves the edited profile data to the Firebase Realtime Database.
+     * Called when the save button is clicked.
+     */
     private void saveProfileData() {
         String name = userNameInput.getText().toString().trim();
         String email = userEmailInput.getText().toString().trim();
@@ -68,12 +115,17 @@ public class ProfileActivity extends AppCompatActivity {
         userImageInput.removeInitialsAndImage();
         userImageInput.setInitialsFromName(name);
 
-        String userId = databaseReference.push().getKey();
-        if (userId != null) {
-            Profile profile = new Profile(name, imageUri != null ? imageUri.toString() : "", email, contact);
-            // Assuming you have a way to handle image URIs in your Profile class
-            // This assumes 'imageUri' is the Uri of the uploaded image or null if no image has been uploaded
-            databaseReference.child(userId).setValue(profile)
+        // Get the user ID from the intent
+        String userID = getIntent().getStringExtra("userID");
+
+        // Assuming you have a reference to the Firebase database
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference accountsRef = database.getReference("Accounts");
+
+        if (userID != null) {
+            Profile profile = new Profile(name, "", email, contact); // Create a Profile object
+
+            accountsRef.child(userID).child("profile").setValue(profile)
                     .addOnCompleteListener(task -> {
                         if (task.isSuccessful()) {
                             Log.d(TAG, "Profile saved successfully");
@@ -84,37 +136,57 @@ public class ProfileActivity extends AppCompatActivity {
                         }
                     });
         } else {
-            Log.e(TAG, "Failed to generate a unique key for the profile");
+            Log.e(TAG, "User ID is null");
             // Handle the error, perhaps by informing the user to try again
         }
     }
 
+    /**
+     * Navigates to the Attendee activity.
+     */
     private void navigateToAttendee() {
-        Intent intent = new Intent(this, Attendee.class);
+        Intent intent = new Intent(this, AttendeeDashboard.class);
         startActivity(intent);
     }
 
+    /**
+     * Navigates to the Event activity.
+     */
     private void navigateToEvent() {
-        Intent intent = new Intent(this, Event.class);
+        Intent intent = new Intent(this, EventListActivity.class);
         startActivity(intent);
     }
 
+    /**
+     * Navigates to the Notification activity.
+     */
     private void navigateToMyNotificationReceiver() {
         Intent intent = new Intent(this, NotificationFragment.class);
         startActivity(intent);
     }
 
+    /**
+     * Navigates to the QR code scan activity.
+     */
     private void navigateToQRCodeScanActivity() {
         Intent intent = new Intent(this, QRCodeScanActivity.class);
         startActivity(intent);
     }
 
+    /**
+     * Clears the input fields.
+     */
     private void clearInputs() {
         userNameInput.setText("");
         userEmailInput.setText("");
         userContactInput.setText("");
     }
 
+    /**
+     * Loads the profile image using Glide library.
+     *
+     * @param imageUrl The URL of the profile image.
+     */
     private void loadProfileImage(String imageUrl) {
         Glide.with(this)
                 .load(imageUrl)
@@ -122,16 +194,29 @@ public class ProfileActivity extends AppCompatActivity {
                 .error(R.drawable.uploadimage)
                 .into(userImageInput);
     }
+    /**
+     * Opens the image selector to choose a profile image.
+     */
     private void openImageSelector() {
         Intent intent = new Intent();
         intent.setType("image/*");
         intent.setAction(Intent.ACTION_GET_CONTENT);
         startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST);
     }
+    /**
+     * Removes the profile image and sets it to the default image.
+     */
     private void removeProfileImage() {
         // Set to default image or clear
         userImageInput.setImageResource(R.drawable.uploadimage); // Assuming 'uploadimage' is your default/placeholder image
     }
+    /**
+     * Handles the result of picking an image from the device.
+     *
+     * @param requestCode The request code passed to startActivityForResult().
+     * @param resultCode  The result code returned by the child activity.
+     * @param data        An Intent that carries the result data.
+     */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -141,7 +226,4 @@ public class ProfileActivity extends AppCompatActivity {
             userImageInput.setImageUri(imageUri); // Update this line to use the new method
         }
     }
-
-
-
 }

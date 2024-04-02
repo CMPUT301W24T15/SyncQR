@@ -2,7 +2,6 @@ package com.example.sync.organizer;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,8 +17,8 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
-import com.example.sync.Event;
-import com.example.sync.Notification;
+import com.example.sync.Open.Event;
+import com.example.sync.Close.Notification;
 import com.example.sync.R;
 import java.util.ArrayList;
 

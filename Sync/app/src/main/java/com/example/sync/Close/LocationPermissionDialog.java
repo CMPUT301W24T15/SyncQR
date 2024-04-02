@@ -1,4 +1,4 @@
-package com.example.sync;
+package com.example.sync.Close;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -9,9 +9,18 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.DialogFragment;
 
+/**
+ * Dialog fragment for requesting location permission.
+ */
 public class LocationPermissionDialog extends DialogFragment {
 
+    /**
+     * Interface for listening to location permission requests.
+     */
     public interface LocationPermissionDialogListener {
+        /**
+         * Callback method invoked when location permission is requested.
+         */
         void onRequestLocationPermission();
     }
 
@@ -28,6 +37,12 @@ public class LocationPermissionDialog extends DialogFragment {
         }
     }
 
+    /**
+     * Creates the dialog for requesting location permission.
+     *
+     * @param savedInstanceState A Bundle containing the saved state.
+     * @return The created dialog.
+     */
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
@@ -43,4 +58,5 @@ public class LocationPermissionDialog extends DialogFragment {
         return builder.create();
     }
 }
+
 

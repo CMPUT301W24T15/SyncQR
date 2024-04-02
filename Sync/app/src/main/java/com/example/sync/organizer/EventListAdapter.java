@@ -10,12 +10,11 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.example.sync.Event;
+import com.example.sync.Open.Event;
 import com.example.sync.R;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 
 public class EventListAdapter extends ArrayAdapter<Event> {
 

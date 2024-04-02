@@ -1,4 +1,4 @@
-package com.example.sync;
+package com.example.sync.Close;
 
 import java.security.SecureRandom;
 
