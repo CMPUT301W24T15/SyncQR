@@ -1,7 +1,5 @@
 package com.example.sync;
 
-import static android.os.Build.ID;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -12,18 +10,7 @@ import android.widget.ListView;
 import com.example.sync.organizer.EventListAdapter;
 
 import java.util.ArrayList;
-
-import android.content.Intent;
-import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ListView;
-
-import com.example.sync.organizer.EventListAdapter;
 import com.google.firebase.firestore.FirebaseFirestore;
-
-import java.util.ArrayList;
 
 /**
  * Activity to display a list of events that the user can sign up for.
@@ -58,10 +45,15 @@ public class SignUpEventListActivity extends EventListActivity {
 
         // Retrieve and process the event IDs passed to this activity
         ArrayList<String> eventIDs = getIntent().getStringArrayListExtra("eventIDs");
+        // Check if the signUpEventIDs is not null and log its content
+        if (eventIDs != null) {
+            Log.d("SignUpEventListActivity", "Event IDs: " + eventIDs.toString());
+        } else {
+            Log.d("SignUpEventListActivity", "No Event IDs found");
+        }
         if (eventIDs != null && !eventIDs.isEmpty()) {
             fetchEventsByIds(eventIDs);
         }
-
         setupItemClickListener();
     }
 
@@ -72,7 +64,6 @@ public class SignUpEventListActivity extends EventListActivity {
      */
     private void fetchEventsByIds(ArrayList<String> eventIDs) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-
         for (String eventId : eventIDs) {
             db.collection("Accounts").document(eventId).get().addOnSuccessListener(documentSnapshot -> {
                 Event event = documentSnapshot.toObject(Event.class);

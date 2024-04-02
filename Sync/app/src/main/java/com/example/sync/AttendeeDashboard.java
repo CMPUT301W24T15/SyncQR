@@ -92,27 +92,27 @@ public class AttendeeDashboard extends AppCompatActivity implements LocationPerm
             @Override
             public void onClick(View v) {
                 FirebaseDatabase database = FirebaseDatabase.getInstance();
-                DatabaseReference myRef = database.getReference("Accounts").child(userID).child("signUpEvents");
+                DatabaseReference myRef = database.getReference("Accounts").child(userID).child("signupevents");
 
                 myRef.addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
-                        ArrayList<String> signUpEventIDs = new ArrayList<>();
                         for (DataSnapshot childSnapshot: dataSnapshot.getChildren()) {
                             String eventID = childSnapshot.getValue(String.class);
                             signUpEventIDs.add(eventID);
                         }
-
-                        Intent intent = new Intent(AttendeeDashboard.this, SignUpEventListActivity.class);
-                        intent.putStringArrayListExtra("eventIDs", signUpEventIDs);
-                        startActivity(intent);
                     }
 
                     @Override
                     public void onCancelled(@NonNull DatabaseError error) {
-
+                        Log.d("SignUpEventListActivity", "Failed to read value.", error.toException());
                     }
                 });
+
+                // Now that we have the event list, start the next activity and pass the list.
+                Intent intent = new Intent(AttendeeDashboard.this, SignUpEventListActivity.class);
+                intent.putStringArrayListExtra("eventIDs", signUpEventIDs);
+                startActivity(intent);
 
             }
         });
