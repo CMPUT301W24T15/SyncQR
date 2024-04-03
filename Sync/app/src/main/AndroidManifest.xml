@@ -70,6 +70,9 @@
             <meta-data
                 android:name="photopicker_activity:0:required"
                 android:value="" />
+            <meta-data
+                android:name="com.google.android.geo.API_KEY"
+                android:value="AIzaSyD33hIw562z2VODr7JzNSQ5UGHPWSLxFSs" />
         </service>
         <activity android:name=".EventDetailsActivity"/>
         <activity android:name=".SignUpEventListActivity"/>
