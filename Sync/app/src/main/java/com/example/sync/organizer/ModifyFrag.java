@@ -1,17 +1,27 @@
 package com.example.sync.organizer;
 
+import android.app.Dialog;
+import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.example.sync.Checkin;
 import com.example.sync.Event;
 import com.example.sync.R;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 
 public class ModifyFrag extends Fragment {
@@ -19,8 +29,12 @@ public class ModifyFrag extends Fragment {
         void notifyGrandparent();
     }
     private ModifyListener listener;
+    private TextView checkinNum;
+    private TextView signupNum;
     private ImageView delete;
     private ImageView notify;
+    private ImageView promotion;
+    private ImageView viewList;
     private Event event;
     private ModifyFrag self = this;
 
@@ -47,11 +61,22 @@ public class ModifyFrag extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         delete = view.findViewById(R.id.delete_button);
         notify = view.findViewById(R.id.notify_button);
+        promotion = view.findViewById(R.id.promotion_button);
+        viewList = view.findViewById(R.id.view_list_button);
+        checkinNum = view.findViewById(R.id.check_num);
+        signupNum = view.findViewById(R.id.sign_num);
     }
 
     @Override
     public void onStart() {
         super.onStart();
+
+        // display statistics
+        Bundle args = getArguments();
+        if (args != null) {
+            Event event = (Event) args.getSerializable("event");
+            displayNumber(event.getEventId());
+        }
 
         // delete operation: back to ViewEvent
         delete.setOnClickListener(new View.OnClickListener() {
@@ -82,10 +107,47 @@ public class ModifyFrag extends Fragment {
             }
         });
 
+
+        // view list operation: display attendee list
+        viewList.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Bundle args = getArguments();
+                if (args != null) {
+                    Event event = (Event) args.getSerializable("event");
+                    Checkin.getListFromDatabase(event.getEventId(), new Checkin.Callback() {
+                        @Override
+                        public void onSuccess(Map<String, Object> counts, ArrayList<String> current, ArrayList<String> signup) {
+                            // convert map to arraylist
+                            ArrayList<String> countsInList = new ArrayList<>();
+                            for (Map.Entry<String, Object> entry : counts.entrySet()) {
+                                String key = entry.getKey();
+                                String value = (String) entry.getValue();
+                                String user = key + ": " + value;
+                                countsInList.add(user);
+                            }
+
+                            ViewAttendeeDialog dialog = ViewAttendeeDialog.newInstance(countsInList, current, signup);
+                            dialog.show(getChildFragmentManager(), "view list");
+                        }
+                    });
+                }
+            }
+        });
     }
 
 
     public void setListener(ModifyListener listener) {
         this.listener = listener;
+    }
+
+    public void displayNumber(String eventId) {
+        Checkin.getListFromDatabase(eventId, new Checkin.Callback() {
+            @Override
+            public void onSuccess(Map<String, Object> counts, ArrayList<String> current, ArrayList<String> signup) {
+                checkinNum.setText(String.valueOf(current.size()));
+                signupNum.setText(String.valueOf(signup.size()));
+            }
+        });
     }
 }

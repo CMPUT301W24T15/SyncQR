@@ -15,6 +15,7 @@ import com.example.sync.R;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class EventListAdapter extends ArrayAdapter<Event> {
 
@@ -47,9 +48,8 @@ public class EventListAdapter extends ArrayAdapter<Event> {
         // set text
         Event event = getItem(position);
         eventName.setText(event.getEventName());
-        System.out.println("eventlistadapter");
 
-        SimpleDateFormat sfd = new SimpleDateFormat("yyyy.MM.DD HH:mm");
+        SimpleDateFormat sfd = new SimpleDateFormat("yyyy.MM.dd HH:mm");
         String date = sfd.format(event.getEventDate().toDate());
         eventDate.setText(date);
 
