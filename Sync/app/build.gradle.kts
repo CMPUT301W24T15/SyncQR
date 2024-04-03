@@ -40,6 +40,7 @@ dependencies {
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
     implementation("com.google.firebase:firebase-firestore:24.11.0")
     implementation("com.google.firebase:firebase-database:20.3.1")
+    implementation("com.google.firebase:firebase-storage:20.3.0")
     implementation("androidx.recyclerview:recyclerview:1.3.2")
     implementation ("com.google.code.gson:gson:2.10.1")
     implementation("androidx.test:monitor:1.6.1")

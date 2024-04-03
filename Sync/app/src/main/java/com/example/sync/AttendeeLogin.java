@@ -15,6 +15,7 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.util.Map;
 
+
 public class AttendeeLogin extends AppCompatActivity {
 
     private static String TAG = "Kevin";
@@ -25,6 +26,16 @@ public class AttendeeLogin extends AppCompatActivity {
     private Button helpButton;
     private String desiredPosition = "Attendee";
 
+
+    /**
+     * Creates a new instance of the UI components right when the app is started
+     * and sets up the event listener for the login and guest login options.
+     *
+     * @param savedInstanceState If the activity is being re-initialized after
+     *     previously being shut down then this Bundle contains the data it most
+     *     recently supplied in {@link #onSaveInstanceState}.  <b><i>Note: Otherwise it is null.</i></b>
+     *
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,6 +63,19 @@ public class AttendeeLogin extends AppCompatActivity {
         });
     }
 
+
+    /**
+     * Handles the login progress by checking the provided username and password and comparing it
+     * with the accounts in the Firestore Database. If the account is found and the credentials match,
+     * then the user is directed to the Attendee Dashboard.
+     * Toast messages are diplayed according to if the login was successful or an error occured.
+     *
+     * This method requires Firebase Database to be connected, otherwise there is no way to retrieve the account.
+     *
+     * @param username
+     * @param password
+     *
+     */
     private void login(String username, String password) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
@@ -83,6 +107,7 @@ public class AttendeeLogin extends AppCompatActivity {
                         }
                     } else {
                         // Login failed due to user and password not being present
+
                         Toast.makeText(AttendeeLogin.this, "Login Failed: Incorrect username or password.", Toast.LENGTH_SHORT).show();
                     }
                     // Login failed due to other issues like network or accessing database
