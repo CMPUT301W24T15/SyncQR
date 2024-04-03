@@ -45,15 +45,6 @@
             app:layout_constraintTop_toBottomOf="@+id/create_new_event" />
 
 
-        <Button
-            android:id="@+id/track_attendance"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text="Track Attendance"
-            android:layout_marginHorizontal="15dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/view_my_events" />
 
         <TextView
             android:id="@+id/recent_activity"
@@ -66,7 +57,7 @@
             android:layout_marginTop="20dp"
             android:layout_marginLeft="15dp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/track_attendance" />
+            app:layout_constraintTop_toBottomOf="@id/view_my_events" />
 
         <ListView
             android:layout_width="0dp"

@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TextView
+    <com.google.android.gms.maps.MapView
         android:id="@+id/mapView"
         android:layout_width="0dp"
         android:layout_height="250dp"
@@ -36,7 +36,7 @@
         android:layout_marginEnd="20dp"
         android:layout_marginTop="20dp"
         android:layout_weight="1"
-        android:text="Sign In:"
+        android:text="Sign up:"
         android:gravity="center"
         android:textStyle="bold"
         app:layout_constraintHorizontal_weight="1"
@@ -171,12 +171,12 @@
 
     <!-- 5th row -->
     <ImageView
-        android:id="@+id/edit_button"
+        android:id="@+id/promotion_button"
         android:layout_width="0dp"
         android:layout_height="70dp"
         android:layout_marginTop="30dp"
         android:layout_marginStart="40dp"
-        android:src="@drawable/edit"
+        android:src="@drawable/promotion"
         android:background="@drawable/modify_icon"
         android:scaleType="fitCenter"
         app:layout_constraintHorizontal_weight="1"
@@ -196,7 +196,7 @@
         android:background="@drawable/modify_icon"
         app:layout_constraintHorizontal_weight="1"
         app:layout_constraintTop_toBottomOf="@id/qrcode_text"
-        app:layout_constraintStart_toEndOf="@id/edit_button"
+        app:layout_constraintStart_toEndOf="@id/promotion_button"
         app:layout_constraintEnd_toStartOf="@id/notify_button"
         app:layout_constraintBottom_toTopOf="@id/delete_text"/>
 
@@ -205,13 +205,12 @@
         android:id="@+id/edit_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="5dp"
         android:layout_marginTop="5dp"
-        android:text="Edit"
+        android:text="Promotion"
         android:gravity="center"
         android:layout_weight="1"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/edit_button"
+        app:layout_constraintTop_toBottomOf="@id/promotion_button"
         app:layout_constraintEnd_toStartOf="@id/delete_text" />
 
     <TextView
@@ -219,7 +218,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
-        android:layout_marginStart="10dp"
+        android:layout_marginEnd="9dp"
         android:text="Delete"
         android:gravity="center"
         android:layout_weight="1"
@@ -232,6 +231,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
+        android:layout_marginEnd="15dp"
         android:text="Notify"
         android:gravity="center"
         android:layout_weight="1"

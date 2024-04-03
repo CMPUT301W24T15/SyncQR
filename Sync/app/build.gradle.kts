@@ -44,6 +44,7 @@ dependencies {
     implementation("androidx.recyclerview:recyclerview:1.3.2")
     implementation ("com.google.code.gson:gson:2.10.1")
     implementation("androidx.test:monitor:1.6.1")
+    implementation("com.google.android.gms:play-services-maps:18.2.0")
     testImplementation("junit:junit:4.13.2")
     implementation(platform("com.google.firebase:firebase-bom:32.8.0"))
     testImplementation("org.junit.jupiter:junit-jupiter:5.10.2")

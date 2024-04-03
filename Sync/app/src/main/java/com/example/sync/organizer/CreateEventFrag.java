@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.PickVisualMediaRequest;
@@ -22,15 +23,35 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.example.sync.Attendee;
+import com.example.sync.Checkin;
+import com.example.sync.Database;
+import com.example.sync.Event;
 import com.example.sync.R;
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.firebase.Timestamp;
 
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Objects;
+import java.util.logging.SimpleFormatter;
 
 public class CreateEventFrag extends Fragment {
     ActivityResultLauncher<PickVisualMediaRequest> pickMedia;
+    Button create;
     Button upload;
     ImageView image;
+    TextInputEditText name;
+    TextInputEditText date;
+    TextInputEditText location;
+    TextInputEditText attendeeNum;
+    TextInputEditText description;
+
+
     Toolbar toolbar;
     Uri imageuri;
     FragListener listener;
@@ -96,7 +117,14 @@ public class CreateEventFrag extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         toolbar = view.findViewById(R.id.toolbar);
         upload = view.findViewById(R.id.upload_image_button);
+        create = view.findViewById(R.id.create);
         image = view.findViewById(R.id.image);
+
+        name = view.findViewById(R.id.name_input);
+        date = view.findViewById(R.id.date_input);
+        location = view.findViewById(R.id.location_input);
+        attendeeNum = view.findViewById(R.id.attendeeNum_input);
+        description = view.findViewById(R.id.description_input);
     }
 
     @Override
@@ -121,6 +149,58 @@ public class CreateEventFrag extends Fragment {
                 listener.notifyShutDown(self);
             }
         });
+
+        create.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                saveEvent();
+            }
+        });
+    }
+
+    public void saveEvent(){
+        // obtain data
+        String nameText = name.getText().toString();
+        String dateText = date.getText().toString();
+        String locationText = location.getText().toString();
+        String attendeeNumText = attendeeNum.getText().toString();
+        String descriptionText = description.getText().toString();
+
+        // check data
+        if (nameText.isEmpty()) {System.out.println("wrong"); name.setError("Required.");}
+        if (dateText.isEmpty()) {date.setError("Required.");}
+        if (locationText.isEmpty()) {location.setError("Required.");}
+        if (attendeeNumText.isEmpty()){attendeeNumText = "0";}
+        if (imageuri == null) {
+            int drawableId = R.drawable.welcomeevent;
+            imageuri = Uri.parse("android.resource://" + "com.example.sync/" + drawableId);
+        }
+        String uri = imageuri.toString();
+
+
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+            Date date = sdf.parse(dateText);
+
+            // store data into database
+            // ********************* change organizer to account ******************
+            Timestamp timestamp = new Timestamp(date);
+            Event event = new Event(nameText, timestamp, locationText, (long)Integer.parseInt(attendeeNumText),
+                    "yiqing", descriptionText, uri, (long)1718521);
+            event.saveEventToDatabase();
+
+            // create a checkin system for the event
+            Checkin checkin = new Checkin(event.getEventId());
+            checkin.initializeDatabase();
+
+            // notify user
+            Toast.makeText(getContext(), "Successful! View it from Event List!", Toast.LENGTH_LONG).show();
+        } catch (ParseException e){
+            date.setError("Invalid Format.");
+        }
+
+
+
 
     }
 }

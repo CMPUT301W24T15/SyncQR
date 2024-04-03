@@ -2,6 +2,7 @@ package com.example.sync.organizer;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -73,7 +74,7 @@ public class ViewEventsFrag extends Fragment{
         // ** Need login system to access all created event
         // list set up
         dataList = new ArrayList<Event>();
-        Event.getEventFromDatabase("1123", new Event.Callback() {
+        Event.getEventFromDatabase("1417182237", new Event.Callback() {
             @Override
             public void onSuccess(Event event) {
                 dataList.add(event);
@@ -81,6 +82,8 @@ public class ViewEventsFrag extends Fragment{
                 eventList.setAdapter(eventListAdapter);
             }
         });
+
+        // *********************** account grabs event*************************
 
 
         // click list item
