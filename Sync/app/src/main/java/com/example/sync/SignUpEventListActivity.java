@@ -1,4 +1,4 @@
-package com.example.sync.Close;
+package com.example.sync;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -7,8 +7,6 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
-import com.example.sync.Open.Event;
-import com.example.sync.R;
 import com.example.sync.organizer.EventListAdapter;
 import com.google.firebase.firestore.FirebaseFirestore;
 

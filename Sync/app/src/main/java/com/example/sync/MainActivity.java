@@ -8,7 +8,6 @@ import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.sync.Close.EventListActivity;
 import com.example.sync.organizer.OrganizerDashboard;
 
 public class MainActivity extends AppCompatActivity {

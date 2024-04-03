@@ -1,4 +1,4 @@
-package com.example.sync.Close;
+package com.example.sync;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,8 +9,6 @@ import android.widget.ListView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.sync.Open.Event;
-import com.example.sync.R;
 import com.example.sync.organizer.EventListAdapter;
 
 import java.util.ArrayList;

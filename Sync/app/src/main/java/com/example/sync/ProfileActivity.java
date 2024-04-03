@@ -13,13 +13,12 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
-import com.example.sync.Close.EventListActivity;
-import com.example.sync.Close.NotificationFragment;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Activity for managing user profile.
@@ -63,31 +62,37 @@ public class ProfileActivity extends AppCompatActivity {
         // Get the user ID from the intent
         String userID = getIntent().getStringExtra("userID");
 
-        // Assuming you have a reference to the Firebase database
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference accountsRef = database.getReference("Accounts").child(userID).child("profile");
+        // Get the profile information for users
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        DocumentReference profileRef = db.collection("Accounts").document(userID);
 
-        accountsRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists()) {
-                    // Retrieve profile information from the dataSnapshot
-                    String name = dataSnapshot.child("name").getValue(String.class);
-                    String email = dataSnapshot.child("email").getValue(String.class);
-                    String contact = dataSnapshot.child("phoneNumber").getValue(String.class);
+        profileRef.get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                DocumentSnapshot document = task.getResult();
+                if (document != null && document.exists()) {
+                    // Access the nested 'profile' map
+                    Map<String, Object> profile = (Map<String, Object>) document.get("profile");
+                    if (profile != null) {
+                        // Extract fields from the profile map
+                        String name = (String) profile.get("name");
+                        String email = (String) profile.get("email");
+                        String contact = (String) profile.get("phoneNumber");
 
-                    // Set the retrieved profile information to the EditText fields
-                    userNameInput.setText(name);
-                    userEmailInput.setText(email);
-                    userContactInput.setText(contact);
+                        // Update UI with the retrieved data
+                        userNameInput.setText(name);
+                        userEmailInput.setText(email);
+                        userContactInput.setText(contact);
+
+                        Log.d("DatabaseTag", "Profile data loaded successfully.");
+                    } else {
+                        Log.d("DatabaseTag", "Profile data is null.");
+                    }
                 } else {
-                    Log.d(TAG, "No profile information found for user ID: " + userID);
+                    // Document not found
+                    Log.d("DatabaseTag", "No profile information found for user ID: " + userID);
                 }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                Log.e(TAG, "Error retrieving profile information", databaseError.toException());
+            } else {
+                Log.d("DatabaseTag", "Error loading profile data", task.getException());
             }
         });
 
@@ -112,28 +117,31 @@ public class ProfileActivity extends AppCompatActivity {
         String name = userNameInput.getText().toString().trim();
         String email = userEmailInput.getText().toString().trim();
         String contact = userContactInput.getText().toString().trim();
-        userImageInput.removeInitialsAndImage();
-        userImageInput.setInitialsFromName(name);
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
 
         // Get the user ID from the intent
         String userID = getIntent().getStringExtra("userID");
 
-        // Assuming you have a reference to the Firebase database
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference accountsRef = database.getReference("Accounts");
-
         if (userID != null) {
-            Profile profile = new Profile(name, "", email, contact); // Create a Profile object
+            // Create a map containing the profile fields
+            Map<String, Object> profileData = new HashMap<>();
+            profileData.put("email", email);
+            profileData.put("imageUrl", ""); // Assuming imageUrl is not changed
+            profileData.put("name", name);
+            profileData.put("phoneNumber", contact);
 
-            accountsRef.child(userID).child("profile").setValue(profile)
-                    .addOnCompleteListener(task -> {
-                        if (task.isSuccessful()) {
-                            Log.d(TAG, "Profile saved successfully");
-                            // Optionally, show a success message or navigate to another activity
-                        } else {
-                            Log.e(TAG, "Failed to save profile", task.getException());
-                            // Optionally, show an error message
-                        }
+            // Assuming 'userID' is the document ID in the 'Accounts' collection
+            DocumentReference profileRef = db.collection("Accounts").document(userID);
+
+            // Update the 'profile' field with the new profile data
+            profileRef.update("profile", profileData, "username", name)
+                    .addOnSuccessListener(aVoid -> {
+                        Log.d(TAG, "Profile saved successfully");
+                        // Optionally, show a success message or navigate to another activity
+                    })
+                    .addOnFailureListener(e -> {
+                        Log.e(TAG, "Failed to save profile", e);
+                        // Optionally, show an error message
                     });
         } else {
             Log.e(TAG, "User ID is null");

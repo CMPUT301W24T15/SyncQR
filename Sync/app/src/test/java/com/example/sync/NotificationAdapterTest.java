@@ -12,9 +12,6 @@ import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.test.platform.app.InstrumentationRegistry;
 
-import com.example.sync.Close.Notification;
-import com.example.sync.Close.NotificationAdapter;
-
 import org.junit.Before;
 import org.junit.Test;
 

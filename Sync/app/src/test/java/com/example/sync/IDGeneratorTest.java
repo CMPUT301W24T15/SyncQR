@@ -4,8 +4,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.fail;
 
-import com.example.sync.Close.UserIDGenerator;
-
 import org.junit.Test;
 
 /**

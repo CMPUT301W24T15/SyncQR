@@ -16,10 +16,6 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.annotation.NonNull;
 
-import com.example.sync.Close.EventListActivity;
-import com.example.sync.Close.LocationPermissionDialog;
-import com.example.sync.Close.NotificationActivity;
-import com.example.sync.Close.SignUpEventListActivity;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;

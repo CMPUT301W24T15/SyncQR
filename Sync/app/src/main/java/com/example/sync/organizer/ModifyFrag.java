@@ -10,7 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import com.example.sync.Open.Event;
+import com.example.sync.Event;
 import com.example.sync.R;
 
 

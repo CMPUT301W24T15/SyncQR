@@ -3,8 +3,6 @@ package com.example.sync;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 
-import com.example.sync.Close.Notification;
-
 import org.junit.Test;
 
 import java.util.ArrayList;

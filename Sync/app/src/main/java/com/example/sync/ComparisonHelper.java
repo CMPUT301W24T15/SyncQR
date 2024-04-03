@@ -1,4 +1,4 @@
-package com.example.sync.Open;
+package com.example.sync;
 
 import android.util.Log;
 

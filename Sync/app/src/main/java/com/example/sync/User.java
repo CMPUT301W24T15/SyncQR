@@ -4,7 +4,6 @@ import android.util.Log;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.sync.Open.Event;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;

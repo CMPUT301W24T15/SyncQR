@@ -1,8 +1,4 @@
-package com.example.sync.Close;
-
-import com.example.sync.Open.Event;
-import com.example.sync.Profile;
-import com.example.sync.User;
+package com.example.sync;
 
 import java.util.ArrayList;
 /**
