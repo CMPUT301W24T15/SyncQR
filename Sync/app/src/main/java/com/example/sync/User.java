@@ -58,7 +58,7 @@ public class User extends AppCompatActivity {
         db.collection("Accounts").document(userID).set(userData)
                 // Upload successful
                 .addOnSuccessListener(aVoid -> {
-                    Log.d(TAG, "Upload Successful");
+                    Log.d(TAG, userID + "Upload Successful");
 
                 })
                 // If error occurs during upload

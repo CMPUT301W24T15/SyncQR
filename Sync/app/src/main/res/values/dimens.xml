@@ -3,5 +3,8 @@
     <dimen name="event_poster_height" />
     <dimen name="small_margin">5dp</dimen>
     <dimen name="medium_margin">10dp</dimen>
+    <dimen name="large_margin">20dp</dimen>
+    <dimen name="extra_large_margin">40dp</dimen>
     <dimen name="button_text_size">16dp</dimen>
+    <dimen name="button_text_size_large">24dp</dimen>
 </resources>

@@ -1,6 +1,8 @@
 package com.example.sync;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -12,10 +14,28 @@ import com.example.sync.organizer.OrganizerDashboard;
 
 public class LoginActivity extends AppCompatActivity {
 
+    private static String TAG = "KevinTag";
+    private String userID;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        SharedPreferences sharedPref = getPreferences(Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+
+        // a new user
+        if (userID == null) {
+            userID = UserIDGenerator.generateUserID();
+            User user = new User(userID);
+            user.saveUser();
+            Log.d(TAG, "Creating new Account in Login Activity");
+            editor.putString("userID", userID);
+            editor.apply();
+        }
+
+
         Log.d("kevinTag", "Created Login Activity");
 
         Button attendeeLoginButton = findViewById(R.id.login_attendee_button);
@@ -25,7 +45,8 @@ public class LoginActivity extends AppCompatActivity {
         attendeeLoginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(LoginActivity.this, AttendeeLogin.class);
+                Intent intent = new Intent(LoginActivity.this, AttendeeDashboard.class);
+                intent.putExtra("userID", userID);
                 intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                 startActivity(intent);
             }
@@ -34,7 +55,8 @@ public class LoginActivity extends AppCompatActivity {
         organizerLoginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(LoginActivity.this, OrganizerLogin.class);
+                Intent intent = new Intent(LoginActivity.this, OrganizerDashboard.class);
+                intent.putExtra("userID", userID);
                 intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                 startActivity(intent);
             }
@@ -43,7 +65,7 @@ public class LoginActivity extends AppCompatActivity {
         administratorLoginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(LoginActivity.this, AdministratorLogin.class);
+                Intent intent = new Intent(LoginActivity.this, QRCodeScanActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                 startActivity(intent);
             }
