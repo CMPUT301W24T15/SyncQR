@@ -1,4 +1,4 @@
-package com.example.sync.Close;
+package com.example.sync;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,8 +13,6 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
-import com.example.sync.Checkin;
-import com.example.sync.R;
 import com.example.sync.organizer.FragListener;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;

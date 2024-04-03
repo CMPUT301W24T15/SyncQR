@@ -2,8 +2,6 @@ package com.example.sync;
 
 import static org.junit.Assert.assertTrue;
 
-import com.example.sync.Open.ComparisonHelper;
-
 import org.junit.Test;
 
 public class ComparisonHelperTest {

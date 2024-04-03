@@ -57,7 +57,7 @@
         <activity android:name=".AttendeeLogin"/>
         <activity android:name=".OrganizerLogin"/>
         <activity android:name=".AdministratorLogin"/>
-        <activity android:name=".Close.NotificationActivity"/>
+        <activity android:name=".NotificationActivity"/>
         <!--suppress AndroidDomInspection -->
         <service
             android:name="com.google.android.gms.metadata.ModuleDependencies"
@@ -71,9 +71,9 @@
                 android:name="photopicker_activity:0:required"
                 android:value="" />
         </service>
-        <activity android:name=".Close.EventDetailsActivity"/>
-        <activity android:name=".Close.SignUpEventListActivity"/>
-        <activity android:name=".Close.EventListActivity"/>
+        <activity android:name=".EventDetailsActivity"/>
+        <activity android:name=".SignUpEventListActivity"/>
+        <activity android:name=".EventListActivity"/>
         <activity android:name=".ProfileListActivity"/>
 
     </application>
