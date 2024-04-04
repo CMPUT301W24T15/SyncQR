@@ -14,7 +14,7 @@ import com.example.sync.organizer.EventListAdapter;
 import java.util.ArrayList;
 
 /**
- * Activity for displaying a list of events.
+ * Activity for displaying a list of events for Attendee.
  * This activity fetches event data from Firestore and displays it in a ListView using an EventListAdapter.
  * Users can click on an event to view its details.
  */

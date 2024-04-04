@@ -18,6 +18,7 @@ import java.util.Map;
  * Profile represents user profile information.
  */
 public class Profile implements Parcelable {
+    private String profileID;
     private String name;
     private String imageUrl;
     private String email;
@@ -33,19 +34,23 @@ public class Profile implements Parcelable {
     /**
      * Constructor to initialize profile information.
      *
+     * @param profileID   The ID of the profile.
      * @param name        The name of the user.
      * @param imageUrl    The URL of the user's profile image.
      * @param email       The email address of the user.
      * @param phoneNumber The phone number of the user.
      */
-    public Profile(String name, String imageUrl, String email, String phoneNumber) {
+    public Profile(String profileID, String name, String imageUrl, String email, String phoneNumber) {
+        this.profileID = profileID;
         this.name = name;
         this.imageUrl = imageUrl;
         this.email = email;
         this.phoneNumber = phoneNumber;
     }
 
+
     protected Profile(Parcel in) {
+        profileID = in.readString();
         name = in.readString();
         imageUrl = in.readString();
         email = in.readString();
@@ -64,74 +69,42 @@ public class Profile implements Parcelable {
         }
     };
 
-    /**
-     * Get the name of the user.
-     *
-     * @return The name of the user.
-     */
+    public String getProfileID() {
+        return profileID;
+    }
+
+    public void setProfileID(String profileID) {
+        this.profileID = profileID;
+    }
+
     public String getName() {
         return name;
     }
 
-    /**
-     * Set the name of the user.
-     *
-     * @param name The name of the user.
-     */
     public void setName(String name) {
         this.name = name;
     }
 
-    /**
-     * Get the URL of the user's profile image.
-     *
-     * @return The URL of the user's profile image.
-     */
     public String getImageUrl() {
         return imageUrl;
     }
 
-    /**
-     * Set the URL of the user's profile image.
-     *
-     * @param imageUrl The URL of the user's profile image.
-     */
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
     }
 
-    /**
-     * Get the email address of the user.
-     *
-     * @return The email address of the user.
-     */
     public String getEmail() {
         return email;
     }
 
-    /**
-     * Set the email address of the user.
-     *
-     * @param email The email address of the user.
-     */
     public void setEmail(String email) {
         this.email = email;
     }
 
-    /**
-     * Get the phone number of the user.
-     *
-     * @return The phone number of the user.
-     */
     public String getPhoneNumber() {
         return phoneNumber;
     }
 
-    /**
-     * Set the phone number of the user.
-     *
-     * @param phoneNumber The phone number of the user.
-     */
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
@@ -143,6 +116,7 @@ public class Profile implements Parcelable {
 
     @Override
     public void writeToParcel(@NonNull Parcel dest, int flags) {
+        dest.writeString(profileID);
         dest.writeString(name);
         dest.writeString(imageUrl);
         dest.writeString(email);
@@ -166,16 +140,18 @@ public class Profile implements Parcelable {
                                 Map<String, Object> data = document.getData();
                                 Map<String, Object> profileData = (Map<String, Object>) data.get("profile");
                                 if (profileData != null) {
+                                    String id = (String) profileData.get("profileID");
                                     String name = (String) profileData.get("name");
                                     String imageUrl = (String) profileData.get("imageUrl");
                                     String email = (String) profileData.get("email");
                                     String phoneNumber = (String) profileData.get("phoneNumber");
 
                                     // Create Profile instance
-                                    Profile profile = new Profile(name, imageUrl, email, phoneNumber);
-
-                                    // Add profile to list
-                                    profileList.add(profile);
+                                    if (!name.isEmpty()) {
+                                        // Add profile to list
+                                        Profile profile = new Profile(id, name, imageUrl, email, phoneNumber);
+                                        profileList.add(profile);
+                                    }
                                 }
                             }
                             // Notify callback with the list of profiles

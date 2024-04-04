@@ -80,6 +80,8 @@
         <activity android:name=".SignUpEventListActivity"/>
         <activity android:name=".EventListActivity"/>
         <activity android:name=".ProfileListActivity"/>
+        <activity android:name=".AdminEventListActivity"/>
+        <activity android:name=".AdminEventDetailsActivity"/>
 
     </application>
 

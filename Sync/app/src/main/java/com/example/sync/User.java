@@ -31,8 +31,8 @@ public class User extends AppCompatActivity {
     public User(String userID) {
         this.userID = userID;
         username = "Visitor";
-        password = "000000";
-        profile = new Profile(username,"https://avatar.iran.liara.run/public","example@com","0000000000");
+        password = "";
+        profile = new Profile(userID,username,"https://avatar.iran.liara.run/public","","");
         position = "Attendee";
         signupevents = new ArrayList<Event>();
         createdevents = new ArrayList<Event>();

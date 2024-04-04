@@ -30,39 +30,40 @@
         android:textAlignment="center"
         android:textSize="16sp" />
 
-    <EditText
-        android:id="@+id/administrator_text"
-        android:layout_width="379dp"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Name for Event/Profile"
-        android:textSize="20sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:orientation="horizontal"
+        android:gravity="center">
+
+        <Button
+            android:id="@+id/home_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Home" />
+
+        <Button
+            android:id="@+id/profile_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Profile" />
+
+        <Button
+            android:id="@+id/event_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Event" />
+
+        <Button
+            android:id="@+id/messages_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Messages" />
+    </LinearLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <Button
-            android:id="@+id/event_search_button"
-            android:layout_width="189dp"
-            android:layout_height="36dp"
-            android:text="Search Event"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <Button
-            android:id="@+id/profile_search_button"
-            android:layout_width="190dp"
-            android:layout_height="36dp"
-            android:text="Search Profile"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
+        android:layout_height="wrap_content"/>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -71,7 +72,7 @@
         <Button
             android:id="@+id/event_browse_button"
             android:layout_width="189dp"
-            android:layout_height="36dp"
+            android:layout_height="wrap_content"
             android:text="Browse Event"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -80,7 +81,7 @@
         <Button
             android:id="@+id/profile_browse_button"
             android:layout_width="190dp"
-            android:layout_height="36dp"
+            android:layout_height="wrap_content"
             android:text="Browse Profile"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -88,11 +89,5 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-
-    <ListView
-        android:id="@+id/administrator_list"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1" />
 
 </LinearLayout>

@@ -179,7 +179,7 @@ public class Event implements Serializable {
                 });
     }
 
-    public void deleteEvent(String eventId){
+    public static void deleteEvent(String eventId){
         DocumentReference doc = db.collection("Events").document(eventId);
         doc.delete()
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
