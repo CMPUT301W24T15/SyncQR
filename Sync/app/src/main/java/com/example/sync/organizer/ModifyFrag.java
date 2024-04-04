@@ -2,6 +2,7 @@ package com.example.sync.organizer;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,6 +19,14 @@ import androidx.fragment.app.Fragment;
 import com.example.sync.Checkin;
 import com.example.sync.Event;
 import com.example.sync.R;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapView;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.PolylineOptions;
+import com.google.firebase.firestore.GeoPoint;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -35,6 +44,7 @@ public class ModifyFrag extends Fragment {
     private ImageView notify;
     private ImageView promotion;
     private ImageView viewList;
+    private MapView map;
     private Event event;
     private ModifyFrag self = this;
 
@@ -65,18 +75,40 @@ public class ModifyFrag extends Fragment {
         viewList = view.findViewById(R.id.view_list_button);
         checkinNum = view.findViewById(R.id.check_num);
         signupNum = view.findViewById(R.id.sign_num);
+        map = view.findViewById(R.id.map);
+        map.onCreate(savedInstanceState);
     }
 
     @Override
     public void onStart() {
         super.onStart();
 
-        // display statistics
+        // get event (not safe)
         Bundle args = getArguments();
         if (args != null) {
-            Event event = (Event) args.getSerializable("event");
-            displayNumber(event.getEventId());
+            event = (Event) args.getSerializable("event");
         }
+
+        // display map
+
+        map.getMapAsync(new OnMapReadyCallback() {
+            @Override
+            public void onMapReady(@NonNull GoogleMap googleMap) {
+                //acquire location list from database
+                Checkin.getLocationFromDatabase(event.getEventId(), new Checkin.Callback() {
+                    @Override
+                    public void onSuccess(ArrayList<LatLng> locations) {
+                        for (LatLng location: locations){
+                            googleMap.addMarker(new MarkerOptions().position(location));
+                            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location, 14.0f));
+                        }
+                    }
+                });
+            }
+        });
+
+        // display statistics
+        displayNumber(event.getEventId());
 
         // delete operation: back to ViewEvent
         delete.setOnClickListener(new View.OnClickListener() {
@@ -98,12 +130,8 @@ public class ModifyFrag extends Fragment {
         notify.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Bundle args = getArguments();
-                if (args != null) {
-                    Event event = (Event) args.getSerializable("event");
-                    NotifyDialog notifyDialog = NotifyDialog.newInstance(event);
-                    notifyDialog.show(getChildFragmentManager(), "Notification");
-                }
+                NotifyDialog notifyDialog = NotifyDialog.newInstance(event);
+                notifyDialog.show(getChildFragmentManager(), "Notification");
             }
         });
 
@@ -112,30 +140,25 @@ public class ModifyFrag extends Fragment {
         viewList.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Bundle args = getArguments();
-                if (args != null) {
-                    Event event = (Event) args.getSerializable("event");
-                    Checkin.getListFromDatabase(event.getEventId(), new Checkin.Callback() {
-                        @Override
-                        public void onSuccess(Map<String, Object> counts, ArrayList<String> current, ArrayList<String> signup) {
-                            // convert map to arraylist
-                            ArrayList<String> countsInList = new ArrayList<>();
-                            for (Map.Entry<String, Object> entry : counts.entrySet()) {
-                                String key = entry.getKey();
-                                String value = (String) entry.getValue();
-                                String user = key + ": " + value;
-                                countsInList.add(user);
-                            }
-
-                            ViewAttendeeDialog dialog = ViewAttendeeDialog.newInstance(countsInList, current, signup);
-                            dialog.show(getChildFragmentManager(), "view list");
+                Checkin.getListFromDatabase(event.getEventId(), new Checkin.Callback() {
+                    @Override
+                    public void onSuccess(Map<String, Object> counts, ArrayList<String> current, ArrayList<String> signup) {
+                        // convert map to arraylist
+                        ArrayList<String> countsInList = new ArrayList<>();
+                        for (Map.Entry<String, Object> entry : counts.entrySet()) {
+                            String key = entry.getKey();
+                            String value = (String) entry.getValue();
+                            String user = key + ": " + value;
+                            countsInList.add(user);
                         }
-                    });
-                }
+
+                        ViewAttendeeDialog dialog = ViewAttendeeDialog.newInstance(countsInList, current, signup);
+                        dialog.show(getChildFragmentManager(), "view list");
+                    }
+                });
             }
         });
     }
-
 
     public void setListener(ModifyListener listener) {
         this.listener = listener;
@@ -150,4 +173,29 @@ public class ModifyFrag extends Fragment {
             }
         });
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        map.onResume();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        map.onPause();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        map.onDestroy();
+    }
+
+    @Override
+    public void onLowMemory() {
+        super.onLowMemory();
+        map.onLowMemory();
+    }
+
 }

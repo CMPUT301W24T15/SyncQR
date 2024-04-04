@@ -5,9 +5,10 @@
     android:layout_height="match_parent">
 
     <com.google.android.gms.maps.MapView
-        android:id="@+id/mapView"
+        android:id="@+id/map"
         android:layout_width="0dp"
         android:layout_height="250dp"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
@@ -24,7 +25,7 @@
         android:gravity="center"
         android:textStyle="bold"
         app:layout_constraintHorizontal_weight="1"
-        app:layout_constraintTop_toBottomOf="@id/mapView"
+        app:layout_constraintTop_toBottomOf="@id/map"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toStartOf="@id/sign_in"
         app:layout_constraintBottom_toTopOf="@id/check_num"/>
@@ -40,7 +41,7 @@
         android:gravity="center"
         android:textStyle="bold"
         app:layout_constraintHorizontal_weight="1"
-        app:layout_constraintTop_toBottomOf="@id/mapView"
+        app:layout_constraintTop_toBottomOf="@id/map"
         app:layout_constraintStart_toEndOf="@id/check_in"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toTopOf="@id/sign_num"/>
