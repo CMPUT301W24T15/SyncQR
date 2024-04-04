@@ -24,6 +24,10 @@ public class User extends AppCompatActivity {
     private ArrayList<Event> signupevents;
     private ArrayList<Event> createdevents;
 
+    /**
+     * Constructs a new User object with default values.
+     * @param userID The unique identifier for the user.
+     */
     public User(String userID) {
         this.userID = userID;
         username = "Visitor";
@@ -34,6 +38,16 @@ public class User extends AppCompatActivity {
         createdevents = new ArrayList<Event>();
     }
 
+    /**
+     * Constructs a new User object with specified values.
+     * @param userID The unique identifier for the user.
+     * @param username The username of the user.
+     * @param password The password of the user.
+     * @param profile The profile of the user.
+     * @param position The position of the user.
+     * @param signupevents The events the user has signed up for.
+     * @param createdevents The events the user has created.
+     */
     public User(String userID, String username, String password, Profile profile, String position, ArrayList<Event> signupevents, ArrayList<Event> createdevents) {
         this.userID = userID;
         this.username = username;
@@ -44,6 +58,9 @@ public class User extends AppCompatActivity {
         this.createdevents = createdevents;
     }
 
+    /**
+     * Saves the user data to the database.
+     */
     public void saveUser() {
         Map<String, Object> userData = new HashMap<>();
         userData.put("userID", userID);
@@ -68,10 +85,14 @@ public class User extends AppCompatActivity {
                 });
     }
 
+    /**
+     * Initiates the QR code scanning activity.
+     */
     public void scanQRCode(){
         new QRCodeScanActivity();
     }
 
+    // Getters and setters for user properties
     public String getUserID() {
         return userID;
     }

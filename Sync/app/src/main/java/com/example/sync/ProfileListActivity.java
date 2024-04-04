@@ -5,13 +5,18 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+
 import androidx.appcompat.app.AppCompatActivity;
+
 import java.util.ArrayList;
 
+/**
+ * Activity for displaying a list of profiles.
+ */
 public class ProfileListActivity extends AppCompatActivity {
 
-    private ArrayList<Profile> profileList;
-    private ListView listView;
+    private ArrayList<Profile> dataList;
+    private ListView profileList;
     private ProfileListAdapter adapter;
 
     @Override
@@ -19,21 +24,35 @@ public class ProfileListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.view_profiles);
 
-        profileList = new ArrayList<>();
-        listView = findViewById(R.id.profileList);
-        adapter = new ProfileListAdapter(this, profileList);
-        listView.setAdapter(adapter);
+        // Initialize dataList and profileList
+        dataList = new ArrayList<>();
+        profileList = findViewById(R.id.profileList);
 
-        adapter.notifyDataSetChanged();
+        // Create and set the adapter
+        adapter = new ProfileListAdapter(this, dataList);
+        profileList.setAdapter(adapter);
 
-        // Set item click listener to handle clicks on individual profiles
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        // Fetch profiles from Firestore and update the UI
+        Profile.getAllProfilesFromDatabase(new Profile.Callback() {
+            @Override
+            public void onSuccess(ArrayList<Profile> profileArrayList) {
+                // Update dataList and notify the adapter to refresh the ListView
+                dataList.addAll(profileArrayList);
+                adapter.notifyDataSetChanged();
+            }
+        });
+
+        // Set an item click listener on the ListView to handle clicks on individual profiles
+        profileList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Profile profile = profileList.get(position);
-                // Start a new activity to show profile details, passing necessary data
+                Profile profile = dataList.get(position);
                 Intent intent = new Intent(ProfileListActivity.this, ProfileActivity.class);
-                intent.putExtra("profile", (CharSequence) profile);
+                intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+
+                // Get and pass userID
+                String userID = getIntent().getStringExtra("userID");
+                intent.putExtra("userID", userID);
                 startActivity(intent);
             }
         });

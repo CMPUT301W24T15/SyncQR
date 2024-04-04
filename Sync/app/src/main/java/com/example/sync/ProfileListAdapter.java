@@ -12,16 +12,31 @@ import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
 
+/**
+ * Custom ArrayAdapter implementation for displaying a list of profiles in a ListView.
+ */
 public class ProfileListAdapter extends ArrayAdapter<Profile> {
     private Activity context;
     private ArrayList<Profile> profiles;
 
+    /**
+     * Constructor for ProfileListAdapter.
+     * @param context The context where the ListView is being displayed.
+     * @param profiles The list of profiles to be displayed in the ListView.
+     */
     public ProfileListAdapter(Activity context, ArrayList<Profile> profiles) {
         super(context, R.layout.profile_list_item, profiles);
         this.context = context;
         this.profiles = profiles;
     }
 
+    /**
+     * Returns a View representing the data at the specified position in the adapter.
+     * @param position The position of the item within the adapter's data set.
+     * @param convertView The old view to reuse, if possible.
+     * @param parent The parent that this view will eventually be attached to.
+     * @return A View corresponding to the data at the specified position.
+     */
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         LayoutInflater inflater = context.getLayoutInflater();
@@ -46,4 +61,5 @@ public class ProfileListAdapter extends ArrayAdapter<Profile> {
         return listViewItem;
     }
 }
+
 
