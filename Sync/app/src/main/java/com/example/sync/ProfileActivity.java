@@ -5,8 +5,11 @@ import static android.content.ContentValues.TAG;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.Editable;
 import android.util.Log;
 import android.widget.Button;
+import android.text.TextWatcher;
+
 import android.widget.EditText;
 
 import androidx.annotation.Nullable;
@@ -82,6 +85,33 @@ public class ProfileActivity extends AppCompatActivity {
                         userNameInput.setText(name);
                         userEmailInput.setText(email);
                         userContactInput.setText(contact);
+                        userNameInput.addTextChangedListener(new TextWatcher() {
+                            @Override
+                            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                                // Implementation can be left empty if not needed
+                            }
+
+                            @Override
+                            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                                // Implementation can be left empty if not needed
+                            }
+
+                            @Override
+                            public void afterTextChanged(Editable s) {
+                                String name = s.toString().trim();
+                                if (!name.isEmpty()) {
+                                    userImageInput.setInitialsFromName(name);
+                                } else {
+                                    userImageInput.removeInitialsAndImage();
+                                }
+                            }
+                        });
+                        if (name != null && !name.isEmpty()) {
+                            userImageInput.setInitialsFromName(name);
+                        } else {
+
+                            userImageInput.removeInitialsAndImage();
+                        }
 
                         Log.d("DatabaseTag", "Profile data loaded successfully.");
                     } else {
@@ -113,6 +143,7 @@ public class ProfileActivity extends AppCompatActivity {
      * Saves the edited profile data to the Firebase Realtime Database.
      * Called when the save button is clicked.
      */
+
     private void saveProfileData() {
         String name = userNameInput.getText().toString().trim();
         String email = userEmailInput.getText().toString().trim();
