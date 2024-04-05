@@ -5,6 +5,7 @@ import static com.google.firebase.firestore.FieldValue.arrayRemove;
 import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -35,9 +36,12 @@ import android.location.Location;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Nullable;
+
+import kotlinx.coroutines.tasks.TasksKt;
 
 public class Checkin {
     private String eventId;
@@ -60,10 +64,9 @@ public class Checkin {
 
     /**
      * Construct a new Checkin system instance
-     *
      * @param eventId The event which the checkin system attached to
      */
-    public Checkin(String eventId) {
+    public Checkin(String eventId, String eventName) {
         this.eventId = eventId;
         this.eventName = eventName;
         this.qrcodeImage = "";
