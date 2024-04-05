@@ -11,6 +11,9 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.DialogFragment;
 
+/**
+ * Dialog to be displayed when an organizer tries deleting an event.
+ */
 public class DeleteDialog extends DialogFragment {
     private DeleteDialogListener listener;
     interface DeleteDialogListener {

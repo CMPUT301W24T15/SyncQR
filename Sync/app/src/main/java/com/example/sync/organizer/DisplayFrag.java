@@ -16,6 +16,9 @@ import com.example.sync.R;
 
 import java.text.SimpleDateFormat;
 
+/**
+ * Fragment to display information of an event.
+ */
 public class DisplayFrag extends Fragment {
 
     ImageView poster; // has not been implemented. implement when connect to database

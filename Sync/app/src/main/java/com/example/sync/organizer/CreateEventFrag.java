@@ -31,6 +31,10 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+/**
+ * Fragment that helps an organizer to create events.
+ * Organizers can edit event details such as name, location, date, description, and attendee limit.
+ */
 public class CreateEventFrag extends Fragment {
     ActivityResultLauncher<PickVisualMediaRequest> pickMedia;
     Button create;

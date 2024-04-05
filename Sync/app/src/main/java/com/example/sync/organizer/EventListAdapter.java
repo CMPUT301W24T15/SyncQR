@@ -17,9 +17,11 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
+/**
+ * ArrayAdapter that can be used to store events.
+ */
 public class EventListAdapter extends ArrayAdapter<Event> {
 
-    // call super
     public EventListAdapter(Context context, ArrayList<Event> events) {
         super(context, 0, events);
     }

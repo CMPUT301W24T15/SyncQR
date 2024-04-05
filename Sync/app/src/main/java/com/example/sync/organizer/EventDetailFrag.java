@@ -14,6 +14,9 @@ import com.example.sync.Event;
 import com.example.sync.R;
 import com.google.android.material.navigation.NavigationBarView;
 
+/**
+ * Fragment to show the detail of an event to the user.
+ */
 public class EventDetailFrag extends Fragment {
     interface EventDetailListener {
         void notifyParent(Event event);
