@@ -58,8 +58,14 @@
         <activity android:name=".OrganizerLogin"/>
         <activity android:name=".AdministratorLogin"/>
         <activity android:name=".NotificationActivity"/>
-        <activity android:name=".QRCodeActivity"
+        <activity android:name=".organizer.QRCodeShareActivity"
             android:enableOnBackInvokedCallback="true"/>
+        <activity android:name=".EventDetailsActivity"/>
+        <activity android:name=".SignUpEventListActivity"/>
+        <activity android:name=".EventListActivity"/>
+        <activity android:name=".ProfileListActivity"/>
+        <activity android:name=".AdminEventListActivity"/>
+        <activity android:name=".AdminEventDetailsActivity"/>
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
@@ -78,13 +84,19 @@
                 android:value="" />
 
         </service>
-        <activity android:name=".EventDetailsActivity"/>
-        <activity android:name=".SignUpEventListActivity"/>
-        <activity android:name=".EventListActivity"/>
-        <activity android:name=".ProfileListActivity"/>
-        <activity android:name=".AdminEventListActivity"/>
-        <activity android:name=".AdminEventDetailsActivity"/>
+
+        <!-- Share QR Code -->
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
 
     </application>
+
 
 </manifest>

@@ -1,14 +1,10 @@
 package com.example.sync.organizer;
 
-import android.app.Dialog;
-import android.content.Context;
-import android.graphics.Color;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -25,11 +21,8 @@ import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.maps.model.PolylineOptions;
-import com.google.firebase.firestore.GeoPoint;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Map;
 
 
@@ -135,6 +128,16 @@ public class ModifyFrag extends Fragment {
             }
         });
 
+        promotion.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(ModifyFrag.this, QRCodeShareActivity.class);
+                String inputID = event.getEventId();
+                intent.putExtra("inputID", inputID);
+                startActivity(intent);
+            }
+
+        });
 
         // view list operation: display attendee list
         viewList.setOnClickListener(new View.OnClickListener() {

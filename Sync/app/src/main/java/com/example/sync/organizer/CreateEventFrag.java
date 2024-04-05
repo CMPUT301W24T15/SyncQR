@@ -1,8 +1,6 @@
 package com.example.sync.organizer;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -20,12 +18,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 
-import com.example.sync.Attendee;
 import com.example.sync.Checkin;
-import com.example.sync.Database;
 import com.example.sync.Event;
 import com.example.sync.R;
 import com.google.android.material.textfield.TextInputEditText;
@@ -36,9 +30,6 @@ import java.io.InputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Objects;
-import java.util.logging.SimpleFormatter;
 
 public class CreateEventFrag extends Fragment {
     ActivityResultLauncher<PickVisualMediaRequest> pickMedia;

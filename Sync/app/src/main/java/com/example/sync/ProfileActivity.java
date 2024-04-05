@@ -109,7 +109,6 @@ public class ProfileActivity extends AppCompatActivity {
                         if (name != null && !name.isEmpty()) {
                             userImageInput.setInitialsFromName(name);
                         } else {
-
                             userImageInput.removeInitialsAndImage();
                         }
 
@@ -247,7 +246,7 @@ public class ProfileActivity extends AppCompatActivity {
      */
     private void removeProfileImage() {
         // Set to default image or clear
-        userImageInput.setImageResource(R.drawable.uploadimage); // Assuming 'uploadimage' is your default/placeholder image
+        userImageInput.setImageResource(R.drawable.uploadimage);
     }
     /**
      * Handles the result of picking an image from the device.

@@ -16,6 +16,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.annotation.NonNull;
 
+import com.example.sync.organizer.QRCodeShareActivity;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -92,9 +93,9 @@ public class AttendeeDashboard extends AppCompatActivity implements LocationPerm
         qrCodeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(AttendeeDashboard.this, QRCodeActivity.class);
-                String userID = getIntent().getStringExtra("userID");
-                intent.putExtra("userID", userID);
+                Intent intent = new Intent(AttendeeDashboard.this, QRCodeShareActivity.class);
+                String inputID = getIntent().getStringExtra("userID");
+                intent.putExtra("inputID", inputID);
                 startActivity(intent);
             }
 
