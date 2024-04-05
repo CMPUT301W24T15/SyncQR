@@ -16,11 +16,7 @@ public class AdministratorDashboard extends AppCompatActivity {
         homeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // Start HomeActivity when the button is clicked
-                Intent intent = new Intent(AdministratorDashboard.this, MainActivity.class);
-                // Consider clearing the task or setting flags if needed, to prevent back stack accumulation
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-                startActivity(intent);
+                // left blank since it's in the activity already
             }
         });
 

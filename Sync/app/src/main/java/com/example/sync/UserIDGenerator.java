@@ -2,6 +2,9 @@ package com.example.sync;
 
 import java.security.SecureRandom;
 
+/**
+ * Class to randomly generate user id.
+ */
 public class UserIDGenerator {
 
     private static final String CHARACTER_SET = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";

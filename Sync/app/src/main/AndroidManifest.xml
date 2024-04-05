@@ -29,18 +29,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Sync"
         tools:targetApi="31">
-        <activity
-            android:name=".MainActivity">
-<!--            android:exported="true">-->
-<!--            <intent-filter>-->
-<!--                <action android:name="android.intent.action.MAIN" />-->
-
-<!--                <category android:name="android.intent.category.LAUNCHER" />-->
-<!--            </intent-filter>-->
-        </activity>
-
         <activity android:name=".organizer.OrganizerDashboard" />
-
         <activity
             android:name=".LoginActivity"
             android:exported="true">
@@ -49,7 +38,6 @@
                         <category android:name="android.intent.category.LAUNCHER" />
                     </intent-filter>
         </activity>
-
         <activity android:name=".AdministratorDashboard" />
         <activity android:name=".ProfileActivity"/>
         <activity android:name=".AttendeeDashboard" />
