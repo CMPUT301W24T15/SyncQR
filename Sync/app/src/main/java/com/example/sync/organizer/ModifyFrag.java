@@ -1,10 +1,14 @@
 package com.example.sync.organizer;
 
-import android.content.Intent;
+import android.app.Dialog;
+import android.content.Context;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -21,8 +25,11 @@ import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.PolylineOptions;
+import com.google.firebase.firestore.GeoPoint;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 
 
@@ -36,6 +43,7 @@ public class ModifyFrag extends Fragment {
     private ImageView delete;
     private ImageView notify;
     private ImageView promotion;
+    private ImageView generate;
     private ImageView viewList;
     private MapView map;
     private Event event;
@@ -66,6 +74,7 @@ public class ModifyFrag extends Fragment {
         notify = view.findViewById(R.id.notify_button);
         promotion = view.findViewById(R.id.promotion_button);
         viewList = view.findViewById(R.id.view_list_button);
+        generate = view.findViewById(R.id.qrcode_button);
         checkinNum = view.findViewById(R.id.check_num);
         signupNum = view.findViewById(R.id.sign_num);
         map = view.findViewById(R.id.map);
@@ -128,16 +137,6 @@ public class ModifyFrag extends Fragment {
             }
         });
 
-        promotion.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(ModifyFrag.this, QRCodeShareActivity.class);
-                String inputID = event.getEventId();
-                intent.putExtra("inputID", inputID);
-                startActivity(intent);
-            }
-
-        });
 
         // view list operation: display attendee list
         viewList.setOnClickListener(new View.OnClickListener() {
@@ -161,6 +160,16 @@ public class ModifyFrag extends Fragment {
                 });
             }
         });
+
+        // generate action: reuse / generate QR code and share
+        generate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                QrCodeDialog qrcodeDialog = QrCodeDialog.newInstance(event.getEventId());
+                qrcodeDialog.show(getChildFragmentManager(), "qr code dialog");
+            }
+        });
+
     }
 
     public void setListener(ModifyListener listener) {
