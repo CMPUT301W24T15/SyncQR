@@ -17,13 +17,15 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.Timestamp;
+import com.google.firebase.firestore.EventListener;
+
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.GeoPoint;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -37,8 +39,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.annotation.Nullable;
+
+import kotlinx.coroutines.tasks.TasksKt;
+
 public class Checkin {
     private String eventId;
+    private String eventName;
     private String qrcodeImage;
     private ArrayList<String> signup;
     private HashMap<String, Integer> checkinCounts;
@@ -49,17 +56,19 @@ public class Checkin {
     private static final String TAG = "Checkin System";
 
     public interface Callback {
-        default void onSuccess(Map<String, Object> counts, ArrayList<String> current, ArrayList<String> signup){}
+        default void onSuccess(String eventName, Map<String, Object> counts, ArrayList<String> current, ArrayList<String> signup){}
         default void onSuccess(ArrayList<LatLng> locations){}
         default void onSuccess(GeoPoint geoPoint){}
+        default void onSuccessUpdate(ArrayList<Integer> countList){};
     }
 
     /**
      * Construct a new Checkin system instance
      * @param eventId The event which the checkin system attached to
      */
-    public Checkin(String eventId) {
+    public Checkin(String eventId, String eventName) {
         this.eventId = eventId;
+        this.eventName = eventName;
         this.qrcodeImage = "";
         this.signup = new ArrayList<>();
         this.checkinCounts = new HashMap<>();
@@ -74,6 +83,7 @@ public class Checkin {
     public void initializeDatabase() {
         HashMap<String, Object> data = new HashMap<>();
         data.put("eventId", eventId);
+        data.put("eventName", eventName);
         data.put("qrcode",qrcodeImage);
         data.put("signup", signup);
         data.put("checkinCounts", checkinCounts);
@@ -236,11 +246,12 @@ public class Checkin {
 
                 // Obtain the map
                 if (document.exists()) {
+                    String eventName = (String) document.getData().get("eventName");
                     HashMap <String, Object> counts = (HashMap<String, Object>) document.getData().get("checkinCounts");
                     ArrayList<String> current = (ArrayList<String>) document.getData().get("checkinCurrent");
                     ArrayList<String> signup = (ArrayList<String>) document.getData().get("signup");
 
-                    callback.onSuccess(counts, current, signup);
+                    callback.onSuccess(eventName, counts, current, signup);
                 }
             }
         });
@@ -280,6 +291,28 @@ public class Checkin {
                     }
                 });
     }
+
+    public static void addListenerToEvents(String eventId, int position, ArrayList<Integer> countList, Callback callback) {
+        DocumentReference docRef = collection.document(eventId);
+
+        // real-time listener
+        docRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
+            @Override
+            public void onEvent(@Nullable DocumentSnapshot snapshot,
+                                @Nullable FirebaseFirestoreException e) {
+
+                if (snapshot != null && snapshot.exists()) {
+                    Map<String, Object> data = snapshot.getData();
+                    int count = ((ArrayList<String>)data.get("checkinCurrent")).size();
+                    countList.set(position, count);
+                    callback.onSuccessUpdate(countList);
+                }
+            }
+        });
+
+    }
+
+
 
 
 
