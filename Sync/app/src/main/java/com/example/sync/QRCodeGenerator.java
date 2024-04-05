@@ -1,76 +1,41 @@
 package com.example.sync;
 
-import android.content.Context;
 import android.graphics.Bitmap;
-import android.net.Uri;
+import android.graphics.Color;
 
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.QRCodeWriter;
-import com.journeyapps.barcodescanner.BarcodeEncoder;
 
+/**
+ * Utility class for generating QR code bitmaps from content.
+ */
 public class QRCodeGenerator {
 
     /**
-     * Generates a QR Code bitmap from the given text.
+     * Generates a QR code bitmap for the given content with the specified width and height.
      *
-     * @param text The text to encode in the QR Code.
-     * @param width The desired width of the QR Code image.
-     * @param height The desired height of the QR Code image.
-     * @return A Bitmap containing the QR Code, or null if generation fails.
+     * @param content The content to encode in the QR code.
+     * @param width   The width of the QR code bitmap.
+     * @param height  The height of the QR code bitmap.
+     * @return The generated QR code bitmap, or null if an error occurs during generation.
      */
-    public static Bitmap generateQRCodeBitmap(String text, int width, int height) {
+    public static Bitmap generateQRCodeBitmap(String content, int width, int height) {
         QRCodeWriter writer = new QRCodeWriter();
         try {
-            BitMatrix bitMatrix = writer.encode(text, BarcodeFormat.QR_CODE, width, height);
-            BarcodeEncoder barcodeEncoder = new BarcodeEncoder();
-            return barcodeEncoder.createBitmap(bitMatrix);
+            BitMatrix bitMatrix = writer.encode(content, BarcodeFormat.QR_CODE, width, height);
+            Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.RGB_565);
+            for (int x = 0; x < width; x++) {
+                for (int y = 0; y < height; y++) {
+                    bitmap.setPixel(x, y, bitMatrix.get(x, y) ? Color.BLACK : Color.WHITE);
+                }
+            }
+            return bitmap;
         } catch (WriterException e) {
             e.printStackTrace();
             return null;
         }
     }
-
-    /**
-     * Generates a QR Code bitmap for check-in information and saves it as an image file.
-     *
-     * @param checkInInfo The check-in information to encode in the QR Code.
-     * @param width       The desired width of the QR Code image.
-     * @param height      The desired height of the QR Code image.
-     * @return The URI of the saved image file, or null if saving fails.
-     */
-    public static Uri generateAndSaveCheckInQRCode(String checkInInfo, int width, int height, Context context) {
-        // For check-in, you could structure the checkInInfo in a specific format
-        // Example: "CHECKIN:eventId:userID"
-        Bitmap qrCodeBitmap = generateQRCodeBitmap(checkInInfo, width, height);
-        if (qrCodeBitmap != null) {
-            return QRCodeFileSaver.saveBitmapAsImage(context, qrCodeBitmap, "SyncQR\\Sync\\qrcode");
-        } else {
-            return null;
-        }
-    }
-
-    /**
-     * Generates a QR Code bitmap that redirects to an event page and saves it as an image file.
-     *
-     * @param eventID The ID of the event page to encode in the QR Code.
-     * @param width   The desired width of the QR Code image.
-     * @param height  The desired height of the QR Code image.
-     * @return The URI of the saved image file, or null if saving fails.
-     */
-    public static Uri generateAndSaveEventPageQRCode(String eventID, int width, int height, Context context) {
-        // The eventPageURL should be a fully qualified URL
-        // Example: "EVENTID:eventId"
-        // This QR code, when scanned, will redirect users to the event page
-        Bitmap qrCodeBitmap = generateQRCodeBitmap(eventID, width, height);
-        if (qrCodeBitmap != null) {
-            return QRCodeFileSaver.saveBitmapAsImage(context, qrCodeBitmap, "SyncQR\\Sync\\qrcode");
-        } else {
-            return null;
-        }
-    }
-
 }
-
 

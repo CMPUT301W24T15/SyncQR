@@ -88,6 +88,18 @@ public class AttendeeDashboard extends AppCompatActivity implements LocationPerm
             }
         });
 
+        Button qrCodeButton = findViewById(R.id.qr_code_button);
+        qrCodeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(AttendeeDashboard.this, QRCodeActivity.class);
+                String userID = getIntent().getStringExtra("userID");
+                intent.putExtra("userID", userID);
+                startActivity(intent);
+            }
+
+        });
+
         Button checkInButton = findViewById(R.id.check_in_with_qr_button);
         checkInButton.setOnClickListener(new View.OnClickListener() {
             @Override

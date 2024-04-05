@@ -59,13 +59,13 @@ dependencies {
     annotationProcessor ("com.github.bumptech.glide:compiler:4.16.0")
     implementation ("com.google.firebase:firebase-messaging:23.4.1")
     implementation ("com.github.bumptech.glide:glide:4.16.0")
+    implementation ("com.google.zxing:core:3.4.1")
     annotationProcessor ("com.github.bumptech.glide:compiler:4.16.0")
     androidTestImplementation ("androidx.test.espresso:espresso-core:3.4.0")
     androidTestImplementation ("androidx.test.espresso:espresso-contrib:3.4.0")
     androidTestImplementation ("androidx.test.espresso:espresso-intents:3.4.0")
     androidTestImplementation ("androidx.test.ext:junit:1.1.3")
     androidTestImplementation ("androidx.test:core:1.4.0")
-
-
+    testImplementation ("org.mockito:mockito-core:5.11.0")
 
 }

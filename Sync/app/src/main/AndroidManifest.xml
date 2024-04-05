@@ -58,6 +58,8 @@
         <activity android:name=".OrganizerLogin"/>
         <activity android:name=".AdministratorLogin"/>
         <activity android:name=".NotificationActivity"/>
+        <activity android:name=".QRCodeActivity"
+            android:enableOnBackInvokedCallback="true"/>
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
