@@ -10,7 +10,10 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
@@ -19,6 +22,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+
+import javax.annotation.Nullable;
 
 /**
  * Event Model class to store related information and to be stored in database.
@@ -36,14 +41,6 @@ public class Event implements Serializable {
     private String eventDescription;
     private String poster;
     private Long organizerId;
-
-    /**
-     * Constructor for Event
-     */
-    // Empty constructor required by Firestore
-    public Event() {
-        // Default constructor required for Firestore
-    }
 
     /**
      * Constructor for creating an event
@@ -73,15 +70,30 @@ public class Event implements Serializable {
         this.organizerName = organizerName;
     }
 
+    public Event(String id, String eventName, Timestamp eventDate, String eventLocation, Long attendeeNumber, String organizerName, String eventDescription, String poster, Long organizerId) {
+
+        // eventID
+        // is set to a string for convenience!!
+
+        this.eventId = id;
+        this.eventName = eventName;
+        this.eventDate = eventDate;
+        this.eventLocation = eventLocation;
+        this.attendeeNumber = attendeeNumber;
+        this.eventDescription = eventDescription;
+        this.poster = poster;
+        this.organizerId = organizerId;
+        this.organizerName = organizerName;
+    }
+
+
     /**
      * Interface for callback function to be called when retrieving data from database
      */
     public interface Callback{
-        default void onSuccess(Event event) {
-        }
-
-        default void onSuccess(ArrayList<Event> eventArrayList) {
-        }
+        default void onSuccess(Event event){}
+        default void onSuccess(ArrayList<Event> eventArrayList) {}
+        default void onSuccessReturnId(ArrayList<String> idList){}
     }
 
     /**
@@ -131,7 +143,7 @@ public class Event implements Serializable {
      * This method return all events after current time
      * @param callback when event array is ready, it return the event array
      */
-    public static void getAllEventFromDatabase(Callback callback){
+    public static void getAllEventFromDatabase(Callback callback) {
         Timestamp current = new Timestamp(new Date());
         db.collection("Events")
                 .whereGreaterThanOrEqualTo("eventDate", current)
@@ -170,6 +182,9 @@ public class Event implements Serializable {
 
                             // notify finished
                             callback.onSuccess(eventArrayList);
+
+                            // add listener
+
                         }
                     }
                 });
@@ -200,11 +215,12 @@ public class Event implements Serializable {
                 .addOnFailureListener(e -> {
                 });
     }
+
     /**
      * Delete a specific event from the database given eventID
      * @param eventId eventID of the event to delete
      */
-    public void deleteEvent(String eventId){
+    public static void deleteEvent(String eventId){
         DocumentReference doc = db.collection("Events").document(eventId);
         doc.delete()
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -219,6 +235,41 @@ public class Event implements Serializable {
                         Log.w(TAG, "Error deleting document", e);
                     }
                 });
+    }
+
+    public static void getCreatedEventIdList(String userId, Callback callback) {
+        db.collection("Accounts")
+                .document(userId)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        DocumentSnapshot document = task.getResult();
+
+                        // Obtain the id list of events created by this user
+                        if (document.exists()) {
+                            ArrayList<String> idList = (ArrayList<String>) document.getData().get("createdevents");
+                            callback.onSuccessReturnId(idList);
+                        }
+                    }
+                });
+    }
+
+    public  static void addCreatedEventListener(String userId, Callback callback) {
+        DocumentReference docRef = db.collection("Accounts").document(userId);
+        docRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
+            @Override
+            public void onEvent(@Nullable DocumentSnapshot snapshot, @Nullable FirebaseFirestoreException e) {
+
+                if (snapshot != null && snapshot.exists()) {
+                    Map<String, Object> data = snapshot.getData();
+                    ArrayList<String> idList = (ArrayList<String>) data.get("createdevents");
+                    if (idList.size() != 0){
+                        callback.onSuccessReturnId(idList);
+                    }
+                }
+            }
+        });
     }
 
 
