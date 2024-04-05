@@ -1,6 +1,5 @@
 package com.example.sync;
 
-import android.telecom.Call;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -11,7 +10,6 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -20,7 +18,6 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.io.Serializable;
-import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -203,7 +200,7 @@ public class Event implements Serializable {
                 });
     }
 
-    public void deleteEvent(String eventId){
+    public static void deleteEvent(String eventId){
         DocumentReference doc = db.collection("Events").document(eventId);
         doc.delete()
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
