@@ -2,46 +2,33 @@ package com.example.sync;
 
 import static com.google.firebase.firestore.FieldValue.arrayRemove;
 
-import android.app.Activity;
-import android.content.Context;
-import android.content.pm.PackageManager;
-import android.net.Uri;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
-import androidx.core.app.ActivityCompat;
 
-import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.firestore.EventListener;
-
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.GeoPoint;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
-import android.location.Location;
-
-
-
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.annotation.Nullable;
-
-import kotlinx.coroutines.tasks.TasksKt;
 
 public class Checkin {
     private String eventId;
@@ -54,6 +41,7 @@ public class Checkin {
     private static FirebaseFirestore db = FirebaseFirestore.getInstance();
     private static CollectionReference collection = db.collection("Checkin System");
     private static final String TAG = "Checkin System";
+    private FusedLocationProviderClient fusedLocationClient;
 
     public interface Callback {
         default void onSuccess(String eventName, Map<String, Object> counts, ArrayList<String> current, ArrayList<String> signup){}
@@ -94,6 +82,7 @@ public class Checkin {
 
     }
 
+
     /**
      * Adds the user's ID to the "signup" list in the "Checkin" system for a specific event.
      *
@@ -124,7 +113,7 @@ public class Checkin {
 
                 // Obtain the map
                 if (document.exists()) {
-                    HashMap <String, Object> counts = (HashMap<String, Object>) document.getData().get("checkinCounts");
+                    HashMap <String, Long> counts = (HashMap<String, Long>) document.getData().get("checkinCounts");
 
                     // handle new value
                     if (counts != null && counts.containsKey(userId)) {
@@ -135,6 +124,10 @@ public class Checkin {
                     }
 
                     // update
+                    Set<String> keySet = counts.keySet();
+                    String[] keysArray = keySet.toArray(new String[0]);
+                    String firstKey = keysArray[0];
+                    System.out.println("First Key: " + firstKey);
                     doc.update("checkinCounts", counts)
                             .addOnSuccessListener(new OnSuccessListener<Void>() {
                                 @Override
@@ -177,43 +170,41 @@ public class Checkin {
                 .addOnFailureListener(e -> Log.w(TAG, "Error adding user to location list.", e));
     }
 
-    /**
-     * Ask permission from the user and acquire their location
-     * @param context The context of the app
-     * @param callback A callback returned the location once the result sent back
-     */
-    private static void getLocationFromUser(Context context, Callback callback){
-        FusedLocationProviderClient fusedLocationClient = LocationServices.getFusedLocationProviderClient(context);
-        if (ActivityCompat.checkSelfPermission(context, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(context, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // Request permission if not granted
-            int MY_PERMISSIONS_REQUEST_LOCATION = 1031;
-            ActivityCompat.requestPermissions((Activity) context, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION, android.Manifest.permission.ACCESS_COARSE_LOCATION}, MY_PERMISSIONS_REQUEST_LOCATION);
-        }
-        fusedLocationClient.getLastLocation().addOnSuccessListener((Activity) context, new OnSuccessListener<Location>() {
-            @Override
-            public void onSuccess(Location location) {
-                if (location != null) {
-                    double latitude = location.getLatitude();
-                    double longitude = location.getLongitude();
-                    callback.onSuccess(new GeoPoint(latitude, longitude));
-                }
-            }
-        });
-    }
+//    /**
+//     * Ask permission from the user and acquire their location
+//     * @param context The context of the app
+//     * @param callback A callback returned the location once the result sent back
+//     */
+//    private static void getLocationFromUser(Context context, Callback callback){
+//        FusedLocationProviderClient fusedLocationClient = LocationServices.getFusedLocationProviderClient(context);
+//        if (ActivityCompat.checkSelfPermission(context, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(context, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+//            // Request permission if not granted
+//            int MY_PERMISSIONS_REQUEST_LOCATION = 1031;
+//            ActivityCompat.requestPermissions((Activity) context, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION, android.Manifest.permission.ACCESS_COARSE_LOCATION}, MY_PERMISSIONS_REQUEST_LOCATION);
+//        }
+//        fusedLocationClient.getLastLocation().addOnSuccessListener((Activity) context, new OnSuccessListener<Location>() {
+//            @Override
+//            public void onSuccess(Location location) {
+//                if (location != null) {
+//                    double latitude = location.getLatitude();
+//                    double longitude = location.getLongitude();
+//                    callback.onSuccess(new GeoPoint(latitude, longitude));
+//                }
+//            }
+//        });
+//    }
 
     /**
      * When the qr code is scanned, updated the three of the lists at the same time
-     * @param context The context of the app
      * @param eventId The id of the correspondent event
      * @param userId The id of the correspondent user
+     * @param geoPoint The geoPoint of the correspondent user
      */
-    public static void checkInForUser(Context context, String eventId, String userId) {
-        getLocationFromUser(context, new Callback() {
-            @Override
-            public void onSuccess(GeoPoint geoPoint) {
-                updateLocation(eventId, geoPoint);
-            }
-        });
+    public static void checkInForUser(String eventId, String userId, GeoPoint geoPoint) {
+        // Immediately update the location with the GeoPoint provided
+        updateLocation(eventId, geoPoint);
+
+        // Proceed with other updates that do not depend on the location
         updateCheckinCurrent(eventId, userId);
         updateCheckinCounts(eventId, userId);
     }

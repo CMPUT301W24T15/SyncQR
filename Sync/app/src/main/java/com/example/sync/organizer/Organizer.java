@@ -13,7 +13,7 @@ public class Organizer extends User {
 
 
     public Organizer(String userID, String username, String password, Profile profile, String position, ArrayList<Event> signupevents, ArrayList<Event> createdevents) {
-        super(userID, username, password, profile, position, signupevents, createdevents);
+        super(userID, username, password, profile, signupevents, createdevents);
     }
 
     @Override

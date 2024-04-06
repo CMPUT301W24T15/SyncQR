@@ -24,18 +24,11 @@
             android:layout_alignParentEnd="true" />
 
         <Button
-            android:id="@+id/qr_code_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="QR Code"
-            android:layout_toStartOf="@id/profile_image_top_right" />
-
-        <Button
             android:id="@+id/permission_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Permission"
-            android:layout_toStartOf="@id/qr_code_button"/>
+            android:layout_toStartOf="@id/profile_image_top_right"/>
 
     </RelativeLayout>
 
