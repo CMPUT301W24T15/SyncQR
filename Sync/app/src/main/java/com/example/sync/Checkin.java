@@ -32,7 +32,6 @@ import javax.annotation.Nullable;
 public class Checkin {
     private String eventId;
     private String eventName;
-    private String qrcodeImage;
     private ArrayList<String> signup;
     private HashMap<String, Integer> checkinCounts;
     private ArrayList<String> checkinCurrent;
@@ -46,7 +45,7 @@ public class Checkin {
         default void onSuccess(String eventName, Map<String, Object> counts, ArrayList<String> current, ArrayList<String> signup){}
         default void onSuccess(ArrayList<LatLng> locations){}
         default void onSuccess(GeoPoint geoPoint){}
-        default void onSuccessUpdate(ArrayList<Integer> countList){};
+        default void onSuccessUpdate(int newCount){};
     }
 
     /**
@@ -56,7 +55,6 @@ public class Checkin {
     public Checkin(String eventId, String eventName) {
         this.eventId = eventId;
         this.eventName = eventName;
-        this.qrcodeImage = "";
         this.signup = new ArrayList<>();
         this.checkinCounts = new HashMap<>();
         this.checkinCurrent = new ArrayList<>();
@@ -71,7 +69,6 @@ public class Checkin {
         HashMap<String, Object> data = new HashMap<>();
         data.put("eventId", eventId);
         data.put("eventName", eventName);
-        data.put("qrcode",qrcodeImage);
         data.put("signup", signup);
         data.put("checkinCounts", checkinCounts);
         data.put("checkinCurrent", checkinCurrent);
@@ -200,24 +197,8 @@ public class Checkin {
     //public static void checkInForUser(String eventId, String userId, GeoPoint geoPoint) {
     public static void checkInForUser(String eventId, String userId) {
         // Query for the user document with the matching userId
-        db.collection("Accounts").whereEqualTo("userID", userId).get()
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        for (DocumentSnapshot document : task.getResult()) {
-                            if (document.exists()) {
-                                // Found the user document, now update it
-                                DocumentReference userRef = document.getReference();
-                                userRef.update("checkinevents", FieldValue.arrayUnion(eventId))
-                                        .addOnSuccessListener(aVoid -> Log.d(TAG, "Event added to user's check-in events successfully."))
-                                        .addOnFailureListener(e -> Log.w(TAG, "Error adding event to user's check-in events.", e));
-                            } else {
-                                Log.d(TAG, "No such user document with given userId");
-                            }
-                        }
-                    } else {
-                        Log.d(TAG, "Error finding user document: ", task.getException());
-                    }
-                });
+        registerCheckinForUser(eventId, userId);
+
         // Immediately update the location with the GeoPoint provided
         //updateLocation(eventId, geoPoint);
 
@@ -300,7 +281,28 @@ public class Checkin {
                 });
     }
 
-    public static void addListenerToEvents(String eventId, int position, ArrayList<Integer> countList, Callback callback) {
+    public static void registerCheckinForUser(String eventId, String userId){
+        db.collection("Accounts").whereEqualTo("userID", userId).get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        for (DocumentSnapshot document : task.getResult()) {
+                            if (document.exists()) {
+                                // Found the user document, now update it
+                                DocumentReference userRef = document.getReference();
+                                userRef.update("checkinevents", FieldValue.arrayUnion(eventId))
+                                        .addOnSuccessListener(aVoid -> Log.d(TAG, "Event added to user's check-in events successfully."))
+                                        .addOnFailureListener(e -> Log.w(TAG, "Error adding event to user's check-in events.", e));
+                            } else {
+                                Log.d(TAG, "No such user document with given userId");
+                            }
+                        }
+                    } else {
+                        Log.d(TAG, "Error finding user document: ", task.getException());
+                    }
+                });
+    }
+
+    public static void addListenerToEvent(String eventId, int position, ArrayList<Integer> oldCount, Callback callback) {
         DocumentReference docRef = collection.document(eventId);
 
         // real-time listener
@@ -311,9 +313,12 @@ public class Checkin {
 
                 if (snapshot != null && snapshot.exists()) {
                     Map<String, Object> data = snapshot.getData();
-                    int count = ((ArrayList<String>)data.get("checkinCurrent")).size();
-                    countList.set(position, count);
-                    callback.onSuccessUpdate(countList);
+                    int newCount = ((ArrayList<String>)data.get("checkinCurrent")).size();
+
+                    // Check if the current checkin list has changed
+                    if (newCount != oldCount.get(position)) {
+                        callback.onSuccessUpdate(newCount);
+                    }
                 }
             }
         });
@@ -332,13 +337,6 @@ public class Checkin {
         this.eventId = eventId;
     }
 
-    public String getQrcodeImage() {
-        return qrcodeImage;
-    }
-
-    public void setQrcodeImage(String qrcodeImage) {
-        this.qrcodeImage = qrcodeImage;
-    }
 
     public ArrayList<String> getSignup() {
         return signup;

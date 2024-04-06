@@ -1,5 +1,9 @@
 package com.example.sync.organizer;
 
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,17 +15,19 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.bumptech.glide.Glide;
 import com.example.sync.Event;
 import com.example.sync.R;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.text.SimpleDateFormat;
+import java.util.Objects;
 
-/**
- * Fragment to display information of an event.
- */
 public class DisplayFrag extends Fragment {
 
-    ImageView poster; // has not been implemented. implement when connect to database
+    ImageView poster;
     TextView name;
     TextView date;
     TextView location;
@@ -53,7 +59,7 @@ public class DisplayFrag extends Fragment {
         location = view.findViewById(R.id.location);
         organizer = view.findViewById(R.id.organizer);
         description = view.findViewById(R.id.description);
-
+        poster = view.findViewById(R.id.poster);
     }
 
     @Override
@@ -75,7 +81,12 @@ public class DisplayFrag extends Fragment {
             organizer.setText(event_organizer);
 
             description.setText(event.getEventDescription());
-        }
 
+            if (!Objects.equals(event.getPoster(), "")) {
+                Glide.with(requireContext())
+                        .load(event.getPoster())
+                        .into(poster);
+            }
+        }
     }
 }

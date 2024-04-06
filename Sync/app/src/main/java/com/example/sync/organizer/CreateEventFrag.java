@@ -1,6 +1,8 @@
 package com.example.sync.organizer;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -18,23 +20,27 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
+import com.example.sync.Attendee;
 import com.example.sync.Checkin;
+import com.example.sync.Database;
 import com.example.sync.Event;
 import com.example.sync.R;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.Timestamp;
 
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Objects;
+import java.util.logging.SimpleFormatter;
 
-/**
- * Fragment that helps an organizer to create events.
- * Organizers can edit event details such as name, location, date, description, and attendee limit.
- */
 public class CreateEventFrag extends Fragment {
     ActivityResultLauncher<PickVisualMediaRequest> pickMedia;
     Button create;
@@ -43,17 +49,21 @@ public class CreateEventFrag extends Fragment {
     TextInputEditText name;
     TextInputEditText date;
     TextInputEditText location;
+    TextInputEditText organizer;
     TextInputEditText attendeeNum;
     TextInputEditText description;
 
 
     Toolbar toolbar;
-    Uri imageuri;
+    Bitmap imageBitmap;
     FragListener listener;
 
-    static CreateEventFrag newInstance() {
+    static CreateEventFrag newInstance(String userId) {
         // create the fragment instance
         CreateEventFrag fragment = new CreateEventFrag();
+        Bundle args = new Bundle();
+        args.putString("userID", userId);
+        fragment.setArguments(args);
         return fragment;
     }
 
@@ -82,15 +92,18 @@ public class CreateEventFrag extends Fragment {
                 registerForActivityResult(new ActivityResultContracts.PickVisualMedia(), uri -> {
                     // Callback is invoked after the user selects a media item or closes the
                     // photo picker.
-                    imageuri = uri;
                     if (uri != null) {
                         Log.d("PhotoPicker", "Selected URI: " + uri);
                         try {
-                            InputStream inputStream = getContext().getContentResolver().openInputStream(imageuri);
+                            InputStream inputStream = getContext().getContentResolver().openInputStream(uri);
                             image.setImageURI(null);
-                            image.setImageURI(imageuri);
+                            image.setImageURI(uri);
+                            imageBitmap = BitmapFactory.decodeStream(inputStream);
+                            inputStream.close();
 
                         } catch (FileNotFoundException e) {
+                            throw new RuntimeException(e);
+                        } catch (IOException e) {
                             throw new RuntimeException(e);
                         }
                     } else {
@@ -118,6 +131,7 @@ public class CreateEventFrag extends Fragment {
         name = view.findViewById(R.id.name_input);
         date = view.findViewById(R.id.date_input);
         location = view.findViewById(R.id.location_input);
+        organizer = view.findViewById(R.id.organizerName_input);
         attendeeNum = view.findViewById(R.id.attendeeNum_input);
         description = view.findViewById(R.id.description_input);
     }
@@ -125,6 +139,11 @@ public class CreateEventFrag extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
+
+        // acquire userID
+        Bundle args = getArguments();
+        assert args != null;
+        String userId = args.getString("userID");
 
         upload.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -148,16 +167,21 @@ public class CreateEventFrag extends Fragment {
         create.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                saveEvent();
+                try {
+                    saveEvent(userId);
+                } catch (ParseException e) {
+                    throw new RuntimeException(e);
+                }
             }
         });
     }
 
-    public void saveEvent(){
+    public void saveEvent(String userId) throws ParseException {
         // obtain data
         String nameText = name.getText().toString();
         String dateText = date.getText().toString();
         String locationText = location.getText().toString();
+        String organizerText = organizer.getText().toString();
         String attendeeNumText = attendeeNum.getText().toString();
         String descriptionText = description.getText().toString();
 
@@ -166,38 +190,58 @@ public class CreateEventFrag extends Fragment {
         if (dateText.isEmpty()) {date.setError("Required.");}
         if (locationText.isEmpty()) {location.setError("Required.");}
         if (attendeeNumText.isEmpty()){attendeeNumText = "0";}
-        if (imageuri == null) {
-            int drawableId = R.drawable.welcomeevent;
-            imageuri = Uri.parse("android.resource://" + "com.example.sync/" + drawableId);
+
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+        Date date = sdf.parse(dateText);
+
+        // store data into database
+        // ********************* change organizer to account ******************
+        Timestamp timestamp = new Timestamp(date);
+        Event event = new Event(nameText, timestamp, locationText, (long)Integer.parseInt(attendeeNumText),
+                organizerText, descriptionText, "", userId);
+
+        // store poster
+        if (imageBitmap != null) {
+            String path = "poster/" + event.getEventId() + ".png";
+            Database.storeImage(imageBitmap, path, new Database.Callback() {
+                @Override
+                public void onSuccess(String uri) {
+                    event.setPoster(uri);
+
+                    // if successfully, initialize all database
+                    // Event: save the new event into database
+                    // Checkin: create a new checkin system accompanied with the event
+                    // Account: record that the user has created a new event (record the eventid)
+                    // Toast: notify user
+
+                    initializeEventProcess(event, userId);
+
+                }
+            });
+        } else {
+            initializeEventProcess(event, userId);
         }
-        String uri = imageuri.toString();
-
-
-        try {
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-            Date date = sdf.parse(dateText);
-
-            // store data into database
-            // ********************* change organizer to account ******************
-            Timestamp timestamp = new Timestamp(date);
-            Event event = new Event(nameText, timestamp, locationText, (long)Integer.parseInt(attendeeNumText),
-                    "yiqing", descriptionText, uri, (long)1718521);
-            event.saveEventToDatabase();
-
-            // create a checkin system for the event
-            Checkin checkin = new Checkin(event.getEventId(), event.getEventName());
-            checkin.initializeDatabase();
-
-            // notify user
-            Toast.makeText(getContext(), "Successful! View it from Event List!", Toast.LENGTH_LONG).show();
-        } catch (ParseException e){
-            date.setError("Invalid Format.");
-        }
-
 
 
 
     }
+
+    public void initializeEventProcess(Event event, String userId){
+        // save event
+        event.saveEventToDatabase();
+
+        // create a checkin system for the event
+        Checkin checkin = new Checkin(event.getEventId(), event.getEventName());
+        checkin.initializeDatabase();
+
+        // record history for user
+        Event.registerInAccount(userId, event.getEventId());
+
+        // notify user
+        Toast.makeText(getContext(), "Successful! View it from Event List!", Toast.LENGTH_LONG).show();
+    }
+
 }
 
 

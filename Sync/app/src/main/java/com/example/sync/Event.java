@@ -12,6 +12,7 @@ import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -40,7 +41,7 @@ public class Event implements Serializable {
     private String organizerName;
     private String eventDescription;
     private String poster;
-    private Long organizerId;
+    private String organizerId;
 
     /**
      * Constructor for creating an event
@@ -54,7 +55,7 @@ public class Event implements Serializable {
      * @param poster url of the poster image
      * @param organizerId userID of the organizer
      */
-    public Event(String eventName, Timestamp eventDate, String eventLocation, Long attendeeNumber, String organizerName, String eventDescription, String poster, Long organizerId) {
+    public Event(String eventName, Timestamp eventDate, String eventLocation, Long attendeeNumber, String organizerName, String eventDescription, String poster, String organizerId) {
 
         // eventID
         // is set to a string for convenience!!
@@ -70,7 +71,7 @@ public class Event implements Serializable {
         this.organizerName = organizerName;
     }
 
-    public Event(String id, String eventName, Timestamp eventDate, String eventLocation, Long attendeeNumber, String organizerName, String eventDescription, String poster, Long organizerId) {
+    public Event(String id, String eventName, Timestamp eventDate, String eventLocation, Long attendeeNumber, String organizerName, String eventDescription, String poster, String organizerId) {
 
         // eventID
         // is set to a string for convenience!!
@@ -122,7 +123,7 @@ public class Event implements Serializable {
                                 String location = (String) data.get("eventLocation") ;
                                 Long limit = (Long) data.get("attendeeNumber");
                                 String organizerName = (String) data.get("organizerName");
-                                Long organizerId = (Long) data.get("organizerId");
+                                String organizerId = (String) data.get("organizerId");
                                 String eventDescription = (String) data.get("eventDescription");
                                 String poster = (String) data.get("poster");
 
@@ -167,7 +168,7 @@ public class Event implements Serializable {
                                 String location = (String) data.get("eventLocation") ;
                                 Long limit = (Long) data.get("attendeeNumber");
                                 String organizerName = (String) data.get("organizerName");
-                                Long organizerId = (Long) data.get("organizerId");
+                                String organizerId = (String) data.get("organizerId");
                                 String eventDescription = (String) data.get("eventDescription");
                                 String poster = (String) data.get("poster");
 
@@ -183,7 +184,6 @@ public class Event implements Serializable {
                             // notify finished
                             callback.onSuccess(eventArrayList);
 
-                            // add listener
 
                         }
                     }
@@ -255,22 +255,44 @@ public class Event implements Serializable {
                 });
     }
 
-    public  static void addCreatedEventListener(String userId, Callback callback) {
-        DocumentReference docRef = db.collection("Accounts").document(userId);
-        docRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
-            @Override
-            public void onEvent(@Nullable DocumentSnapshot snapshot, @Nullable FirebaseFirestoreException e) {
-
-                if (snapshot != null && snapshot.exists()) {
-                    Map<String, Object> data = snapshot.getData();
-                    ArrayList<String> idList = (ArrayList<String>) data.get("createdevents");
-                    if (idList.size() != 0){
-                        callback.onSuccessReturnId(idList);
+    public static void registerInAccount(String userId, String eventId) {
+        db.collection("Accounts").whereEqualTo("userID", userId).get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        for (DocumentSnapshot document : task.getResult()) {
+                            if (document.exists()) {
+                                // Found the user document, now update it
+                                DocumentReference userRef = document.getReference();
+                                userRef.update("createdevents", FieldValue.arrayUnion(eventId))
+                                        .addOnSuccessListener(aVoid -> Log.d(TAG, "Event added to user's created events successfully."))
+                                        .addOnFailureListener(e -> Log.w(TAG, "Error adding event to user's created events.", e));
+                            } else {
+                                Log.d(TAG, "No such user document with given userId");
+                            }
+                        }
+                    } else {
+                        Log.d(TAG, "Error finding user document: ", task.getException());
                     }
-                }
-            }
-        });
+                });
     }
+
+
+    public static void removePoster(String eventId) {
+        DocumentReference doc = db.collection("Events").document(eventId);
+        Map<String, Object> data = new HashMap<>();
+        data.put("poster", "");
+
+        doc.update(data)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d(TAG, "Poster removed successfully");
+                    }
+                });
+    }
+
+
+
 
 
     /**
@@ -333,11 +355,11 @@ public class Event implements Serializable {
         this.poster = poster;
     }
 
-    public Long getOrganizerId() {
+    public String getOrganizerId() {
         return organizerId;
     }
 
-    public void setOrganizerId(Long organizerId) {
+    public void setOrganizerId(String organizerId) {
         this.organizerId = organizerId;
     }
 
