@@ -246,7 +246,7 @@ public class ProfileActivity extends AppCompatActivity {
      */
     private void removeProfileImage() {
         // Set to default image or clear
-        userImageInput.setImageResource(R.drawable.uploadimage);
+        userImageInput.resetToDefault();
     }
     /**
      * Handles the result of picking an image from the device.
