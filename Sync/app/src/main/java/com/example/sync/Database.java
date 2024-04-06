@@ -1,13 +1,24 @@
 package com.example.sync;
 
+import android.graphics.Bitmap;
+
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
+
+import java.io.ByteArrayOutputStream;
 import java.util.HashMap;
 
 /**
  * Helper class for performing database operations.
  */
 public class Database {
+
+    public interface Callback{
+        void onSuccess(String uri);
+    }
 
     /**
      * Adds an entry to the specified collection in Firestore.
@@ -33,6 +44,20 @@ public class Database {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         CollectionReference currentRef = db.collection(collectionName);
         currentRef.document(key).set(value);
+    }
+
+    public static void storeImage(Bitmap bitmap, String pathInStorage, Callback callback){
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
+        byte[] data = baos.toByteArray();
+
+        StorageReference storageRef = FirebaseStorage.getInstance().getReference().child(pathInStorage);
+        UploadTask uploadTask = storageRef.putBytes(data);
+        uploadTask.addOnSuccessListener(taskSnapshot -> storageRef.getDownloadUrl().addOnSuccessListener(uri -> {
+            if (callback != null) {
+                callback.onSuccess(uri.toString());
+            }
+        }));
     }
 }
 

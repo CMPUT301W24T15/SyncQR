@@ -108,10 +108,10 @@ public class QrCodeDialog extends DialogFragment {
 
     private void generateQRcode(){
         if (!reuse) {
-            bitmap = QRCodeGenerator.generateQRCodeBitmap(input, 300, 300);
+            bitmap = QRCodeGenerator.generateQRCodeBitmap("checkin"+input, 300, 300);
         } else {
             String random = RandomStringGenerator.generateRandomString(20);
-            bitmap = QRCodeGenerator.generateQRCodeBitmap(random, 300, 300);
+            bitmap = QRCodeGenerator.generateQRCodeBitmap("checkin"+random, 300, 300);
         }
         qrcode.setImageBitmap(bitmap);
 

@@ -47,34 +47,52 @@ public class OrganizerDashboard extends AppCompatActivity implements FragListene
         recyclerView = dashboard.findViewById(R.id.recycler_view);
 
         // initialize list for milestones
+        // ****************** change to userId intent ***************
         Event.getCreatedEventIdList("1718521", new Event.Callback() {
             @Override
             public void onSuccessReturnId(ArrayList<String> ids) {
                 idList = ids;
+                if (!idList.isEmpty()) {
+                    for (String id : idList) {
+                        Checkin.getListFromDatabase(id, new Checkin.Callback() {
+                            @Override
+                            public void onSuccess(String eventName, Map<String, Object> counts, ArrayList<String> current, ArrayList<String> signup) {
+                                countList.add(current.size());
+                                nameList.add(eventName);
 
-                // if initially the user does not create any events
-                if (idList.isEmpty()) {
-                    Event.addCreatedEventListener("1718521", new Event.Callback() {
-                        @Override
-                        public void onSuccessReturnId(ArrayList<String> idList) {
-                            addMillstoneListener(idList);
-                        }
-                    });
+                                // add listener for each event
+                                int index = idList.indexOf(id);
+                                Checkin.addListenerToEvent(id, index, countList, new Checkin.Callback() {
+                                    @Override
+                                    public void onSuccessUpdate(int newCount) {
+                                        if (adapter!=null) {
+                                            countList.set(index, newCount);
+                                            adapter.notifyItemChanged(index);
+                                        }
+                                    }
+                                });
 
-                    // if initially the user has created some events
-                }else {
-                    addMillstoneListener(idList);
+                                if (nameList.size() == idList.size()) {
+
+                                    // Set RecyclerView adapter
+                                    recyclerView.setLayoutManager(new LinearLayoutManager(OrganizerDashboard.this));
+                                    adapter = new EventRecyclerAdapter(nameList, countList);
+                                    recyclerView.setAdapter(adapter);
+                                }
+                            }
+                        });
+                    }
                 }
             }
         });
-
 
 
         // click listeners
         createEvent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                CreateEventFrag createEventFrag = CreateEventFrag.newInstance();
+                // ****************** change to userId intent ***************
+                CreateEventFrag createEventFrag = CreateEventFrag.newInstance("1718521");
                 FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
                 transaction.replace(R.id.fragment_container, createEventFrag);
                 transaction.addToBackStack(null);
@@ -88,7 +106,8 @@ public class OrganizerDashboard extends AppCompatActivity implements FragListene
         viewEvent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ViewEventsFrag viewEventsFrag = ViewEventsFrag.newInstance();
+                // ****************** change to userId intent ***************
+                ViewEventsFrag viewEventsFrag = ViewEventsFrag.newInstance("1718521");
                 FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
                 transaction.replace(R.id.fragment_container, viewEventsFrag);
                 transaction.addToBackStack(null);
@@ -107,39 +126,38 @@ public class OrganizerDashboard extends AppCompatActivity implements FragListene
         getSupportFragmentManager().beginTransaction().remove(frag).commit();
         dashboard.setVisibility(View.VISIBLE);
         fragmentContainer.setVisibility(View.GONE);
-    }
 
-    private void addMillstoneListener(ArrayList<String> idList){
+        // Add new event to dashboard
+        // ****************** change to userId intent ***************
+        Event.getCreatedEventIdList("1718521", new Event.Callback() {
+            @Override
+            public void onSuccessReturnId(ArrayList<String> newList) {
+                if (!idList.equals(newList)) {
+                    idList = newList;
+                    String lastID = newList.get(newList.size() - 1);
+                    Checkin.getListFromDatabase(lastID, new Checkin.Callback() {
+                        @Override
+                        public void onSuccess(String eventName, Map<String, Object> counts, ArrayList<String> current, ArrayList<String> signup) {
+                            nameList.add(eventName);
+                            countList.add(current.size());
+                            adapter.notifyItemChanged(nameList.size() - 1);
 
-        // iterate each event id to get their checkin-system (obtain event name and real-time attendance)
-        for(String id: idList) {
-            Checkin.getListFromDatabase(id, new Checkin.Callback() {
-                @Override
-                public void onSuccess(String eventName, Map<String, Object> counts, ArrayList<String> current, ArrayList<String> signup) {
-                    countList.add(current.size());
-                    nameList.add(eventName);
-
-                    if (nameList.size() == idList.size()) {
-
-                        // Set RecyclerView adapter
-                        recyclerView.setLayoutManager(new LinearLayoutManager(OrganizerDashboard.this));
-                        adapter = new EventRecyclerAdapter(nameList, countList);
-                        recyclerView.setAdapter(adapter);
-
-                        // milestone listener
-                        for (String id: idList) {
-                            int position = idList.indexOf(id);
-                            Checkin.addListenerToEvents(id, position, countList, new Checkin.Callback() {
+                            // add listener for new event
+                            int index = idList.size()-1;
+                            Checkin.addListenerToEvent(lastID, index, countList, new Checkin.Callback() {
                                 @Override
-                                public void onSuccessUpdate(ArrayList<Integer> newList) {
-                                    countList = newList;
-                                    adapter.notifyItemChanged(position);
+                                public void onSuccessUpdate(int newCount) {
+                                    if (adapter!=null) {
+                                        countList.set(index, newCount);
+                                        adapter.notifyItemChanged(index);
+                                    }
                                 }
                             });
                         }
-                    }
+                    });
+
                 }
-            });
-        }
+            }
+        });
     }
 }
