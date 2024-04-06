@@ -41,7 +41,8 @@
         <activity android:name=".AdministratorDashboard" />
         <activity android:name=".ProfileActivity"/>
         <activity android:name=".AttendeeDashboard" />
-        <activity android:name=".QRCodeScanActivity"/>
+        <activity android:name=".QRCodeScanActivity"
+            android:enableOnBackInvokedCallback="true"/>
         <activity android:name=".AttendeeLogin"/>
         <activity android:name=".OrganizerLogin"/>
         <activity android:name=".AdministratorLogin"/>

@@ -20,7 +20,6 @@ public class User extends AppCompatActivity {
     private String username;
     private String password;
     private Profile profile;
-    private String position;
     private ArrayList<Event> signupevents;
     private ArrayList<Event> createdevents;
 
@@ -33,7 +32,6 @@ public class User extends AppCompatActivity {
         username = "Visitor";
         password = "";
         profile = new Profile(userID,username,"https://avatar.iran.liara.run/public","","");
-        position = "Attendee";
         signupevents = new ArrayList<Event>();
         createdevents = new ArrayList<Event>();
     }
@@ -44,16 +42,14 @@ public class User extends AppCompatActivity {
      * @param username The username of the user.
      * @param password The password of the user.
      * @param profile The profile of the user.
-     * @param position The position of the user.
      * @param signupevents The events the user has signed up for.
      * @param createdevents The events the user has created.
      */
-    public User(String userID, String username, String password, Profile profile, String position, ArrayList<Event> signupevents, ArrayList<Event> createdevents) {
+    public User(String userID, String username, String password, Profile profile, ArrayList<Event> signupevents, ArrayList<Event> createdevents) {
         this.userID = userID;
         this.username = username;
         this.password = password;
         this.profile = profile;
-        this.position = position;
         this.signupevents = signupevents;
         this.createdevents = createdevents;
     }
@@ -67,7 +63,6 @@ public class User extends AppCompatActivity {
         userData.put("username", username);
         userData.put("password", password);
         userData.put("profile", profile);
-        userData.put("position", position);
         userData.put("signupevents", signupevents);
         userData.put("createdevents", createdevents);
 
@@ -130,14 +125,6 @@ public class User extends AppCompatActivity {
     }
     public void setProfilePhoneNumber(String phoneNumber) {
         this.profile.setPhoneNumber(phoneNumber);
-    }
-
-    public String getPosition() {
-        return position;
-    }
-
-    public void setPosition(String position) {
-        this.position = position;
     }
 
     public ArrayList<Event> getSignUpEvents() {
