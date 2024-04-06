@@ -22,6 +22,7 @@ public class User extends AppCompatActivity {
     private Profile profile;
     private ArrayList<Event> signupevents;
     private ArrayList<Event> createdevents;
+    private ArrayList<Event> checkinevents;
 
     /**
      * Constructs a new User object with default values.
@@ -34,6 +35,7 @@ public class User extends AppCompatActivity {
         profile = new Profile(userID,username,"https://avatar.iran.liara.run/public","","");
         signupevents = new ArrayList<Event>();
         createdevents = new ArrayList<Event>();
+        checkinevents = new ArrayList<Event>();
     }
 
     /**
@@ -45,13 +47,14 @@ public class User extends AppCompatActivity {
      * @param signupevents The events the user has signed up for.
      * @param createdevents The events the user has created.
      */
-    public User(String userID, String username, String password, Profile profile, ArrayList<Event> signupevents, ArrayList<Event> createdevents) {
+    public User(String userID, String username, String password, Profile profile, ArrayList<Event> signupevents, ArrayList<Event> createdevents, ArrayList<Event> checkinevents) {
         this.userID = userID;
         this.username = username;
         this.password = password;
         this.profile = profile;
         this.signupevents = signupevents;
         this.createdevents = createdevents;
+        this.checkinevents = checkinevents;
     }
 
     /**
@@ -65,6 +68,7 @@ public class User extends AppCompatActivity {
         userData.put("profile", profile);
         userData.put("signupevents", signupevents);
         userData.put("createdevents", createdevents);
+        userData.put("checkinevents", checkinevents);
 
 
         db.collection("Accounts").document(userID).set(userData)
@@ -141,5 +145,13 @@ public class User extends AppCompatActivity {
 
     public void setCreatedEvents(ArrayList<Event> events) {
         this.createdevents = events;
+    }
+
+    public ArrayList<Event> getCheckinEvents() {
+        return checkinevents;
+    }
+
+    public void setCheckinEvents(ArrayList<Event> events) {
+        this.checkinevents = events;
     }
 }

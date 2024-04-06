@@ -26,7 +26,6 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 
 import javax.annotation.Nullable;
 
@@ -113,21 +112,18 @@ public class Checkin {
 
                 // Obtain the map
                 if (document.exists()) {
-                    HashMap <String, Long> counts = (HashMap<String, Long>) document.getData().get("checkinCounts");
+                    Map<String, Object> counts = (Map<String, Object>) document.getData().get("checkinCounts");
 
-                    // handle new value
-                    if (counts != null && counts.containsKey(userId)) {
-                        long newCount = (long) counts.get(userId) + 1;
-                        counts.put(userId, newCount);
-                    } else {
-                        counts.put(userId, (long) 1);
+                    // if counts is null, initialize a new HashMap
+                    if (counts == null) {
+                        counts = new HashMap<>();
                     }
 
-                    // update
-                    Set<String> keySet = counts.keySet();
-                    String[] keysArray = keySet.toArray(new String[0]);
-                    String firstKey = keysArray[0];
-                    System.out.println("First Key: " + firstKey);
+                    // deal with new user
+                    long newCount = counts.containsKey(userId) ? ((long) counts.get(userId)) + 1 : 1;
+                    counts.put(userId, newCount);
+
+                    // update document
                     doc.update("checkinCounts", counts)
                             .addOnSuccessListener(new OnSuccessListener<Void>() {
                                 @Override
@@ -152,6 +148,7 @@ public class Checkin {
      * @param userId The id of the correspondent user
      */
     public static void updateCheckinCurrent(String eventId, String userId) {
+        Log.d(TAG, "Updating checkinCurrent for event: " + eventId + " with user: " + userId);
         DocumentReference doc = collection.document(eventId);
         doc.update("checkinCurrent", FieldValue.arrayUnion(userId))
                 .addOnSuccessListener(aVoid -> Log.d(TAG, "User added to checkinCurrent list successfully."))
@@ -198,11 +195,31 @@ public class Checkin {
      * When the qr code is scanned, updated the three of the lists at the same time
      * @param eventId The id of the correspondent event
      * @param userId The id of the correspondent user
-     * @param geoPoint The geoPoint of the correspondent user
+     //* @param geoPoint The geoPoint of the correspondent user
      */
-    public static void checkInForUser(String eventId, String userId, GeoPoint geoPoint) {
+    //public static void checkInForUser(String eventId, String userId, GeoPoint geoPoint) {
+    public static void checkInForUser(String eventId, String userId) {
+        // Query for the user document with the matching userId
+        db.collection("Accounts").whereEqualTo("userID", userId).get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        for (DocumentSnapshot document : task.getResult()) {
+                            if (document.exists()) {
+                                // Found the user document, now update it
+                                DocumentReference userRef = document.getReference();
+                                userRef.update("checkinevents", FieldValue.arrayUnion(eventId))
+                                        .addOnSuccessListener(aVoid -> Log.d(TAG, "Event added to user's check-in events successfully."))
+                                        .addOnFailureListener(e -> Log.w(TAG, "Error adding event to user's check-in events.", e));
+                            } else {
+                                Log.d(TAG, "No such user document with given userId");
+                            }
+                        }
+                    } else {
+                        Log.d(TAG, "Error finding user document: ", task.getException());
+                    }
+                });
         // Immediately update the location with the GeoPoint provided
-        updateLocation(eventId, geoPoint);
+        //updateLocation(eventId, geoPoint);
 
         // Proceed with other updates that do not depend on the location
         updateCheckinCurrent(eventId, userId);

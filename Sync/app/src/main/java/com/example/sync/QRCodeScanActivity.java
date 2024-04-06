@@ -1,11 +1,11 @@
 package com.example.sync;
 
-import android.Manifest;
+import static com.google.android.gms.location.LocationServices.getFusedLocationProviderClient;
+
+import android.app.Activity;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -14,12 +14,8 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.firestore.GeoPoint;
 import com.google.zxing.BinaryBitmap;
 import com.google.zxing.LuminanceSource;
 import com.google.zxing.MultiFormatReader;
@@ -38,7 +34,9 @@ import java.io.InputStream;
 public class QRCodeScanActivity extends AppCompatActivity {
 
     private static final int PICK_IMAGE_REQUEST = 1;
+    public static Activity context;
     private FusedLocationProviderClient fusedLocationClient;
+
 
     /**
      * Initializes the activity, setting up Firestore and starting the QR code scanner.
@@ -51,7 +49,7 @@ public class QRCodeScanActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         // Initialize the FusedLocationProviderClient
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+        fusedLocationClient = getFusedLocationProviderClient(this);
         // Show an option dialog for user to choose between camera scan or gallery pick
         showScanOptionDialog();
     }
@@ -133,6 +131,7 @@ public class QRCodeScanActivity extends AppCompatActivity {
             // Extract the event ID from the scanned data
             String eventId = extractSubstringAfterDelimiter(scannedData, ":"); // This skips the "checkin:" part
             String userID = getIntent().getStringExtra("userID");
+            Log.e("UserID:", "UserID = " + userID);
             fetchLocationAndCheckIn(eventId, userID);
         } else {
             // Handle any other unexpected QR code data
@@ -193,33 +192,45 @@ public class QRCodeScanActivity extends AppCompatActivity {
     }
 
     private void fetchLocationAndCheckIn(String eventId, String userID) {
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // Request missing location permissions
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, 101);
-            return;
-        }
-
-        fusedLocationClient.getLastLocation().addOnSuccessListener(this, new OnSuccessListener<Location>() {
-            @Override
-            public void onSuccess(Location location) {
-                // Got last known location. In some rare situations, this can be null.
-                if (location != null) {
-                    // Logic to handle location object
-                    double latitude = location.getLatitude();
-                    double longitude = location.getLongitude();
-                    Log.d("Location", "Latitude: " + latitude + ", Longitude: " + longitude);
-                    // Proceed with check-in using the location
-                    GeoPoint geoPoint = new GeoPoint(location.getLatitude(), location.getLongitude());
-                    Checkin.checkInForUser(eventId, userID, geoPoint);
-                } else {
-                    // Handle situation where location is null; you might want to fetch a new location
-                    Log.e("Location", "Location is null");
-                    Toast.makeText(QRCodeScanActivity.this, "Unable to get location", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
+        Checkin.checkInForUser(eventId, userID);
+//        SharedPreferences prefs = getSharedPreferences("AppSettings", MODE_PRIVATE);
+//        boolean isGeolocationEnabled = prefs.getBoolean("GeolocationEnabled", true);
+//
+//        if (isGeolocationEnabled) {
+//
+//            if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+//                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+//                return;
+//            }
+//
+//            FusedLocationProviderClient fusedLocationClient = getFusedLocationProviderClient(this);
+//
+//            LocationRequest locationRequest = LocationRequest.create();
+//            locationRequest.setInterval(10000); // 10 seconds
+//            locationRequest.setFastestInterval(5000); // 5 seconds
+//            locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+//
+//            // If there is a location result, take the first one and use it to update your Firestore.
+//            // Your method to update Firestore
+//            LocationCallback locationCallback = new LocationCallback() {
+//                @Override
+//                public void onLocationResult(@NonNull LocationResult locationResult) {
+//                    // Logic to handle location object
+//                    android.location.Location location = locationResult.getLocations().get(0);
+//                    double latitude = location.getLatitude();
+//                    double longitude = location.getLongitude();
+//                    Log.d("Location", "Latitude: " + latitude + ", Longitude: " + longitude);
+//                    // Proceed with check-in using the location
+//                    GeoPoint geoPoint = new GeoPoint(location.getLatitude(), location.getLongitude());
+//                    //Checkin.checkInForUser(eventId, userID, geoPoint);
+//                }
+//            };
+//
+//            fusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, Looper.getMainLooper());
+//        } else {
+//            Log.d("requestLocationUpdates", "Geolocation is disabled in preferences.");
+//            return;
+//        }
     }
 
 }
-
-

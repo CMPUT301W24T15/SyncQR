@@ -6,7 +6,7 @@ import java.util.ArrayList;
  */
 public class Administrator extends User {
 
-    public Administrator(String userID, String username, String password, Profile profile, ArrayList<Event> signupevents, ArrayList<Event> createevents) {
-        super(userID, username, password, profile, signupevents, createevents);
+    public Administrator(String userID, String username, String password, Profile profile, ArrayList<Event> signupevents, ArrayList<Event> createdevents, ArrayList<Event> checkinevents) {
+        super(userID, username, password, profile, signupevents, createdevents, checkinevents);
     }
 }

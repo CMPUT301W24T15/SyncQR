@@ -96,6 +96,8 @@ public class AttendeeDashboard extends AppCompatActivity implements LocationPerm
                     quitEventButton.setVisibility(View.GONE);
                 }
                 Intent intent = new Intent(AttendeeDashboard.this, QRCodeScanActivity.class);
+                String userID = getIntent().getStringExtra("userID");
+                intent.putExtra("userID", userID);
                 startActivity(intent);
             }
         });
@@ -115,8 +117,10 @@ public class AttendeeDashboard extends AppCompatActivity implements LocationPerm
         quitEventButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Remove the user's ID from the check-in system
-                removeFromCheckInSystem(userID);
+                Intent intent = new Intent(AttendeeDashboard.this, CheckinEventListActivity.class);
+                String userID = getIntent().getStringExtra("userID");
+                intent.putExtra("userID", userID);
+                startActivity(intent);
             }
         });
     }
@@ -164,7 +168,7 @@ public class AttendeeDashboard extends AppCompatActivity implements LocationPerm
 
     private void removeFromCheckInSystem(String userID) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        DocumentReference checkInRef = db.collection("Check-in System").document(userID);
+        DocumentReference checkInRef = db.collection("Checkin System").document(userID);
 
         // Remove the user's ID from the "signup" field
         checkInRef.update("signup", FieldValue.arrayRemove(userID))
