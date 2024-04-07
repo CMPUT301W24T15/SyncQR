@@ -32,9 +32,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * Fragment to be shown when an organizer tries modifying events.
- */
+
 public class ModifyFrag extends Fragment {
     interface ModifyListener {
         void notifyGrandparent();
