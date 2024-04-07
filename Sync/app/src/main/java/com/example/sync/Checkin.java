@@ -36,20 +36,21 @@ import javax.annotation.Nullable;
 public class Checkin {
     private String eventId;
     private String eventName;
+    private String qrcode;
     private ArrayList<String> signup;
     private HashMap<String, Integer> checkinCounts;
     private ArrayList<String> checkinCurrent;
     private ArrayList<GeoPoint> geoPoints;
-    private static FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private static CollectionReference collection = db.collection("Checkin System");
+    private static final CollectionReference collection = FirebaseFirestore.getInstance().collection("Checkin System");
     private static final String TAG = "Checkin System";
-    private FusedLocationProviderClient fusedLocationClient;
+
 
     public interface Callback {
         default void onSuccess(String eventName, Map<String, Object> counts, ArrayList<String> current, ArrayList<String> signup){}
         default void onSuccess(ArrayList<LatLng> locations){}
         default void onSuccess(GeoPoint geoPoint){}
         default void onSuccessUpdate(int newCount){};
+        default void onSavedQRCode(String text){};
     }
 
     /**
@@ -59,6 +60,7 @@ public class Checkin {
     public Checkin(String eventId, String eventName) {
         this.eventId = eventId;
         this.eventName = eventName;
+        this.qrcode = "";
         this.signup = new ArrayList<>();
         this.checkinCounts = new HashMap<>();
         this.checkinCurrent = new ArrayList<>();
@@ -74,6 +76,7 @@ public class Checkin {
         data.put("eventId", eventId);
         data.put("eventName", eventName);
         data.put("signup", signup);
+        data.put("qrcode", qrcode);
         data.put("checkinCounts", checkinCounts);
         data.put("checkinCurrent", checkinCurrent);
         data.put("locations", geoPoints);
@@ -168,33 +171,8 @@ public class Checkin {
                 .addOnFailureListener(e -> Log.w(TAG, "Error adding user to location list.", e));
     }
 
-//    /**
-//     * Ask permission from the user and acquire their location
-//     * @param context The context of the app
-//     * @param callback A callback returned the location once the result sent back
-//     */
-//    private static void getLocationFromUser(Context context, Callback callback){
-//        FusedLocationProviderClient fusedLocationClient = LocationServices.getFusedLocationProviderClient(context);
-//        if (ActivityCompat.checkSelfPermission(context, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(context, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-//            // Request permission if not granted
-//            int MY_PERMISSIONS_REQUEST_LOCATION = 1031;
-//            ActivityCompat.requestPermissions((Activity) context, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION, android.Manifest.permission.ACCESS_COARSE_LOCATION}, MY_PERMISSIONS_REQUEST_LOCATION);
-//        }
-//        fusedLocationClient.getLastLocation().addOnSuccessListener((Activity) context, new OnSuccessListener<Location>() {
-//            @Override
-//            public void onSuccess(Location location) {
-//                if (location != null) {
-//                    double latitude = location.getLatitude();
-//                    double longitude = location.getLongitude();
-//                    callback.onSuccess(new GeoPoint(latitude, longitude));
-//                }
-//            }
-//        });
-//    }
-
     /**
      * When the qr code is scanned, updated the three of the lists at the same time
-     * @param context The context of the app
      * @param eventId The id of the correspondent event
      * @param userId The id of the correspondent user
      //* @param geoPoint The geoPoint of the correspondent user
@@ -203,9 +181,6 @@ public class Checkin {
     public static void checkInForUser(String eventId, String userId) {
         // Query for the user document with the matching userId
         registerCheckinForUser(eventId, userId);
-
-        // Immediately update the location with the GeoPoint provided
-        //updateLocation(eventId, geoPoint);
 
         // Proceed with other updates that do not depend on the location
         updateCheckinCurrent(eventId, userId);
@@ -287,6 +262,7 @@ public class Checkin {
     }
 
     public static void registerCheckinForUser(String eventId, String userId){
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection("Accounts").whereEqualTo("userID", userId).get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
@@ -328,6 +304,34 @@ public class Checkin {
             }
         });
 
+    }
+
+
+    public static void saveQRcode(String qrcodeText, String eventId, Callback callback) {
+
+        // check to see if it is already existed
+        collection.whereEqualTo("qrcode", qrcodeText)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+
+                            if (!task.getResult().isEmpty()) {
+                                callback.onSavedQRCode("QR code already exists. Use another one.");
+
+                            } else {
+                                DocumentReference doc = collection.document(eventId);
+                                doc.update("qrcode", qrcodeText)
+                                        .addOnSuccessListener(aVoid -> callback.onSavedQRCode("successfully saved."))
+                                        .addOnFailureListener(e -> Log.w(TAG, "Error uploaded qrcode.", e));
+
+                            }
+                        } else {
+                            Log.d("TAG", "Error getting documents: ", task.getException());
+                        }
+                    }
+                });
     }
 
 

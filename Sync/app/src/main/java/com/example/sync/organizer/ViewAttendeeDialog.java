@@ -67,7 +67,6 @@ public class ViewAttendeeDialog extends DialogFragment {
             content.put("Checkin Attendees (Current)", current);
             content.put("Checkin Attendees (Counts)", counts);
 
-
             ViewAttendeeAdapter adapter = new ViewAttendeeAdapter(getContext(), name, content);
             attendeeList.setAdapter(adapter);
         }

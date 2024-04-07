@@ -223,7 +223,7 @@ public class QRCodeScanActivity extends AppCompatActivity {
                                 double longitude = location.getLongitude();
 
                                 // Comment out to test:
-                                // Toast.makeText(QRCodeScanActivity.this, "Latitude: " + latitude + ", Longitude: " + longitude, Toast.LENGTH_SHORT).show();
+                                //Toast.makeText(QRCodeScanActivity.this, "Latitude: " + latitude + ", Longitude: " + longitude, Toast.LENGTH_SHORT).show();
                                 Checkin.updateLocation(eventId, new GeoPoint(latitude, longitude));
                             } else {
                                 Toast.makeText(QRCodeScanActivity.this, "Location is null", Toast.LENGTH_SHORT).show();
