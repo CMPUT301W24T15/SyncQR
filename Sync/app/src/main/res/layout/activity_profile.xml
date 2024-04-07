@@ -30,6 +30,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:backgroundTint="@color/button_grey"
+            android:textColor="@color/black"
             android:text="QR Code"
             android:layout_toStartOf="@id/profile_image_top_right" />
 
@@ -67,7 +68,7 @@
 
         <Button
             android:id="@+id/messages_button"
-            android:layout_width="124dp"
+            android:layout_width="@dimen/messages_button"
             android:layout_height="wrap_content"
             android:backgroundTint="@color/white"
             android:text="Messages"

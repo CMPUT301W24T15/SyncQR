@@ -7,4 +7,5 @@
     <dimen name="extra_large_margin">40dp</dimen>
     <dimen name="button_text_size">16dp</dimen>
     <dimen name="button_text_size_large">24dp</dimen>
+    <dimen name="messages_button">124dp</dimen>
 </resources>

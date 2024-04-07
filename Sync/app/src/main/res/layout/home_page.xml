@@ -18,31 +18,35 @@
 
             <Button
                 android:id="@+id/home_button"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/homeBtn" />
+                android:backgroundTint="@color/white"
+                android:textColor="@color/black"
+                android:text="Home" />
 
             <Button
                 android:id="@+id/profile_button"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/profileBtn" />
+                android:backgroundTint="@color/white"
+                android:textColor="@color/black"
+                android:text="Profile" />
 
             <Button
                 android:id="@+id/event_button"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/eventBtn" />
+                android:backgroundTint="@color/white"
+                android:textColor="@color/black"
+                android:text="Event" />
 
             <Button
                 android:id="@+id/messages_button"
-                android:layout_width="0dp"
+                android:layout_width="@dimen/messages_button"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/messagesBtn" />
+                android:backgroundTint="@color/white"
+                android:text="Messages"
+                android:textColor="@color/black" />
 
         </LinearLayout>
 
@@ -99,7 +103,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight="1"
-                    android:backgroundTint="#BAB7B7"
+                    android:backgroundTint="@color/button_grey"
+                    android:textColor="@color/black"
                     android:text="View Event Details" />
 
             </LinearLayout>
