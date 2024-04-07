@@ -46,10 +46,10 @@ public class Checkin {
 
 
     public interface Callback {
-        default void onSuccess(String eventName, Map<String, Object> counts, ArrayList<String> current, ArrayList<String> signup){}
+        default void onSuccess(String eventId, String eventName, Map<String, Object> counts, ArrayList<String> current, ArrayList<String> signup){}
         default void onSuccess(ArrayList<LatLng> locations){}
         default void onSuccess(GeoPoint geoPoint){}
-        default void onSuccessUpdate(int newCount){};
+        default void onSuccessUpdate(String eventName, int newCount){};
         default void onSavedQRCode(String text){};
     }
 
@@ -215,12 +215,13 @@ public class Checkin {
 
                 // Obtain the map
                 if (document.exists()) {
+                    String eventId = (String) document.getData().get("eventId");
                     String eventName = (String) document.getData().get("eventName");
                     HashMap <String, Object> counts = (HashMap<String, Object>) document.getData().get("checkinCounts");
                     ArrayList<String> current = (ArrayList<String>) document.getData().get("checkinCurrent");
                     ArrayList<String> signup = (ArrayList<String>) document.getData().get("signup");
 
-                    callback.onSuccess(eventName, counts, current, signup);
+                    callback.onSuccess(eventId, eventName, counts, current, signup);
                 }
             }
         });
@@ -294,11 +295,12 @@ public class Checkin {
 
                 if (snapshot != null && snapshot.exists()) {
                     Map<String, Object> data = snapshot.getData();
+                    String name = (String) data.get("eventName");
                     int newCount = ((ArrayList<String>)data.get("checkinCurrent")).size();
 
                     // Check if the current checkin list has changed
                     if (newCount != oldCount.get(position)) {
-                        callback.onSuccessUpdate(newCount);
+                        callback.onSuccessUpdate(name, newCount);
                     }
                 }
             }

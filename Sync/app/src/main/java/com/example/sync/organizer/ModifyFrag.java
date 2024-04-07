@@ -102,7 +102,7 @@ public class ModifyFrag extends Fragment {
                     public void onSuccess(ArrayList<LatLng> locations) {
                         for (LatLng location: locations){
                             googleMap.addMarker(new MarkerOptions().position(location));
-                            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location, 3.0f));
+                            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location, 15.0f));
                         }
                     }
                 });
@@ -144,7 +144,7 @@ public class ModifyFrag extends Fragment {
             public void onClick(View v) {
                 Checkin.getListFromDatabase(event.getEventId(), new Checkin.Callback() {
                     @Override
-                    public void onSuccess(String name, Map<String, Object> counts, ArrayList<String> current, ArrayList<String> signup) {
+                    public void onSuccess(String id, String name, Map<String, Object> counts, ArrayList<String> current, ArrayList<String> signup) {
                         // convert map to arraylist
                         ArrayList<String> countsInList = new ArrayList<>();
                         for (Map.Entry<String, Object> entry : counts.entrySet()) {
@@ -188,7 +188,7 @@ public class ModifyFrag extends Fragment {
     public void displayNumber(String eventId) {
         Checkin.getListFromDatabase(eventId, new Checkin.Callback() {
             @Override
-            public void onSuccess(String name, Map<String, Object> counts, ArrayList<String> current, ArrayList<String> signup) {
+            public void onSuccess(String id, String name, Map<String, Object> counts, ArrayList<String> current, ArrayList<String> signup) {
                 checkinNum.setText(String.valueOf(current.size()));
                 signupNum.setText(String.valueOf(signup.size()));
             }
