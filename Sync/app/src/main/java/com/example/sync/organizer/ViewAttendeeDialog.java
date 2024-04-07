@@ -67,9 +67,6 @@ public class ViewAttendeeDialog extends DialogFragment {
             content.put("Checkin Attendees (Current)", current);
             content.put("Checkin Attendees (Counts)", counts);
 
-            System.out.println(current.get(0));
-            System.out.println(signup.get(0));
-            System.out.println(counts.get(0));
 
             ViewAttendeeAdapter adapter = new ViewAttendeeAdapter(getContext(), name, content);
             attendeeList.setAdapter(adapter);

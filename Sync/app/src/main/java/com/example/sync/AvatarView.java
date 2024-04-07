@@ -132,5 +132,13 @@ public class AvatarView extends AppCompatImageView {
                 .fitCenter() // Ensure the image fits within the ImageView bounds
                 .into(this);
     }
+    public void resetToDefault() {
+        this.initials = ""; // Clear initials
+        isImageLoaded = false; // Reset the flag as no image is now loaded
+        setImageDrawable(null); // Remove any set image
+        // Optionally, set a default image if you have one
+        // Glide.with(getContext()).load(R.drawable.default_image).into(this);
+        invalidate(); // Trigger a redraw to ensure correct state is shown
+    }
 
 }

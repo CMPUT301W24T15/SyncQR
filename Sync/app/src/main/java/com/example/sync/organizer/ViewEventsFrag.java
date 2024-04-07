@@ -35,9 +35,14 @@ public class ViewEventsFrag extends Fragment{
     private ViewEventsFrag self = this;
 
 
-    static ViewEventsFrag newInstance() {
+    static ViewEventsFrag newInstance(String userId) {
         // create the fragment instance
         ViewEventsFrag fragment = new ViewEventsFrag();
+
+        Bundle args = new Bundle();
+        args.putString("userId", userId);
+        fragment.setArguments(args);
+
         return fragment;
     }
 
@@ -70,20 +75,37 @@ public class ViewEventsFrag extends Fragment{
     public void onStart() {
         super.onStart();
 
+        // acquire user id
+        Bundle args = getArguments();
+        String userId = args.getString("userId");
 
-        // ** Need login system to access all created event
+
         // list set up
         dataList = new ArrayList<Event>();
-        Event.getEventFromDatabase("1417182237", new Event.Callback() {
+        Event.getCreatedEventIdList(userId, new Event.Callback() {
             @Override
-            public void onSuccess(Event event) {
-                dataList.add(event);
-                eventListAdapter = new EventListAdapter(requireContext(), dataList);
-                eventList.setAdapter(eventListAdapter);
+            public void onSuccessReturnId(ArrayList<String> idList) {
+
+                // idList may be empty
+                // find all events that have been created by the user
+                if (!idList.isEmpty()) {
+                    for (String eventId: idList) {
+                        Event.getEventFromDatabase(eventId, new Event.Callback() {
+                            @Override
+                            public void onSuccess(Event event) {
+                                dataList.add(event);
+
+                                // set an adapter when all events have been loaded
+                                if (idList.size() == dataList.size()){
+                                    EventListAdapter adapter = new EventListAdapter(requireContext(), dataList);
+                                    eventList.setAdapter(adapter);
+                                }
+                            }
+                        });
+                    }
+                }
             }
         });
-
-        // *********************** account grabs event*************************
 
 
         // click list item

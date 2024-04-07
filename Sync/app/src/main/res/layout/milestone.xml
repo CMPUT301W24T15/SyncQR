@@ -83,7 +83,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
-                android:text="        10      20                40                                   80"
+                android:text="         10      20                40                                   80"
                 android:textColor="@color/white"
                 android:textSize="12sp"
                 android:textStyle="bold|italic"

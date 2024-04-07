@@ -2,54 +2,40 @@ package com.example.sync;
 
 import static com.google.firebase.firestore.FieldValue.arrayRemove;
 
-import android.app.Activity;
-import android.content.Context;
-import android.content.pm.PackageManager;
-import android.net.Uri;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
-import androidx.core.app.ActivityCompat;
 
-import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.firestore.EventListener;
-
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.GeoPoint;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
-import android.location.Location;
-
-
-
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Nullable;
 
-import kotlinx.coroutines.tasks.TasksKt;
-
 /**
  * Checkin System for checking in to an event and storing related information.
  */
+
 public class Checkin {
     private String eventId;
     private String eventName;
-    private String qrcodeImage;
     private ArrayList<String> signup;
     private HashMap<String, Integer> checkinCounts;
     private ArrayList<String> checkinCurrent;
@@ -57,12 +43,13 @@ public class Checkin {
     private static FirebaseFirestore db = FirebaseFirestore.getInstance();
     private static CollectionReference collection = db.collection("Checkin System");
     private static final String TAG = "Checkin System";
+    private FusedLocationProviderClient fusedLocationClient;
 
     public interface Callback {
         default void onSuccess(String eventName, Map<String, Object> counts, ArrayList<String> current, ArrayList<String> signup){}
         default void onSuccess(ArrayList<LatLng> locations){}
         default void onSuccess(GeoPoint geoPoint){}
-        default void onSuccessUpdate(ArrayList<Integer> countList){};
+        default void onSuccessUpdate(int newCount){};
     }
 
     /**
@@ -72,7 +59,6 @@ public class Checkin {
     public Checkin(String eventId, String eventName) {
         this.eventId = eventId;
         this.eventName = eventName;
-        this.qrcodeImage = "";
         this.signup = new ArrayList<>();
         this.checkinCounts = new HashMap<>();
         this.checkinCurrent = new ArrayList<>();
@@ -87,7 +73,6 @@ public class Checkin {
         HashMap<String, Object> data = new HashMap<>();
         data.put("eventId", eventId);
         data.put("eventName", eventName);
-        data.put("qrcode",qrcodeImage);
         data.put("signup", signup);
         data.put("checkinCounts", checkinCounts);
         data.put("checkinCurrent", checkinCurrent);
@@ -96,6 +81,7 @@ public class Checkin {
         collection.document(eventId).set(data);
 
     }
+
 
     /**
      * Adds the user's ID to the "signup" list in the "Checkin" system for a specific event.
@@ -127,17 +113,18 @@ public class Checkin {
 
                 // Obtain the map
                 if (document.exists()) {
-                    HashMap <String, Object> counts = (HashMap<String, Object>) document.getData().get("checkinCounts");
+                    Map<String, Object> counts = (Map<String, Object>) document.getData().get("checkinCounts");
 
-                    // handle new value
-                    if (counts != null && counts.containsKey(userId)) {
-                        long newCount = (long) counts.get(userId) + 1;
-                        counts.put(userId, newCount);
-                    } else {
-                        counts.put(userId, (long) 1);
+                    // if counts is null, initialize a new HashMap
+                    if (counts == null) {
+                        counts = new HashMap<>();
                     }
 
-                    // update
+                    // deal with new user
+                    long newCount = counts.containsKey(userId) ? ((long) counts.get(userId)) + 1 : 1;
+                    counts.put(userId, newCount);
+
+                    // update document
                     doc.update("checkinCounts", counts)
                             .addOnSuccessListener(new OnSuccessListener<Void>() {
                                 @Override
@@ -162,6 +149,7 @@ public class Checkin {
      * @param userId The id of the correspondent user
      */
     public static void updateCheckinCurrent(String eventId, String userId) {
+        Log.d(TAG, "Updating checkinCurrent for event: " + eventId + " with user: " + userId);
         DocumentReference doc = collection.document(eventId);
         doc.update("checkinCurrent", FieldValue.arrayUnion(userId))
                 .addOnSuccessListener(aVoid -> Log.d(TAG, "User added to checkinCurrent list successfully."))
@@ -180,43 +168,46 @@ public class Checkin {
                 .addOnFailureListener(e -> Log.w(TAG, "Error adding user to location list.", e));
     }
 
-    /**
-     * Ask permission from the user and acquire their location
-     * @param context The context of the app
-     * @param callback A callback returned the location once the result sent back
-     */
-    private static void getLocationFromUser(Context context, Callback callback){
-        FusedLocationProviderClient fusedLocationClient = LocationServices.getFusedLocationProviderClient(context);
-        if (ActivityCompat.checkSelfPermission(context, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(context, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // Request permission if not granted
-            int MY_PERMISSIONS_REQUEST_LOCATION = 1031;
-            ActivityCompat.requestPermissions((Activity) context, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION, android.Manifest.permission.ACCESS_COARSE_LOCATION}, MY_PERMISSIONS_REQUEST_LOCATION);
-        }
-        fusedLocationClient.getLastLocation().addOnSuccessListener((Activity) context, new OnSuccessListener<Location>() {
-            @Override
-            public void onSuccess(Location location) {
-                if (location != null) {
-                    double latitude = location.getLatitude();
-                    double longitude = location.getLongitude();
-                    callback.onSuccess(new GeoPoint(latitude, longitude));
-                }
-            }
-        });
-    }
+//    /**
+//     * Ask permission from the user and acquire their location
+//     * @param context The context of the app
+//     * @param callback A callback returned the location once the result sent back
+//     */
+//    private static void getLocationFromUser(Context context, Callback callback){
+//        FusedLocationProviderClient fusedLocationClient = LocationServices.getFusedLocationProviderClient(context);
+//        if (ActivityCompat.checkSelfPermission(context, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(context, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+//            // Request permission if not granted
+//            int MY_PERMISSIONS_REQUEST_LOCATION = 1031;
+//            ActivityCompat.requestPermissions((Activity) context, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION, android.Manifest.permission.ACCESS_COARSE_LOCATION}, MY_PERMISSIONS_REQUEST_LOCATION);
+//        }
+//        fusedLocationClient.getLastLocation().addOnSuccessListener((Activity) context, new OnSuccessListener<Location>() {
+//            @Override
+//            public void onSuccess(Location location) {
+//                if (location != null) {
+//                    double latitude = location.getLatitude();
+//                    double longitude = location.getLongitude();
+//                    callback.onSuccess(new GeoPoint(latitude, longitude));
+//                }
+//            }
+//        });
+//    }
 
     /**
      * When the qr code is scanned, updated the three of the lists at the same time
      * @param context The context of the app
      * @param eventId The id of the correspondent event
      * @param userId The id of the correspondent user
+     //* @param geoPoint The geoPoint of the correspondent user
      */
-    public static void checkInForUser(Context context, String eventId, String userId) {
-        getLocationFromUser(context, new Callback() {
-            @Override
-            public void onSuccess(GeoPoint geoPoint) {
-                updateLocation(eventId, geoPoint);
-            }
-        });
+    //public static void checkInForUser(String eventId, String userId, GeoPoint geoPoint) {
+    public static void checkInForUser(String eventId, String userId) {
+        // Query for the user document with the matching userId
+        registerCheckinForUser(eventId, userId);
+
+        // Immediately update the location with the GeoPoint provided
+        //updateLocation(eventId, geoPoint);
+
+        // Proceed with other updates that do not depend on the location
         updateCheckinCurrent(eventId, userId);
         updateCheckinCounts(eventId, userId);
     }
@@ -295,7 +286,28 @@ public class Checkin {
                 });
     }
 
-    public static void addListenerToEvents(String eventId, int position, ArrayList<Integer> countList, Callback callback) {
+    public static void registerCheckinForUser(String eventId, String userId){
+        db.collection("Accounts").whereEqualTo("userID", userId).get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        for (DocumentSnapshot document : task.getResult()) {
+                            if (document.exists()) {
+                                // Found the user document, now update it
+                                DocumentReference userRef = document.getReference();
+                                userRef.update("checkinevents", FieldValue.arrayUnion(eventId))
+                                        .addOnSuccessListener(aVoid -> Log.d(TAG, "Event added to user's check-in events successfully."))
+                                        .addOnFailureListener(e -> Log.w(TAG, "Error adding event to user's check-in events.", e));
+                            } else {
+                                Log.d(TAG, "No such user document with given userId");
+                            }
+                        }
+                    } else {
+                        Log.d(TAG, "Error finding user document: ", task.getException());
+                    }
+                });
+    }
+
+    public static void addListenerToEvent(String eventId, int position, ArrayList<Integer> oldCount, Callback callback) {
         DocumentReference docRef = collection.document(eventId);
 
         // real-time listener
@@ -306,9 +318,12 @@ public class Checkin {
 
                 if (snapshot != null && snapshot.exists()) {
                     Map<String, Object> data = snapshot.getData();
-                    int count = ((ArrayList<String>)data.get("checkinCurrent")).size();
-                    countList.set(position, count);
-                    callback.onSuccessUpdate(countList);
+                    int newCount = ((ArrayList<String>)data.get("checkinCurrent")).size();
+
+                    // Check if the current checkin list has changed
+                    if (newCount != oldCount.get(position)) {
+                        callback.onSuccessUpdate(newCount);
+                    }
                 }
             }
         });
@@ -327,13 +342,6 @@ public class Checkin {
         this.eventId = eventId;
     }
 
-    public String getQrcodeImage() {
-        return qrcodeImage;
-    }
-
-    public void setQrcodeImage(String qrcodeImage) {
-        this.qrcodeImage = qrcodeImage;
-    }
 
     public ArrayList<String> getSignup() {
         return signup;
