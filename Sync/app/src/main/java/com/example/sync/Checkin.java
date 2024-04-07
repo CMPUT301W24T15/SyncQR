@@ -43,6 +43,9 @@ import javax.annotation.Nullable;
 
 import kotlinx.coroutines.tasks.TasksKt;
 
+/**
+ * Checkin System for checking in to an event and storing related information.
+ */
 public class Checkin {
     private String eventId;
     private String eventName;

@@ -199,7 +199,7 @@ public class ProfileActivity extends AppCompatActivity {
      * Navigates to the Notification activity.
      */
     private void navigateToMyNotificationReceiver() {
-        Intent intent = new Intent(this, NotificationFragment.class);
+        Intent intent = new Intent(this, NotificationActivity.class);
         startActivity(intent);
     }
 

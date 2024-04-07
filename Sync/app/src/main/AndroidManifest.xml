@@ -42,9 +42,6 @@
         <activity android:name=".ProfileActivity"/>
         <activity android:name=".AttendeeDashboard" />
         <activity android:name=".QRCodeScanActivity"/>
-        <activity android:name=".AttendeeLogin"/>
-        <activity android:name=".OrganizerLogin"/>
-        <activity android:name=".AdministratorLogin"/>
         <activity android:name=".NotificationActivity"/>
         <activity android:name=".organizer.QRCodeShareActivity"
             android:enableOnBackInvokedCallback="true"/>

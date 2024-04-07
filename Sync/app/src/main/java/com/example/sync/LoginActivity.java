@@ -35,8 +35,10 @@ public class LoginActivity extends AppCompatActivity {
 
         SharedPreferences sharedPref = getPreferences(Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPref.edit();
+        // read userID from local setting
+        userID = sharedPref.getString("userID", null);
 
-        // a new user
+        // if userID is null, it is a new user
         if (userID == null) {
             userID = UserIDGenerator.generateUserID();
             User user = new User(userID);
