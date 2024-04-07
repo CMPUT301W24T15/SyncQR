@@ -39,7 +39,7 @@ public class EventListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_event);
 
-        Log.d("kevinTag", "Created EventListActivity Instance");
+        Log.d("Kevin", "Created EventListActivity Instance");
 
         // Initialize the dataList, eventList, and eventListAdapter
         dataList = new ArrayList<>();
