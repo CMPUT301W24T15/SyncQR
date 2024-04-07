@@ -2,7 +2,10 @@ package com.example.sync;
 
 import static android.content.ContentValues.TAG;
 
+import static com.example.sync.Database.storeImage;
+
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.Editable;
@@ -22,6 +25,8 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import javax.security.auth.callback.Callback;
 
 /**
  * Activity for managing user profile.
@@ -80,32 +85,46 @@ public class ProfileActivity extends AppCompatActivity {
                         String name = (String) profile.get("name");
                         String email = (String) profile.get("email");
                         String contact = (String) profile.get("phoneNumber");
+                        String imageUrl = (String) profile.get("imageUrl"); // Assuming this is where the image URL is stored
 
                         // Update UI with the retrieved data
                         userNameInput.setText(name);
                         userEmailInput.setText(email);
                         userContactInput.setText(contact);
-                        userNameInput.addTextChangedListener(new TextWatcher() {
-                            @Override
-                            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                                // Implementation can be left empty if not needed
-                            }
 
-                            @Override
-                            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                                // Implementation can be left empty if not needed
-                            }
+                        if (imageUrl != null && !imageUrl.isEmpty()) {
+                            // Download the profile image as a Bitmap, then store it in Firebase Storage
+                            new Thread(() -> {
+                                try {
+                                    Bitmap bitmap = Glide.with(ProfileActivity.this)
+                                            .asBitmap()
+                                            .load(imageUrl)
+                                            .submit()
+                                            .get(); // Download the image as a Bitmap
 
-                            @Override
-                            public void afterTextChanged(Editable s) {
-                                String name = s.toString().trim();
-                                if (!name.isEmpty()) {
-                                    userImageInput.setInitialsFromName(name);
-                                } else {
-                                    userImageInput.removeInitialsAndImage();
+                                    // Define the path for storing the image in Firebase Storage
+                                    String path = "profileImages/" + userID + ".png";
+
+                                    // Use the Database class to store the image
+                                    Database.storeImage(bitmap, path, new Database.Callback() {
+                                        @Override
+                                        public void onSuccess(String downloadUrl) {
+                                            Log.d(TAG, "Image stored successfully with download URL: " + downloadUrl);
+                                            // Optionally, update the Firestore document with the new image download URL
+                                        }
+
+//                                        @Override
+//                                        public void onFailure(Exception e) {
+//                                            Log.e(TAG, "Failed to store image", e);
+//                                            // Handle the error
+//                                        }
+                                    });
+                                } catch (Exception e) {
+                                    Log.e(TAG, "Error loading image", e);
                                 }
-                            }
-                        });
+                            }).start();
+                        }
+
                         if (name != null && !name.isEmpty()) {
                             userImageInput.setInitialsFromName(name);
                         } else {
@@ -117,13 +136,14 @@ public class ProfileActivity extends AppCompatActivity {
                         Log.d("DatabaseTag", "Profile data is null.");
                     }
                 } else {
-                    // Document not found
                     Log.d("DatabaseTag", "No profile information found for user ID: " + userID);
                 }
             } else {
                 Log.d("DatabaseTag", "Error loading profile data", task.getException());
             }
         });
+
+
 
 
         // Set click listeners
