@@ -2,17 +2,12 @@ package com.example.sync;
 
 import static android.content.ContentValues.TAG;
 
-import static com.example.sync.Database.storeImage;
-
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
-import android.text.Editable;
 import android.util.Log;
 import android.widget.Button;
-import android.text.TextWatcher;
-
 import android.widget.EditText;
 
 import androidx.annotation.Nullable;
@@ -25,8 +20,6 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.HashMap;
 import java.util.Map;
-
-import javax.security.auth.callback.Callback;
 
 /**
  * Activity for managing user profile.
@@ -103,7 +96,7 @@ public class ProfileActivity extends AppCompatActivity {
                                             .get(); // Download the image as a Bitmap
 
                                     // Define the path for storing the image in Firebase Storage
-                                    String path = "profileImages/" + userID + ".png";
+                                    String path = "profile/" + userID + ".png";
 
                                     // Use the Database class to store the image
                                     Database.storeImage(bitmap, path, new Database.Callback() {

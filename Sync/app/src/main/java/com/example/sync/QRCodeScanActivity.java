@@ -161,9 +161,14 @@ public class QRCodeScanActivity extends AppCompatActivity {
                                 }
                             }
                             // Now you have all the QR codes in qrCodes list
-                            compareScannedData(scannedData, qrCodes);
+                            if(compareScannedData(scannedData, qrCodes)){
+                                String userID = getIntent().getStringExtra("userID");
+                                fetchLocationAndCheckIn(userID);
+                            } else {
+                                Toast.makeText(this, "Unrecognized QR Code", Toast.LENGTH_LONG).show();
+                            }
                         } else {
-                            Toast.makeText(this, "Unrecognized QR Code", Toast.LENGTH_LONG).show();
+                            Log.d("DatabaseError", "Error getting documents: ", task.getException());
                         }
                     });
         }
@@ -310,10 +315,11 @@ public class QRCodeScanActivity extends AppCompatActivity {
      * found, it logs a different message indicating failure.
      *
      * @param scannedData The data obtained from scanning a QR code, expected to be a String.
-     * @param qrCodes A list of QR codes (as Strings) retrieved from the database against which
-     *                the scanned data is to be compared.
+     * @param qrCodes     A list of QR codes (as Strings) retrieved from the database against which
+     *                    the scanned data is to be compared.
+     * @return
      */
-    private void compareScannedData(String scannedData, List<String> qrCodes) {
+    private boolean compareScannedData(String scannedData, List<String> qrCodes) {
         boolean isMatchFound = false;
 
         for (String qrCode : qrCodes) {
@@ -322,15 +328,7 @@ public class QRCodeScanActivity extends AppCompatActivity {
                 break;
             }
         }
-
-        if (isMatchFound) {
-            // A match is found, proceed with your logic
-            Log.d("QRMatch", "A matching QR code was found.");
-        } else {
-            // No match found
-            Log.d("QRMatch", "No matching QR code.");
-        }
+        return isMatchFound;
     }
-
 
 }

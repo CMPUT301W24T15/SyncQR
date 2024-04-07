@@ -89,15 +89,6 @@
                 android:text="Sign up">
             </Button>
 
-            <Button
-                android:id="@+id/check_in_button"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:backgroundTint="@color/button_yellow"
-                android:textColor="@color/black"
-                android:text="Check In">
-            </Button>
-
         </LinearLayout>
 
     </androidx.core.widget.NestedScrollView>

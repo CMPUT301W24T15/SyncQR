@@ -1,5 +1,6 @@
 package com.example.sync;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -7,12 +8,12 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.content.Context;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import com.bumptech.glide.Glide;
 import com.example.sync.organizer.FragListener;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -23,6 +24,7 @@ import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.text.SimpleDateFormat;
+import java.util.Objects;
 
 /**
  * Activity that displays the details of an event.
@@ -64,6 +66,7 @@ public class EventDetailsActivity extends AppCompatActivity {
         date = findViewById(R.id.event_date_time);
         description = findViewById(R.id.event_description);
         limit = findViewById(R.id.event_attendee_limit);
+        poster = findViewById(R.id.event_poster);
 
         Button backButton = findViewById(R.id.back_button);
 
@@ -124,6 +127,12 @@ public class EventDetailsActivity extends AppCompatActivity {
 
                             String attendee_limit = "Attendee Limit: " + document.getData().get("attendeeNumber").toString();
                             limit.setText((attendee_limit));
+
+                            if (!Objects.equals(document.getData().get("poster"),"")){
+                                Glide.with(EventDetailsActivity.this)
+                                        .load(document.getData().get("poster"))
+                                        .into(poster);
+                            }
 
                         } else {
                             Log.d(TAG, "No such document");
