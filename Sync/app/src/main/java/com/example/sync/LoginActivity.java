@@ -50,7 +50,8 @@ public class LoginActivity extends AppCompatActivity {
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 // Retrieve profile data
                                 Map<String, Object> data = document.getData();
-                                allUserIds.add((String)data.get("userId"));
+                                allUserIds.add((String)data.get("userID"));
+                                Log.d(TAG, (String)data.get("userID") + " Found");
                             }
                         }
                     }
