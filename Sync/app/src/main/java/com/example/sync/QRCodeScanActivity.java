@@ -1,8 +1,5 @@
 package com.example.sync;
 
-import static com.google.android.gms.location.LocationServices.getFusedLocationProviderClient;
-
-import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -20,10 +17,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
-import com.example.sync.organizer.OrganizerDashboard;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.GeoPoint;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.zxing.BinaryBitmap;
 import com.google.zxing.LuminanceSource;
 import com.google.zxing.MultiFormatReader;
@@ -31,9 +30,10 @@ import com.google.zxing.Result;
 import com.google.zxing.common.HybridBinarizer;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
-import com.google.firebase.firestore.GeoPoint;
 
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Activity to handle QR code scanning and processing the scanned data.
@@ -135,20 +135,37 @@ public class QRCodeScanActivity extends AppCompatActivity {
             // Handle Administrator action
             Intent intent = new Intent(QRCodeScanActivity.this, AdministratorDashboard.class);
             startActivity(intent);
-        } else if (scannedData.startsWith("event")) {
+        } else if (scannedData.startsWith("t")) {
             // Extract the event ID from the scanned data
-            String eventId = extractSubstringAfterDelimiter(scannedData, ":"); // This skips the "event:" part
+            String eventId = extractSubstringAfterDelimiter(scannedData, "t");
             // Start EventDetailsActivity with the extracted event ID
             EventDetailsActivity.startWithEventId(this, eventId);
-        } else if (scannedData.startsWith("checkin")) {
+        } else if (scannedData.startsWith("n")) {
             // Extract the event ID from the scanned data
-            eventId = extractSubstringAfterDelimiter(scannedData, ":"); // This skips the "checkin:" part
+            eventId = extractSubstringAfterDelimiter(scannedData, "n");
             String userID = getIntent().getStringExtra("userID");
             Log.e("UserID:", "UserID = " + userID);
             fetchLocationAndCheckIn(userID);
         } else {
             // Handle any other unexpected QR code data
-            Toast.makeText(this, "Unrecognized QR Code", Toast.LENGTH_LONG).show();
+            FirebaseFirestore db = FirebaseFirestore.getInstance();
+            db.collection("Checkin System")
+                    .get()
+                    .addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            List<String> qrCodes = new ArrayList<>();
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                String qrCode = document.getString("qrcode");
+                                if (qrCode != null) {
+                                    qrCodes.add(qrCode);
+                                }
+                            }
+                            // Now you have all the QR codes in qrCodes list
+                            compareScannedData(scannedData, qrCodes);
+                        } else {
+                            Toast.makeText(this, "Unrecognized QR Code", Toast.LENGTH_LONG).show();
+                        }
+                    });
         }
     }
 
@@ -204,12 +221,27 @@ public class QRCodeScanActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Attempts to fetch the device's last known location and use it to check in the user
+     * at an event. This method first checks if the location permission has been granted.
+     * If permission is granted, it attempts to acquire the last known location. Otherwise,
+     * it requests the necessary permission.
+     *
+     * @param userID The user ID for whom the check-in is being performed. This ID is used
+     *               in conjunction with the event ID to record the check-in.
+     */
     private void fetchLocationAndCheckIn(String userID) {
         checkLocationPermission();
         Checkin.checkInForUser(eventId, userID);
     }
 
-    // ---------------------------------- methods for acquiring location-----------------------------
+    /**
+     * Requests the last known location of the device from the fused location provider.
+     * If successful and the location is not null, it updates the event's location with
+     * the current latitude and longitude. If the location is null, a toast message is
+     * displayed to the user. This method requires the ACCESS_FINE_LOCATION permission to
+     * have been granted.
+     */
     private void getLastLocation() {
         if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION)
                 == PackageManager.PERMISSION_GRANTED) {
@@ -218,12 +250,8 @@ public class QRCodeScanActivity extends AppCompatActivity {
                         @Override
                         public void onSuccess(Location location) {
                             if (location != null) {
-
                                 double latitude = location.getLatitude();
                                 double longitude = location.getLongitude();
-
-                                // Comment out to test:
-                                //Toast.makeText(QRCodeScanActivity.this, "Latitude: " + latitude + ", Longitude: " + longitude, Toast.LENGTH_SHORT).show();
                                 Checkin.updateLocation(eventId, new GeoPoint(latitude, longitude));
                             } else {
                                 Toast.makeText(QRCodeScanActivity.this, "Location is null", Toast.LENGTH_SHORT).show();
@@ -233,6 +261,11 @@ public class QRCodeScanActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Checks if the ACCESS_FINE_LOCATION permission has been granted. If it has not,
+     * the permission is requested. If it has been granted, the getLastLocation method
+     * is called to attempt to fetch the device's last known location.
+     */
     private void checkLocationPermission() {
         if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED) {
@@ -244,6 +277,17 @@ public class QRCodeScanActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Callback for the result from requesting permissions. This method is invoked when the user
+     * responds to the permission request. If the permission is granted, getLastLocation is
+     * called to fetch the device's last location. If the permission is denied, a toast
+     * message is shown to the user.
+     *
+     * @param requestCode  The request code passed in requestPermissions(android.app.Activity, String[], int)
+     * @param permissions  The requested permissions. Never null.
+     * @param grantResults The grant results for the corresponding permissions which is either
+     *                     PERMISSION_GRANTED or PERMISSION_DENIED. Never null.
+     */
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
                                            @NonNull int[] grantResults) {
@@ -254,6 +298,37 @@ public class QRCodeScanActivity extends AppCompatActivity {
             } else {
                 Toast.makeText(this, "Location permission denied", Toast.LENGTH_SHORT).show();
             }
+        }
+    }
+
+
+    /**
+     * Compares the provided scanned data against a list of QR codes to check for a match.
+     * This method iterates through the list of QR codes and checks if any of them equals
+     * the scanned data. If a match is found, it logs a message indicating success and
+     * can perform further actions as required by the application logic. If no match is
+     * found, it logs a different message indicating failure.
+     *
+     * @param scannedData The data obtained from scanning a QR code, expected to be a String.
+     * @param qrCodes A list of QR codes (as Strings) retrieved from the database against which
+     *                the scanned data is to be compared.
+     */
+    private void compareScannedData(String scannedData, List<String> qrCodes) {
+        boolean isMatchFound = false;
+
+        for (String qrCode : qrCodes) {
+            if (scannedData.equals(qrCode)) {
+                isMatchFound = true;
+                break;
+            }
+        }
+
+        if (isMatchFound) {
+            // A match is found, proceed with your logic
+            Log.d("QRMatch", "A matching QR code was found.");
+        } else {
+            // No match found
+            Log.d("QRMatch", "No matching QR code.");
         }
     }
 
