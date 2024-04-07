@@ -53,9 +53,6 @@
         <activity android:name=".AdminEventListActivity"/>
         <activity android:name=".AdminEventDetailsActivity"/>
 
-        <meta-data
-            android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyD33hIw562z2VODr7JzNSQ5UGHPWSLxFSs" />
         <!--suppress AndroidDomInspection -->
         <service
             android:name="com.google.android.gms.metadata.ModuleDependencies"
