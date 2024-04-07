@@ -4,14 +4,17 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <com.google.android.gms.maps.MapView
+
+    <org.osmdroid.views.MapView
         android:id="@+id/map"
         android:layout_width="0dp"
         android:layout_height="250dp"
-        android:name="com.google.android.gms.maps.SupportMapFragment"
+        android:enabled="true"
+        android:clickable="true"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintEnd_toEndOf="parent"
+        tilesource="Mapnik" />
 
 
     <!-- 1st row -->
