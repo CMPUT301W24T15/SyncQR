@@ -1,5 +1,7 @@
 package com.example.sync;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -9,9 +11,8 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 
-import com.example.sync.organizer.FragListener;
+import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.Timestamp;
@@ -20,6 +21,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.text.SimpleDateFormat;
+import java.util.Objects;
 
 /**
  * Activity that displays the details of an event for administrators.
@@ -27,8 +29,6 @@ import java.text.SimpleDateFormat;
  * Administrators can also remove the event using the remove button.
  */
 public class AdminEventDetailsActivity extends AppCompatActivity {
-    Toolbar toolbar;
-    FragListener listener;
 
     ImageView poster; // This ImageView has not been implemented yet. It can be implemented when connecting to a database.
     TextView name;
@@ -49,6 +49,7 @@ public class AdminEventDetailsActivity extends AppCompatActivity {
         date = findViewById(R.id.event_date_time);
         description = findViewById(R.id.event_description);
         limit = findViewById(R.id.event_attendee_limit);
+        poster = findViewById(R.id.event_poster);
 
         Button backButton = findViewById(R.id.back_button);
 
@@ -67,6 +68,22 @@ public class AdminEventDetailsActivity extends AppCompatActivity {
                 String eventId = getIntent().getStringExtra("eventID");
                 // Delete event from database
                 Event.deleteEvent(eventId);
+            }
+        });
+
+        Button removeQRCode = findViewById(R.id.remove_qr_code);
+        removeQRCode.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Delete event from database
+                showRemoveQRCodeDialog();
+            }
+        });
+
+        poster.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showRemovePosterDialog();
             }
         });
 
@@ -101,6 +118,12 @@ public class AdminEventDetailsActivity extends AppCompatActivity {
 
                             String attendee_limit = "Attendee Limit: " + document.getData().get("attendeeNumber").toString();
                             limit.setText(attendee_limit);
+
+                            if (!Objects.equals(document.getData().get("poster"),"")){
+                                Glide.with(AdminEventDetailsActivity.this)
+                                        .load(document.getData().get("poster"))
+                                        .into(poster);
+                            }
                         } else {
                             Log.d(TAG, "No such document");
                         }
@@ -110,5 +133,35 @@ public class AdminEventDetailsActivity extends AppCompatActivity {
                 }
             });
         }
+    }
+
+    private void showRemovePosterDialog() {
+        new AlertDialog.Builder(this)
+                .setTitle("Remove Poster") // Set the dialog title
+                .setMessage("Do you want to remove the poster?") // Set the message to show in the dialog
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        String eventId = getIntent().getStringExtra("eventID");
+                        Event.removePoster(eventId); // Call method to remove the poster
+                    }
+                })
+                .setNegativeButton("No", null) // No action, just close the dialog
+                .show();
+    }
+
+    private void showRemoveQRCodeDialog() {
+        new AlertDialog.Builder(this)
+                .setTitle("Remove QR Code") // Set the dialog title
+                .setMessage("Do you want to remove the check-in QR code?") // Set the message to show in the dialog
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        String eventId = getIntent().getStringExtra("eventID");
+                        Checkin.removeQRCode(eventId); // Call method to remove the qr code
+                    }
+                })
+                .setNegativeButton("No", null) // No action, just close the dialog
+                .show();
     }
 }

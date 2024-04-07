@@ -29,17 +29,6 @@
             android:orientation="vertical"
             android:padding="20dp">
 
-            <!--            <ImageView-->
-            <!--                android:id="@+id/event_poster"-->
-            <!--                android:layout_width="match_parent"-->
-            <!--                android:layout_height="@dimen/event_poster_height"-->
-            <!--                android:clickable="true"-->
-            <!--                android:contentDescription="@string/event_poster"-->
-            <!--                android:focusable="true"-->
-            <!--                android:scaleType="centerCrop"-->
-            <!--                android:src="@drawable/event_poster">-->
-            <!--            </ImageView>-->
-
             <ImageView
                 android:id="@+id/event_poster"
                 android:layout_width="match_parent"
@@ -83,6 +72,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Remove Event">
+            </Button>
+
+            <Button
+                android:id="@+id/remove_qr_code"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Remove Check-In QR Code">
             </Button>
 
         </LinearLayout>

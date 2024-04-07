@@ -6,7 +6,6 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
-import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -336,9 +335,19 @@ public class Checkin {
                 });
     }
 
+    public static void removeQRCode(String eventId) {
+        DocumentReference doc = collection.document(eventId);
+        Map<String, Object> data = new HashMap<>();
+        data.put("qrcode", "");
 
-
-
+        doc.update(data)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d(TAG, "QR code removed successfully");
+                    }
+                });
+    }
 
     public String getEventId() {
         return eventId;

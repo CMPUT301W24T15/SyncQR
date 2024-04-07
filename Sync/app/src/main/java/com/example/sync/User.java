@@ -32,7 +32,7 @@ public class User extends AppCompatActivity {
         this.userID = userID;
         username = "Visitor";
         password = "";
-        profile = new Profile(userID,username,"https://avatar.iran.liara.run/public","","");
+        profile = new Profile(userID,username,"","","");
         signupevents = new ArrayList<Event>();
         createdevents = new ArrayList<Event>();
         checkinevents = new ArrayList<Event>();
