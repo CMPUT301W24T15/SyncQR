@@ -23,7 +23,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 /**
  * Activity representing the dashboard for attendees.
  */
-public class AttendeeDashboard extends AppCompatActivity implements LocationPermissionDialog.LocationPermissionDialogListener {
+public class AttendeeDashboard extends AppCompatActivity {
     private static String TAG = "Kevin";
     boolean userCheckedIn = FALSE;
     private String userID;
@@ -34,7 +34,6 @@ public class AttendeeDashboard extends AppCompatActivity implements LocationPerm
         super.onCreate(savedInstanceState);
         setContentView(R.layout.dashboard_attendee);
         Button permissionButton = findViewById(R.id.permission_button);
-        permissionButton.setOnClickListener(v -> new LocationPermissionDialog().show(getSupportFragmentManager(), "LocationPermissionDialog"));
 
         Log.d(TAG, "Entered AttendeeDashboard");
 
@@ -124,47 +123,8 @@ public class AttendeeDashboard extends AppCompatActivity implements LocationPerm
             }
         });
     }
-    private static final int YOUR_PERMISSION_REQUEST_CODE = 123;
 
-    // Chatgpt, OpenAI. Downloaded 2024-03-29
-    // Implement the interface method
-    @Override
-    public void onRequestLocationPermission() {
-        // Check for permission or request it
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, YOUR_PERMISSION_REQUEST_CODE);
-        }
-    }
 
-    private static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
-    /**
-     * Requests location permission from the user.
-     * If permission is already granted, nothing happens. Otherwise, a permission request dialog is displayed.
-     */
-    private void requestLocationPermission() {
-        if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_FINE_LOCATION)) {
-            // Explain to the user why the permission is needed
-            // Then request the permission
-            ActivityCompat.requestPermissions(AttendeeDashboard.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_PERMISSION_REQUEST_CODE);
-        } else {
-            // No explanation needed; request the permission
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_PERMISSION_REQUEST_CODE);
-        }
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == LOCATION_PERMISSION_REQUEST_CODE) {
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                // Permission was granted
-                // You can now use the location services
-            } else {
-                // Permission denied
-                // Disable the functionality that depends on this permission.
-            }
-        }
-    }
 
     private void removeFromCheckInSystem(String userID) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
