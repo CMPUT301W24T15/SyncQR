@@ -51,7 +51,6 @@ public class LoginActivity extends AppCompatActivity {
                                 // Retrieve profile data
                                 Map<String, Object> data = document.getData();
                                 allUserIds.add((String)data.get("userID"));
-                                Log.d(TAG, (String)data.get("userID") + " Found");
                             }
                         }
                     }
@@ -72,7 +71,7 @@ public class LoginActivity extends AppCompatActivity {
         ArrayList<String> allUserIds = getAllAccounts();
         boolean found = false;
         for (String user : allUserIds) {
-            if (userID.equals(user)) {
+            if (userID.contains(user)) {
                 found = true;
                 break;
             }
