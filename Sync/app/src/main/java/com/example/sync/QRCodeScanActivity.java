@@ -4,18 +4,26 @@ import static com.google.android.gms.location.LocationServices.getFusedLocationP
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
+import com.example.sync.organizer.OrganizerDashboard;
 import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.zxing.BinaryBitmap;
 import com.google.zxing.LuminanceSource;
 import com.google.zxing.MultiFormatReader;
@@ -23,6 +31,7 @@ import com.google.zxing.Result;
 import com.google.zxing.common.HybridBinarizer;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
+import com.google.firebase.firestore.GeoPoint;
 
 import java.io.InputStream;
 
@@ -34,8 +43,10 @@ import java.io.InputStream;
 public class QRCodeScanActivity extends AppCompatActivity {
 
     private static final int PICK_IMAGE_REQUEST = 1;
-    public static Activity context;
+    private static final int REQUEST_LOCATION_PERMISSION = 1031;
     private FusedLocationProviderClient fusedLocationClient;
+
+    public static String eventId;
 
 
     /**
@@ -48,8 +59,10 @@ public class QRCodeScanActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // Initialize the FusedLocationProviderClient
-        fusedLocationClient = getFusedLocationProviderClient(this);
+        // Ask location permission
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+
+
         // Show an option dialog for user to choose between camera scan or gallery pick
         showScanOptionDialog();
     }
@@ -129,10 +142,10 @@ public class QRCodeScanActivity extends AppCompatActivity {
             EventDetailsActivity.startWithEventId(this, eventId);
         } else if (scannedData.startsWith("checkin")) {
             // Extract the event ID from the scanned data
-            String eventId = extractSubstringAfterDelimiter(scannedData, ":"); // This skips the "checkin:" part
+            eventId = extractSubstringAfterDelimiter(scannedData, ":"); // This skips the "checkin:" part
             String userID = getIntent().getStringExtra("userID");
             Log.e("UserID:", "UserID = " + userID);
-            fetchLocationAndCheckIn(eventId, userID);
+            fetchLocationAndCheckIn(userID);
         } else {
             // Handle any other unexpected QR code data
             Toast.makeText(this, "Unrecognized QR Code", Toast.LENGTH_LONG).show();
@@ -191,46 +204,58 @@ public class QRCodeScanActivity extends AppCompatActivity {
         }
     }
 
-    private void fetchLocationAndCheckIn(String eventId, String userID) {
+    private void fetchLocationAndCheckIn(String userID) {
+        checkLocationPermission();
         Checkin.checkInForUser(eventId, userID);
-//        SharedPreferences prefs = getSharedPreferences("AppSettings", MODE_PRIVATE);
-//        boolean isGeolocationEnabled = prefs.getBoolean("GeolocationEnabled", true);
-//
-//        if (isGeolocationEnabled) {
-//
-//            if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-//                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
-//                return;
-//            }
-//
-//            FusedLocationProviderClient fusedLocationClient = getFusedLocationProviderClient(this);
-//
-//            LocationRequest locationRequest = LocationRequest.create();
-//            locationRequest.setInterval(10000); // 10 seconds
-//            locationRequest.setFastestInterval(5000); // 5 seconds
-//            locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-//
-//            // If there is a location result, take the first one and use it to update your Firestore.
-//            // Your method to update Firestore
-//            LocationCallback locationCallback = new LocationCallback() {
-//                @Override
-//                public void onLocationResult(@NonNull LocationResult locationResult) {
-//                    // Logic to handle location object
-//                    android.location.Location location = locationResult.getLocations().get(0);
-//                    double latitude = location.getLatitude();
-//                    double longitude = location.getLongitude();
-//                    Log.d("Location", "Latitude: " + latitude + ", Longitude: " + longitude);
-//                    // Proceed with check-in using the location
-//                    GeoPoint geoPoint = new GeoPoint(location.getLatitude(), location.getLongitude());
-//                    //Checkin.checkInForUser(eventId, userID, geoPoint);
-//                }
-//            };
-//
-//            fusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, Looper.getMainLooper());
-//        } else {
-//            Log.d("requestLocationUpdates", "Geolocation is disabled in preferences.");
-//            return;
-//        }
     }
+
+    // ---------------------------------- methods for acquiring location-----------------------------
+    private void getLastLocation() {
+        if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION)
+                == PackageManager.PERMISSION_GRANTED) {
+            fusedLocationClient.getLastLocation()
+                    .addOnSuccessListener(this, new OnSuccessListener<Location>() {
+                        @Override
+                        public void onSuccess(Location location) {
+                            if (location != null) {
+
+                                double latitude = location.getLatitude();
+                                double longitude = location.getLongitude();
+
+                                // Comment out to test:
+                                // Toast.makeText(QRCodeScanActivity.this, "Latitude: " + latitude + ", Longitude: " + longitude, Toast.LENGTH_SHORT).show();
+                                Checkin.updateLocation(eventId, new GeoPoint(latitude, longitude));
+                            } else {
+                                Toast.makeText(QRCodeScanActivity.this, "Location is null", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    });
+        }
+    }
+
+    private void checkLocationPermission() {
+        if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this,
+                    new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION},
+                    REQUEST_LOCATION_PERMISSION);
+        } else {
+            getLastLocation();
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == REQUEST_LOCATION_PERMISSION) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                getLastLocation();
+            } else {
+                Toast.makeText(this, "Location permission denied", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
 
 }
