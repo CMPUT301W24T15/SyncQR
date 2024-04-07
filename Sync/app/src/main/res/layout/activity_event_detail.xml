@@ -13,6 +13,8 @@
                 android:id="@+id/back_button"
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
+                android:backgroundTint="@color/button_yellow"
+                android:textColor="@color/black"
                 android:text="Back" />
 
     </com.google.android.material.appbar.AppBarLayout>
@@ -82,6 +84,8 @@
                 android:id="@+id/sign_up_button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:backgroundTint="@color/button_yellow"
+                android:textColor="@color/black"
                 android:text="Sign up">
             </Button>
 
@@ -89,6 +93,8 @@
                 android:id="@+id/check_in_button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:backgroundTint="@color/button_yellow"
+                android:textColor="@color/black"
                 android:text="Check In">
             </Button>
 

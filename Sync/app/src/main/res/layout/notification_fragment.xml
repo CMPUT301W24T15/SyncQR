@@ -17,6 +17,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Clear Notifications"
+        android:backgroundTint="@color/button_yellow"
+        android:textColor="@color/black"
         android:layout_marginTop="16dp"/>
 
 </LinearLayout>
