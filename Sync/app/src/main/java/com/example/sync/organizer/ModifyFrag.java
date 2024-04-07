@@ -170,6 +170,15 @@ public class ModifyFrag extends Fragment {
             }
         });
 
+        // generate a unique promotion QR code that links to the event description and event poster in the app.
+        promotion.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                PromoDialog promoDialog = PromoDialog.newInstance(event.getEventId());
+                promoDialog.show(getChildFragmentManager(), "promotion dialog");
+            }
+        });
+
     }
 
     public void setListener(ModifyListener listener) {
