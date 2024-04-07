@@ -13,8 +13,10 @@
             android:id="@+id/attendee_label"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
             android:text="Attendee"
-            android:layout_alignParentStart="true" />
+            android:textSize="18sp"
+            android:textStyle="bold" />
 
         <ImageView
             android:id="@+id/profile_image_top_right"
@@ -27,6 +29,8 @@
             android:id="@+id/permission_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:backgroundTint="@color/button_grey"
+            android:textColor="@color/black"
             android:text="Permission"
             android:layout_toStartOf="@id/profile_image_top_right"/>
 
@@ -42,28 +46,36 @@
             android:id="@+id/home_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:backgroundTint="@color/white"
+            android:textColor="@color/black"
             android:text="Home" />
 
         <Button
             android:id="@+id/profile_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:backgroundTint="@color/white"
+            android:textColor="@color/black"
             android:text="Profile" />
 
         <Button
             android:id="@+id/event_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:backgroundTint="@color/white"
+            android:textColor="@color/black"
             android:text="Event" />
 
         <Button
             android:id="@+id/messages_button"
-            android:layout_width="wrap_content"
+            android:layout_width="@dimen/messages_button"
             android:layout_height="wrap_content"
-            android:text="Messages" />
+            android:backgroundTint="@color/white"
+            android:text="Messages"
+            android:textColor="@color/black" />
     </LinearLayout>
 
-    <!-- Welcome Image Section -->
+
     <ImageView
         android:id="@+id/welcome_image"
         android:layout_width="match_parent"
@@ -86,12 +98,16 @@
             android:id="@+id/check_in_with_qr_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:backgroundTint="@color/button_grey"
+            android:textColor="@color/black"
             android:text="Check-in with QR" />
 
         <Button
             android:id="@+id/quit_event_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:backgroundTint="@color/button_yellow"
+            android:textColor="@color/black"
             android:text="Quit Event"
             android:visibility="gone" />
 
@@ -99,7 +115,11 @@
             android:id="@+id/browse_event_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:backgroundTint="@color/button_yellow"
+            android:textColor="@color/black"
             android:text="Browse Events" />
     </LinearLayout>
 
 </LinearLayout>
+
+
