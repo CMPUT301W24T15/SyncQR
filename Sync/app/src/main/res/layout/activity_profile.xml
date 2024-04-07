@@ -45,29 +45,33 @@
             android:id="@+id/home_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:backgroundTint="@color/button_yellow"
+            android:backgroundTint="@color/white"
+            android:textColor="@color/black"
             android:text="Home" />
 
         <Button
             android:id="@+id/profile_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:backgroundTint="@color/button_yellow"
+            android:backgroundTint="@color/white"
+            android:textColor="@color/black"
             android:text="Profile" />
 
         <Button
             android:id="@+id/event_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:backgroundTint="@color/button_yellow"
+            android:backgroundTint="@color/white"
+            android:textColor="@color/black"
             android:text="Event" />
 
         <Button
             android:id="@+id/messages_button"
-            android:layout_width="wrap_content"
+            android:layout_width="124dp"
             android:layout_height="wrap_content"
-            android:backgroundTint="@color/button_yellow"
-            android:text="Messages" />
+            android:backgroundTint="@color/white"
+            android:text="Messages"
+            android:textColor="@color/black" />
     </LinearLayout>
 
     <com.example.sync.AvatarView
@@ -96,6 +100,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:backgroundTint="@color/button_grey"
+            android:textColor="@color/black"
             android:text="Upload Picture" />
 
         <Button
@@ -103,6 +108,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:backgroundTint="@color/button_yellow"
+            android:textColor="@color/black"
             android:text="Remove Picture" />
     </LinearLayout>
     <LinearLayout
@@ -145,6 +151,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:backgroundTint="@color/button_yellow"
+            android:textColor="@color/black"
             android:text="Save" />
 
         <Button
@@ -152,6 +159,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:backgroundTint="@color/button_grey"
+            android:textColor="@color/black"
             android:text="Cancel" />
     </LinearLayout>
 
