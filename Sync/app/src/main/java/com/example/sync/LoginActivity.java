@@ -69,17 +69,8 @@ public class LoginActivity extends AppCompatActivity {
         // read userID from local setting
         userID = sharedPref.getString("userID", null);
 
-        ArrayList<String> allUserIds = getAllAccounts();
-        boolean found = false;
-        for (String user : allUserIds) {
-            if (userID.equals(user)) {
-                found = true;
-                break;
-            }
-        }
-
         // if userID is null, it is a new user
-        if (userID == null || !found) {
+        if (userID == null) {
             userID = UserIDGenerator.generateUserID();
             User user = new User(userID);
             user.saveUser();
@@ -87,6 +78,38 @@ public class LoginActivity extends AppCompatActivity {
             editor.putString("userID", userID);
             editor.apply();
         }
+
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection("Accounts")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        ArrayList<String> allUserIds = new ArrayList<>();
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                // Retrieve profile data
+                                Map<String, Object> data = document.getData();
+                                allUserIds.add((String)data.get("userID"));
+                                Log.d(TAG, (String)data.get("userID") + " Found");
+                            }
+                        }
+                        boolean found = false;
+                        for (String s : allUserIds) {
+                            if (userID.equals(s))
+                                found = true;
+                        }
+                        if (!found) {
+                            userID = UserIDGenerator.generateUserID();
+                            User user = new User(userID);
+                            user.saveUser();
+                            Log.d(TAG, "Creating new Account in Login Activity");
+                            editor.putString("userID", userID);
+                            editor.apply();
+                        }
+                    }
+                });
+
 
 
         Log.d("kevinTag", "Created Login Activity");
