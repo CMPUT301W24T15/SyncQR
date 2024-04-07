@@ -1,8 +1,11 @@
 package com.example.sync.organizer;
 
+import android.content.pm.PackageManager;
+import android.location.Location;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
@@ -17,6 +20,8 @@ import com.example.sync.R;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.Objects;
+
+
 
 public class OrganizerDashboard extends AppCompatActivity implements FragListener {
     private Organizer organizer;
@@ -53,28 +58,42 @@ public class OrganizerDashboard extends AppCompatActivity implements FragListene
             public void onSuccessReturnId(ArrayList<String> ids) {
                 idList = ids;
                 if (!idList.isEmpty()) {
+
+                    // record event id based on the order (sequence) they sent back
+                    // resolve thread issue
+                    ArrayList<String> order = new ArrayList<>();
+
                     for (String id : idList) {
                         Checkin.getListFromDatabase(id, new Checkin.Callback() {
                             @Override
-                            public void onSuccess(String eventName, Map<String, Object> counts, ArrayList<String> current, ArrayList<String> signup) {
+                            public void onSuccess(String eventId, String eventName, Map<String, Object> counts, ArrayList<String> current, ArrayList<String> signup) {
+                                order.add(eventId);
                                 countList.add(current.size());
                                 nameList.add(eventName);
 
+                                // check if it reaches important milestone
+                                invokeCongrat(eventName, current.size());
+
                                 // add listener for each event
-                                int index = idList.indexOf(id);
+                                int index = order.indexOf(id);
                                 Checkin.addListenerToEvent(id, index, countList, new Checkin.Callback() {
                                     @Override
-                                    public void onSuccessUpdate(int newCount) {
+                                    public void onSuccessUpdate(String eventName, int newCount) {
                                         if (adapter!=null) {
                                             countList.set(index, newCount);
                                             adapter.notifyItemChanged(index);
+
+                                            // check if it reaches important milestone
+                                            invokeCongrat(eventName, newCount);
                                         }
                                     }
                                 });
 
+                                // set adapter after all lists are ready. need a reference so use idList.size()
                                 if (nameList.size() == idList.size()) {
 
                                     // Set RecyclerView adapter
+                                    idList = order;  // only keep with the correct order list
                                     recyclerView.setLayoutManager(new LinearLayoutManager(OrganizerDashboard.this));
                                     adapter = new EventRecyclerAdapter(nameList, countList);
                                     recyclerView.setAdapter(adapter);
@@ -133,23 +152,32 @@ public class OrganizerDashboard extends AppCompatActivity implements FragListene
             @Override
             public void onSuccessReturnId(ArrayList<String> newList) {
                 if (!idList.equals(newList)) {
-                    idList = newList;
-                    String lastID = newList.get(newList.size() - 1);
-                    Checkin.getListFromDatabase(lastID, new Checkin.Callback() {
+
+                    for (String item : newList) {
+                        if (!idList.contains(item)) {
+                            idList.add(item);
+                        }
+                    }
+
+                    String newID = idList.get(idList.size() - 1);
+                    Checkin.getListFromDatabase(newID, new Checkin.Callback() {
                         @Override
-                        public void onSuccess(String eventName, Map<String, Object> counts, ArrayList<String> current, ArrayList<String> signup) {
+                        public void onSuccess(String eventId, String eventName, Map<String, Object> counts, ArrayList<String> current, ArrayList<String> signup) {
                             nameList.add(eventName);
                             countList.add(current.size());
                             adapter.notifyItemChanged(nameList.size() - 1);
 
                             // add listener for new event
                             int index = idList.size()-1;
-                            Checkin.addListenerToEvent(lastID, index, countList, new Checkin.Callback() {
+                            Checkin.addListenerToEvent(newID, index, countList, new Checkin.Callback() {
                                 @Override
-                                public void onSuccessUpdate(int newCount) {
+                                public void onSuccessUpdate(String name, int newCount) {
                                     if (adapter!=null) {
                                         countList.set(index, newCount);
                                         adapter.notifyItemChanged(index);
+
+                                        // check if it reaches milestone
+                                        invokeCongrat(name, newCount);
                                     }
                                 }
                             });
@@ -159,5 +187,13 @@ public class OrganizerDashboard extends AppCompatActivity implements FragListene
                 }
             }
         });
+    }
+
+    public void invokeCongrat(String name, int size) {
+        // check if it reaches important milestone
+        if (size == 10 || size == 20 || size == 40 || size == 80){
+            CongraDialog congraDialog = CongraDialog.newInstance(name, String.valueOf(size));
+            congraDialog.show(getSupportFragmentManager(), "congratulations!");
+        }
     }
 }
