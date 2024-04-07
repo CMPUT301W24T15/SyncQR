@@ -126,14 +126,14 @@
             android:id="@+id/hint4"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="20sp"
             android:layout_marginHorizontal="20dp"
             android:layout_marginTop="30dp"
-            android:text="Ogrnaizer Name"
-            app:layout_constraintTop_toBottomOf="@id/input3"
-            app:layout_constraintStart_toStartOf="parent"
+            android:text="Organizer Name"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toTopOf="@id/input4"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toTopOf="@id/input4">
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/input3">
 
         </TextView>
 

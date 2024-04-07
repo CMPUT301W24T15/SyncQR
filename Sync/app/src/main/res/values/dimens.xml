@@ -8,4 +8,5 @@
     <dimen name="button_text_size">16dp</dimen>
     <dimen name="button_text_size_large">24dp</dimen>
     <dimen name="messages_button">124dp</dimen>
+    <dimen name="large_extended_button">348</dimen>
 </resources>
