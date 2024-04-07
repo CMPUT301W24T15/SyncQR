@@ -15,7 +15,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
             android:text="Attendee"
-            android:textSize="16sp"
+            android:textSize="18sp"
             android:textStyle="bold"/>
 
         <ImageView
