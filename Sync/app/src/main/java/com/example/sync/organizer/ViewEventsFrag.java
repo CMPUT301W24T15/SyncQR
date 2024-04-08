@@ -20,7 +20,6 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.example.sync.Event;
 import com.example.sync.Notification;
-import com.example.sync.R;
 import java.util.ArrayList;
 
 
@@ -85,7 +84,7 @@ public class ViewEventsFrag extends Fragment{
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.view_events, container, false);
+        View view = inflater.inflate(com.example.sync.R.layout.view_events, container, false);
         return view;
     }
 
@@ -98,8 +97,8 @@ public class ViewEventsFrag extends Fragment{
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        toolbar = view.findViewById(R.id.toolbar);
-        eventList = view.findViewById(R.id.eventList);
+        toolbar = view.findViewById(com.example.sync.R.id.toolbar);
+        eventList = view.findViewById(com.example.sync.R.id.eventList);
     }
 
     /**
@@ -169,7 +168,7 @@ public class ViewEventsFrag extends Fragment{
                 });
 
                 FragmentTransaction transaction = requireActivity().getSupportFragmentManager().beginTransaction();
-                transaction.replace(R.id.fragment_container, eventDetailFrag);
+                transaction.replace(com.example.sync.R.id.fragment_container, eventDetailFrag);
                 transaction.addToBackStack("event_detail");
                 transaction.commit();
 

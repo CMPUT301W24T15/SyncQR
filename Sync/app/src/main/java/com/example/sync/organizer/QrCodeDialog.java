@@ -25,7 +25,6 @@ import androidx.fragment.app.DialogFragment;
 
 import com.example.sync.Checkin;
 import com.example.sync.QRCodeGenerator;
-import com.example.sync.R;
 import com.google.zxing.BinaryBitmap;
 import com.google.zxing.LuminanceSource;
 import com.google.zxing.MultiFormatReader;
@@ -109,14 +108,14 @@ public class QrCodeDialog extends DialogFragment {
         builder.setTitle("Tab to Generate QR Code");
 
         // link to a view
-        View view = LayoutInflater.from(getContext()).inflate(R.layout.qr_code_organizer, null);
+        View view = LayoutInflater.from(getContext()).inflate(com.example.sync.R.layout.qr_code_organizer, null);
         builder.setView(view);
 
-        qrcode = view.findViewById(R.id.qrCodeImageView);
-        generate = view.findViewById(R.id.generate_button);
-        reuse = view.findViewById(R.id.reuse_button);
-        share = view.findViewById(R.id.share_button);
-        save = view.findViewById(R.id.save_button);
+        qrcode = view.findViewById(com.example.sync.R.id.qrCodeImageView);
+        generate = view.findViewById(com.example.sync.R.id.generate_button);
+        reuse = view.findViewById(com.example.sync.R.id.reuse_button);
+        share = view.findViewById(com.example.sync.R.id.share_button);
+        save = view.findViewById(com.example.sync.R.id.save_button);
 
         // get the input string (optional)
         Bundle args = getArguments();

@@ -30,27 +30,6 @@ public class LoginActivity extends AppCompatActivity {
     private static String TAG = "KevinTag";
     private String userID;
 
-    public ArrayList<String> getAllAccounts() {
-        ArrayList<String> allUserIds = new ArrayList<>();
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        db.collection("Accounts")
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                // Retrieve profile data
-                                Map<String, Object> data = document.getData();
-                                allUserIds.add((String)data.get("userID"));
-                                Log.d(TAG, (String)data.get("userID") + " Found");
-                            }
-                        }
-                    }
-                });
-        return allUserIds;
-    }
-
     /**
      * Method to be called when the activity is first created
      * @param savedInstanceState If the activity is being re-initialized after

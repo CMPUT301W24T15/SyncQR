@@ -14,7 +14,6 @@ import androidx.fragment.app.DialogFragment;
 
 import com.example.sync.Checkin;
 import com.example.sync.Event;
-import com.example.sync.R;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -60,8 +59,8 @@ public class ViewAttendeeDialog extends DialogFragment {
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
         // Create the AlertDialog Builder
         AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
-        View view = LayoutInflater.from(getContext()).inflate(R.layout.view_attendee, null);
-        attendeeList = view.findViewById(R.id.view_attendee);
+        View view = LayoutInflater.from(getContext()).inflate(com.example.sync.R.layout.view_attendee, null);
+        attendeeList = view.findViewById(com.example.sync.R.id.view_attendee);
 
         // Set the title
         builder.setTitle("Tap To See Detail");
