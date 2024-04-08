@@ -22,19 +22,54 @@ import java.util.Map;
 import java.util.Objects;
 
 
-
+/**
+ * OrganizerDashboard class represents the dashboard for an organizer user.
+ * It displays options for the organizer to create new events, view existing events,
+ * and provides statistics on the events they manage.
+ */
 public class OrganizerDashboard extends AppCompatActivity implements FragListener {
-    private Organizer organizer;
 
+    /**
+     * The currently logged-in organizer.
+     */
+    private String organizer = "1718521";
     // find fragments
+    /**
+     * The root view of the dashboard.
+     */
     View dashboard;
+    /**
+     * The container for fragments within the dashboard.
+     */
     View fragmentContainer;
+    /**
+     * Adapter for the RecyclerView displaying event statistics.
+     */
     EventRecyclerAdapter adapter;
+    /**
+     * RecyclerView to display event statistics.
+     */
     RecyclerView recyclerView;
+    /**
+     * List to store the count of attendees for each event.
+     */
     ArrayList<Integer> countList = new ArrayList<>();
+    /**
+     * List to store the names of events.
+     */
     ArrayList<String> nameList = new ArrayList<>();
+    /**
+     * List to store the IDs of events.
+     */
     ArrayList<String> idList = new ArrayList<>();
 
+    /**
+     * Called when the activity is starting.
+     * @param savedInstanceState If the activity is being re-initialized after
+     *     previously being shut down then this Bundle contains the data it most
+     *     recently supplied in {@link #onSaveInstanceState}.  <b><i>Note: Otherwise it is null.</i></b>
+     *
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,7 +88,7 @@ public class OrganizerDashboard extends AppCompatActivity implements FragListene
 
         // initialize list for milestones
         // ****************** change to userId intent ***************
-        Event.getCreatedEventIdList("1718521", new Event.Callback() {
+        Event.getCreatedEventIdList(organizer, new Event.Callback() {
             @Override
             public void onSuccessReturnId(ArrayList<String> ids) {
                 idList = ids;
@@ -111,7 +146,7 @@ public class OrganizerDashboard extends AppCompatActivity implements FragListene
             @Override
             public void onClick(View v) {
                 // ****************** change to userId intent ***************
-                CreateEventFrag createEventFrag = CreateEventFrag.newInstance("1718521");
+                CreateEventFrag createEventFrag = CreateEventFrag.newInstance(organizer);
                 FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
                 transaction.replace(R.id.fragment_container, createEventFrag);
                 transaction.addToBackStack(null);
@@ -126,7 +161,7 @@ public class OrganizerDashboard extends AppCompatActivity implements FragListene
             @Override
             public void onClick(View v) {
                 // ****************** change to userId intent ***************
-                ViewEventsFrag viewEventsFrag = ViewEventsFrag.newInstance("1718521");
+                ViewEventsFrag viewEventsFrag = ViewEventsFrag.newInstance(organizer);
                 FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
                 transaction.replace(R.id.fragment_container, viewEventsFrag);
                 transaction.addToBackStack(null);
@@ -140,6 +175,11 @@ public class OrganizerDashboard extends AppCompatActivity implements FragListene
 
     }
 
+    /**
+     * Shut down the create event fragment
+     * Check if the created list has been updated
+     * @param frag The fragment to be shut down.
+     */
     @Override
     public void notifyShutDown(Fragment frag) {
         getSupportFragmentManager().beginTransaction().remove(frag).commit();
@@ -148,7 +188,7 @@ public class OrganizerDashboard extends AppCompatActivity implements FragListene
 
         // Add new event to dashboard
         // ****************** change to userId intent ***************
-        Event.getCreatedEventIdList("1718521", new Event.Callback() {
+        Event.getCreatedEventIdList(organizer, new Event.Callback() {
             @Override
             public void onSuccessReturnId(ArrayList<String> newList) {
                 if (!idList.equals(newList)) {
@@ -189,6 +229,11 @@ public class OrganizerDashboard extends AppCompatActivity implements FragListene
         });
     }
 
+    /**
+     * Invokes a congratulations dialog if the event reaches a milestone.
+     * @param name The name of the event.
+     * @param size The number of attendees for the event.
+     */
     public void invokeCongrat(String name, int size) {
         // check if it reaches important milestone
         if (size == 10 || size == 20 || size == 40 || size == 80){

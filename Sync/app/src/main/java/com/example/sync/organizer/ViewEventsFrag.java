@@ -23,6 +23,10 @@ import com.example.sync.Notification;
 import com.example.sync.R;
 import java.util.ArrayList;
 
+
+/**
+ * Fragment for viewing events created by the organizer.
+ */
 public class ViewEventsFrag extends Fragment{
 
     private FragListener listener;
@@ -34,7 +38,11 @@ public class ViewEventsFrag extends Fragment{
     private SearchView search; // has not been implemented
     private ViewEventsFrag self = this;
 
-
+    /**
+     * Creates a new instance of ViewEventsFrag.
+     * @param userId The ID of the user.
+     * @return ViewEventsFrag
+     */
     static ViewEventsFrag newInstance(String userId) {
         // create the fragment instance
         ViewEventsFrag fragment = new ViewEventsFrag();
@@ -46,6 +54,11 @@ public class ViewEventsFrag extends Fragment{
         return fragment;
     }
 
+    /**
+     * Called when a fragment is first attached to its context.
+     * Attach a listener
+     * @param context
+     */
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
@@ -57,6 +70,18 @@ public class ViewEventsFrag extends Fragment{
         }
     }
 
+    /**
+     * Called to have the fragment instantiate its user interface view.
+     * @param inflater The LayoutInflater object that can be used to inflate
+     * any views in the fragment,
+     * @param container If non-null, this is the parent view that the fragment's
+     * UI should be attached to.  The fragment should not add the view itself,
+     * but this can be used to generate the LayoutParams of the view.
+     * @param savedInstanceState If non-null, this fragment is being re-constructed
+     * from a previous saved state as given here.
+     *
+     * @return View
+     */
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -64,6 +89,12 @@ public class ViewEventsFrag extends Fragment{
         return view;
     }
 
+    /**
+     * Link the relevant views
+     * @param view The View returned by {@link #onCreateView(LayoutInflater, ViewGroup, Bundle)}.
+     * @param savedInstanceState If non-null, this fragment is being re-constructed
+     * from a previous saved state as given here.
+     */
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -71,6 +102,11 @@ public class ViewEventsFrag extends Fragment{
         eventList = view.findViewById(R.id.eventList);
     }
 
+    /**
+     * Called when the Fragment is visible to the user.
+     * Obtain all the events from database
+     * Set onclick listener so when user click, it will jump to the right fragment
+     */
     @Override
     public void onStart() {
         super.onStart();

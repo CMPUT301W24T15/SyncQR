@@ -16,8 +16,17 @@ import com.example.sync.Notification;
 import com.example.sync.R;
 import com.google.android.material.textfield.TextInputEditText;
 
+/**
+ * A dialog fragment used to push notifications for a specific event to attendees.
+ * Allows organizers to input a message and push it as a notification to event attendees.
+ */
 public class NotifyDialog extends DialogFragment {
 
+    /**
+     * Creates a new instance of NotifyDialog with the provided event.
+     * @param event The event for which notifications will be pushed.
+     * @return NotifyDialog
+     */
     static NotifyDialog newInstance(Event event) {
         // create the fragment instance
         NotifyDialog dialog = new NotifyDialog();
@@ -29,7 +38,13 @@ public class NotifyDialog extends DialogFragment {
         return dialog;
     }
 
-
+    /**
+     * Called to create the dialog shown by this fragment.
+     * @param savedInstanceState The last saved instance state of the Fragment,
+     * or null if this is a freshly created Fragment.
+     *
+     * @return Dialog
+     */
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {

@@ -23,10 +23,25 @@ import com.example.sync.R;
 
 import java.io.ByteArrayOutputStream;
 
+
+/**
+ * PromoDialog class represents a dialog fragment for promoting an event by sharing its QR code.
+ */
 public class PromoDialog extends DialogFragment {
+    /**
+     * The generated qr code used to promote
+     */
     ImageView qrcode;
+    /**
+     * The share button
+     */
     Button share;
 
+    /**
+     * Creates a new instance of PromoDialog with the given event ID.
+     * @param eventId The ID of the event.
+     * @return PromoDialog
+     */
     static PromoDialog newInstance(String eventId) {
         // create the fragment instance
         PromoDialog dialog = new PromoDialog();
@@ -38,6 +53,11 @@ public class PromoDialog extends DialogFragment {
         return dialog;
     }
 
+    /**
+     * Called to create the dialog shown in the fragment.
+     * @param savedInstanceState If the fragment is being re-created from a previous saved state, this is the state.
+     * @return AlertDialog
+     */
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
@@ -76,6 +96,11 @@ public class PromoDialog extends DialogFragment {
         return builder.create();
     }
 
+    /**
+     * Converts a bitmap image to a Uri.
+     * @param bitmap The bitmap image to convert.
+     * @return The Uri of the converted image.
+     */
     private Uri bitmapToUri(Bitmap bitmap) {
         ByteArrayOutputStream bytes = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
