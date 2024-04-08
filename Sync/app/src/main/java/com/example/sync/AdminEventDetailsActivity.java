@@ -30,7 +30,7 @@ import java.util.Objects;
  */
 public class AdminEventDetailsActivity extends AppCompatActivity {
 
-    ImageView poster; // This ImageView has not been implemented yet. It can be implemented when connecting to a database.
+    ImageView poster;
     TextView name;
     TextView location;
     TextView date;
