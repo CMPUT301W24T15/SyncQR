@@ -34,11 +34,27 @@ public class AvatarView extends AppCompatImageView {
         super(context, attrs, defStyleAttr);
         init();
     }
+    private void loadImageIfAvailable() {
+        String uriString = getContext().getSharedPreferences("ProfilePrefs", Context.MODE_PRIVATE)
+                .getString("profileImageUri", null);
+        if (uriString != null) {
+            Uri savedUri = Uri.parse(uriString);
+            Glide.with(getContext())
+                    .load(savedUri)
+                    .fitCenter()
+                    .into(this);
+            isImageLoaded = true;
+        }
+    }
 
+    public boolean isImageLoaded() {
+        return this.isImageLoaded;
+    }
     private void init() {
         borderColor = getResources().getColor(android.R.color.black);
         borderWidth = 4; // Default border width
         backgroundColor = generateRandomColor();
+        loadImageIfAvailable();
     }
 
     @Override
@@ -96,10 +112,13 @@ public class AvatarView extends AppCompatImageView {
         }
     }
     public void setInitialsFromName(String name) {
-        this.initials = getInitials(name);
-        isImageLoaded = false; // No image is being displayed, showing initials instead
-        invalidate(); // Trigger a redraw
+        // Check if an image has already been loaded; if so, do not overwrite with initials
+        if (!isImageLoaded) {
+            this.initials = getInitials(name);
+            invalidate(); // Trigger a redraw
+        }
     }
+
     private String getInitials(String name) {
         if (name == null || name.isEmpty()) return "";
 
@@ -123,18 +142,27 @@ public class AvatarView extends AppCompatImageView {
         setImageDrawable(null); // Remove any set image
         invalidate(); // Trigger a redraw to ensure correct state is shown
     }
+    private void saveImageUri(Uri uri) {
+        getContext().getSharedPreferences("ProfilePrefs", Context.MODE_PRIVATE)
+                .edit()
+                .putString("profileImageUri", uri.toString())
+                .apply();
+    }
     public void setImageUri(Uri uri) {
         this.initials = ""; // Clear initials
         isImageLoaded = true; // Mark that an image has been loaded
+        saveImageUri(uri); // Save the image URI
 
         Glide.with(getContext())
                 .load(uri)
                 .fitCenter() // Ensure the image fits within the ImageView bounds
                 .into(this);
     }
+
     public void resetToDefault() {
         this.initials = ""; // Clear initials
         isImageLoaded = false; // Reset the flag as no image is now loaded
+        getContext().getSharedPreferences("ProfilePrefs", Context.MODE_PRIVATE).edit().remove("profileImageUri").apply(); // Clear saved URI
         setImageDrawable(null); // Remove any set image
         // Optionally, set a default image if you have one
         // Glide.with(getContext()).load(R.drawable.default_image).into(this);

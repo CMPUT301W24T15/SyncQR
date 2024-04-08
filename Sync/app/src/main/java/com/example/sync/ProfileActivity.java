@@ -12,6 +12,8 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -83,6 +85,26 @@ public class ProfileActivity extends AppCompatActivity {
         // Get the profile information for users
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         DocumentReference profileRef = db.collection("Accounts").document(userID);
+        userNameInput.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                // Not used
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                // Not used
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                String newName = s.toString().trim();
+                // Update initials in AvatarView, respecting the uploaded image
+                if (!newName.isEmpty() && !userImageInput.isImageLoaded()) {
+                    userImageInput.setInitialsFromName(newName);
+                }
+            }
+        });
 
         profileRef.get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
@@ -328,6 +350,21 @@ public class ProfileActivity extends AppCompatActivity {
         if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
             Uri selectedImageUri = data.getData();
             try {
+                userImageInput.setImageUri(selectedImageUri); // Update this line
+                Glide.with(this)
+                        .asBitmap()
+                        .load(selectedImageUri)
+                        .into(new CustomTarget<Bitmap>() {
+                            @Override
+                            public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
+                                userBitmap = resource; // Now userBitmap is updated with the new image
+                            }
+
+                            @Override
+                            public void onLoadCleared(@Nullable Drawable placeholder) {
+                            }
+                        });
+                //isImageLoaded = true;
                 Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), selectedImageUri);
                 // Set the bitmap to the AvatarView
                 userImageInput.setImageBitmap(bitmap);
