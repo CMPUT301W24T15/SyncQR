@@ -222,7 +222,8 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/border"
                 android:hint="Enter description"
-                android:inputType="text"
+                android:inputType="textMultiLine"
+                android:scrollbars="vertical"
                 android:textColorHint="@color/white"
                 android:gravity="top|start"
                 android:minHeight="120dp">
