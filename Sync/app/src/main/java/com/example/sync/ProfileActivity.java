@@ -4,20 +4,31 @@ import static android.content.ContentValues.TAG;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
+import java.io.ByteArrayOutputStream;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -30,6 +41,7 @@ public class ProfileActivity extends AppCompatActivity {
     private AvatarView userImageInput;
     private static final int PICK_IMAGE_REQUEST = 1;
     private Uri imageUri;
+    private Bitmap userBitmap;
 
     /**
      * Called when the activity is starting.
@@ -56,7 +68,6 @@ public class ProfileActivity extends AppCompatActivity {
         Button profileButton = findViewById(R.id.profile_button);
         Button eventButton = findViewById(R.id.event_button);
         Button messagesButton = findViewById(R.id.messages_button);
-        Button qrCodeButton = findViewById(R.id.qr_code_button);
         Button uploadpicButton = findViewById(R.id.upload_picture_button);
         Button removepicButton = findViewById(R.id.remove_picture_button);
 
@@ -120,6 +131,7 @@ public class ProfileActivity extends AppCompatActivity {
 
                         if (name != null && !name.isEmpty()) {
                             userImageInput.setInitialsFromName(name);
+                            userBitmap = getBitmapFromView(userImageInput);
                         } else {
                             userImageInput.removeInitialsAndImage();
                         }
@@ -143,7 +155,6 @@ public class ProfileActivity extends AppCompatActivity {
         homeButton.setOnClickListener(view -> navigateToAttendee());
         eventButton.setOnClickListener(view -> navigateToEvent());
         messagesButton.setOnClickListener(view -> navigateToMyNotificationReceiver());
-        qrCodeButton.setOnClickListener(view -> navigateToQRCodeScanActivity());
 
         uploadpicButton.setOnClickListener(view -> openImageSelector());
         removepicButton.setOnClickListener(view -> removeProfileImage());
@@ -157,39 +168,66 @@ public class ProfileActivity extends AppCompatActivity {
      */
 
     private void saveProfileData() {
-        String name = userNameInput.getText().toString().trim();
-        String email = userEmailInput.getText().toString().trim();
-        String contact = userContactInput.getText().toString().trim();
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-
         // Get the user ID from the intent
         String userID = getIntent().getStringExtra("userID");
 
-        if (userID != null) {
-            // Create a map containing the profile fields
-            Map<String, Object> profileData = new HashMap<>();
-            profileData.put("email", email);
-            profileData.put("imageUrl", ""); // Assuming imageUrl is not changed
-            profileData.put("name", name);
-            profileData.put("phoneNumber", contact);
+        final String[] url = new String[1];
 
-            // Assuming 'userID' is the document ID in the 'Accounts' collection
-            DocumentReference profileRef = db.collection("Accounts").document(userID);
+        FirebaseStorage storage = FirebaseStorage.getInstance();
+        StorageReference storageRef = storage.getReference();
+        StorageReference avatarImagesRef = storageRef.child("profile/" + userID + ".png");
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        userBitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
+        byte[] data = baos.toByteArray();
 
-            // Update the 'profile' field with the new profile data
-            profileRef.update("profile", profileData, "username", name)
-                    .addOnSuccessListener(aVoid -> {
-                        Log.d(TAG, "Profile saved successfully");
-                        // Optionally, show a success message or navigate to another activity
-                    })
-                    .addOnFailureListener(e -> {
-                        Log.e(TAG, "Failed to save profile", e);
-                        // Optionally, show an error message
-                    });
-        } else {
-            Log.e(TAG, "User ID is null");
-            // Handle the error, perhaps by informing the user to try again
-        }
+        UploadTask uploadTask = avatarImagesRef.putBytes(data);
+        uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                // Get a URL to the uploaded content
+                avatarImagesRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                    @Override
+                    public void onSuccess(Uri downloadUrl) {
+                        // Use this URL for your needs
+                        url[0] = downloadUrl.toString();
+                        Log.d("Upload", "Upload successful. URL: " + downloadUrl.toString());
+
+                        // Now that you have the URL, update Firestore here
+                        String name = userNameInput.getText().toString().trim();
+                        String email = userEmailInput.getText().toString().trim();
+                        String contact = userContactInput.getText().toString().trim();
+                        Map<String, Object> profileData = new HashMap<>();
+                        profileData.put("email", email);
+                        profileData.put("imageUrl", url[0]); // Now url[0] has the URL
+                        profileData.put("name", name);
+                        profileData.put("phoneNumber", contact);
+
+                        if (userID != null) {
+                            FirebaseFirestore db = FirebaseFirestore.getInstance();
+                            DocumentReference profileRef = db.collection("Accounts").document(userID);
+                            profileRef.update("profile", profileData, "username", name)
+                                    .addOnSuccessListener(aVoid -> {
+                                        Log.d(TAG, "Profile saved successfully");
+                                        // Optionally, show a success message or navigate to another activity
+                                    })
+                                    .addOnFailureListener(e -> {
+                                        Log.e(TAG, "Failed to save profile", e);
+                                        // Optionally, show an error message
+                                    });
+                        } else {
+                            Log.e(TAG, "User ID is null");
+                            // Handle the error, perhaps by informing the user to try again
+                        }
+                    }
+                });
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+                // Handle unsuccessful uploads
+                Log.e("Upload", "Upload failed", exception);
+            }
+        });
     }
 
     /**
@@ -213,14 +251,6 @@ public class ProfileActivity extends AppCompatActivity {
      */
     private void navigateToMyNotificationReceiver() {
         Intent intent = new Intent(this, NotificationActivity.class);
-        startActivity(intent);
-    }
-
-    /**
-     * Navigates to the QR code scan activity.
-     */
-    private void navigateToQRCodeScanActivity() {
-        Intent intent = new Intent(this, QRCodeScanActivity.class);
         startActivity(intent);
     }
 
@@ -277,4 +307,25 @@ public class ProfileActivity extends AppCompatActivity {
             userImageInput.setImageUri(imageUri); // Update this line to use the new method
         }
     }
+
+    public Bitmap getBitmapFromView(View view) {
+        // Create a bitmap with the same dimensions as the view
+        Bitmap returnedBitmap = Bitmap.createBitmap(view.getWidth(), view.getHeight(), Bitmap.Config.ARGB_8888);
+        // Bind a canvas to it
+        Canvas canvas = new Canvas(returnedBitmap);
+        // Get the view's background
+        Drawable bgDrawable = view.getBackground();
+        if (bgDrawable != null) {
+            // has background drawable, then draw it on the canvas
+            bgDrawable.draw(canvas);
+        } else {
+            // does not have background drawable, then draw white background on the canvas
+            canvas.drawColor(Color.WHITE);
+        }
+        // draw the view on the canvas
+        view.draw(canvas);
+        // return the bitmap
+        return returnedBitmap;
+    }
+
 }
