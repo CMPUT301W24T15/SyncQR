@@ -145,7 +145,7 @@ public class QrCodeDialog extends DialogFragment {
     }
 
     private void generateQRcode(String id){
-        qrcodeText = "n"+id;
+        qrcodeText = "SyncQR"+id;
         bitmap = QRCodeGenerator.generateQRCodeBitmap(qrcodeText, 300, 300);
         qrcode.setImageBitmap(bitmap);
     }
