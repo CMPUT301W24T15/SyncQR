@@ -50,7 +50,7 @@ public class LoginActivity extends AppCompatActivity {
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 // Retrieve profile data
                                 Map<String, Object> data = document.getData();
-                                allUserIds.add((String)data.get("userId"));
+                                allUserIds.add((String)data.get("userID"));
                             }
                         }
                     }
@@ -71,7 +71,7 @@ public class LoginActivity extends AppCompatActivity {
         ArrayList<String> allUserIds = getAllAccounts();
         boolean found = false;
         for (String user : allUserIds) {
-            if (userID.equals(user)) {
+            if (userID.contains(user)) {
                 found = true;
                 break;
             }
