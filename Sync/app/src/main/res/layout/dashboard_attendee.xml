@@ -25,15 +25,6 @@
             android:src="@mipmap/ic_launcher"
             android:layout_alignParentEnd="true" />
 
-        <Button
-            android:id="@+id/permission_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:backgroundTint="@color/button_grey"
-            android:textColor="@color/black"
-            android:text="Permission"
-            android:layout_toStartOf="@id/profile_image_top_right"/>
-
     </RelativeLayout>
 
     <LinearLayout
