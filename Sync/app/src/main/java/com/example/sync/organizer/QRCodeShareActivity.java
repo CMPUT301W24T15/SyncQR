@@ -16,7 +16,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.FileProvider;
 
 import com.example.sync.QRCodeGenerator;
-import com.example.sync.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.io.File;
@@ -47,13 +46,13 @@ public class QRCodeShareActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.qr_code);
+        setContentView(com.example.sync.R.layout.qr_code);
 
         // Initialize views
-        qrCodeImageView = findViewById(R.id.qrCodeImageView);
+        qrCodeImageView = findViewById(com.example.sync.R.id.qrCodeImageView);
 
         // Set up share button click listener
-        FloatingActionButton shareButton = findViewById(R.id.share_button);
+        FloatingActionButton shareButton = findViewById(com.example.sync.R.id.share_button);
         shareButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -76,7 +75,7 @@ public class QRCodeShareActivity extends AppCompatActivity {
      */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.qr_code_menu, menu);
+        getMenuInflater().inflate(com.example.sync.R.menu.qr_code_menu, menu);
         return true;
     }
 
@@ -88,7 +87,7 @@ public class QRCodeShareActivity extends AppCompatActivity {
      */
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if (item.getItemId() == R.id.action_share) {
+        if (item.getItemId() == com.example.sync.R.id.action_share) {
             shareQRCode();
             return true;
         }
