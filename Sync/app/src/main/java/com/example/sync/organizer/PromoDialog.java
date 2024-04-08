@@ -58,7 +58,7 @@ public class PromoDialog extends DialogFragment {
         String id = args.getString("eventId");
 
         // generate promotion QRcode
-        String qrcodeText = "t"+id;
+        String qrcodeText = "SyncQRevent"+id;
         Bitmap bitmap = QRCodeGenerator.generateQRCodeBitmap(qrcodeText, 300, 300);
         qrcode.setImageBitmap(bitmap);
 
