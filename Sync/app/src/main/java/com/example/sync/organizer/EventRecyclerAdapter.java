@@ -8,7 +8,6 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-import com.example.sync.R;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -50,7 +49,7 @@ public class EventRecyclerAdapter extends RecyclerView.Adapter {
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.milestone, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(com.example.sync.R.layout.milestone, parent, false);
         return new EventViewHolder(view);
     }
 
@@ -103,9 +102,9 @@ public class EventRecyclerAdapter extends RecyclerView.Adapter {
          */
         public EventViewHolder(@NonNull View itemView) {
             super(itemView);
-            name = itemView.findViewById(R.id.name);
-            count = itemView.findViewById(R.id.count);
-            progressBar = itemView.findViewById(R.id.progress_bar);
+            name = itemView.findViewById(com.example.sync.R.id.name);
+            count = itemView.findViewById(com.example.sync.R.id.count);
+            progressBar = itemView.findViewById(com.example.sync.R.id.progress_bar);
         }
     }
 }

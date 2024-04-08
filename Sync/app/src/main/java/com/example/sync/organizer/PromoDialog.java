@@ -19,7 +19,6 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.DialogFragment;
 
 import com.example.sync.QRCodeGenerator;
-import com.example.sync.R;
 
 import java.io.ByteArrayOutputStream;
 
@@ -67,11 +66,11 @@ public class PromoDialog extends DialogFragment {
         builder.setTitle("Tab to Share");
 
         // link to a view
-        View view = LayoutInflater.from(getContext()).inflate(R.layout.promo_dialog, null);
+        View view = LayoutInflater.from(getContext()).inflate(com.example.sync.R.layout.promo_dialog, null);
         builder.setView(view);
 
-        qrcode = view.findViewById(R.id.qrCodeImageView);
-        share = view.findViewById(R.id.share_button);
+        qrcode = view.findViewById(com.example.sync.R.id.qrCodeImageView);
+        share = view.findViewById(com.example.sync.R.id.share_button);
 
         // get the input string (optional)
         Bundle args = getArguments();

@@ -13,7 +13,6 @@ import androidx.fragment.app.DialogFragment;
 
 import com.example.sync.Event;
 import com.example.sync.Notification;
-import com.example.sync.R;
 import com.google.android.material.textfield.TextInputEditText;
 
 /**
@@ -52,14 +51,14 @@ public class NotifyDialog extends DialogFragment {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
 
         // link to a view
-        View view = LayoutInflater.from(getContext()).inflate(R.layout.notify_organizer, null);
+        View view = LayoutInflater.from(getContext()).inflate(com.example.sync.R.layout.notify_organizer, null);
 
         // set the dialog
         builder.setView(view)
                 .setTitle("Push Notifications")
                 .setNegativeButton("Cancel", null)
                 .setPositiveButton("Push", (dialog, which) -> {
-                    TextInputEditText input = view.findViewById(R.id.message);
+                    TextInputEditText input = view.findViewById(com.example.sync.R.id.message);
                     String message = input.getText().toString();
 
                     // if the message is empty, reminds the user that this is an invalid input

@@ -11,7 +11,6 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 
 import com.example.sync.Event;
-import com.example.sync.R;
 import com.google.android.material.navigation.NavigationBarView;
 
 /**
@@ -84,7 +83,7 @@ public class EventDetailFrag extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.event_detail_organizer, container, false);
+        View view = inflater.inflate(com.example.sync.R.layout.event_detail_organizer, container, false);
         return view;
     }
 
@@ -97,8 +96,8 @@ public class EventDetailFrag extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        toolbar = view.findViewById(R.id.toolbar);
-        navigationBar = view.findViewById(R.id.navigation_bar);
+        toolbar = view.findViewById(com.example.sync.R.id.toolbar);
+        navigationBar = view.findViewById(com.example.sync.R.id.navigation_bar);
     }
 
     /**
@@ -123,12 +122,12 @@ public class EventDetailFrag extends Fragment {
         Event event = (Event) args.getSerializable("event");
 
         getChildFragmentManager().beginTransaction()
-                .replace(R.id.overview_modify_container, DisplayFrag.newInstance(event))
+                .replace(com.example.sync.R.id.overview_modify_container, DisplayFrag.newInstance(event))
                 .commit();
 
         // when click on the navigation bar
         navigationBar.setOnItemSelectedListener((NavigationBarView.OnItemSelectedListener) item -> {
-            if (item.getItemId() == R.id.modify) {
+            if (item.getItemId() == com.example.sync.R.id.modify) {
                 ModifyFrag modifyFrag =  ModifyFrag.newInstance(event);
                 modifyFrag.setListener(new ModifyFrag.ModifyListener() {
                     @Override
@@ -138,11 +137,11 @@ public class EventDetailFrag extends Fragment {
                 });
 
                 getChildFragmentManager().beginTransaction()
-                        .replace(R.id.overview_modify_container, modifyFrag)
+                        .replace(com.example.sync.R.id.overview_modify_container, modifyFrag)
                         .commit();
             } else {
                 getChildFragmentManager().beginTransaction()
-                        .replace(R.id.overview_modify_container, DisplayFrag.newInstance(event))
+                        .replace(com.example.sync.R.id.overview_modify_container, DisplayFrag.newInstance(event))
                         .commit();
             } return true;
         });
