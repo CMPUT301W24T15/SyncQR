@@ -116,14 +116,14 @@
         app:layout_constraintHorizontal_weight="1"
         app:layout_constraintTop_toBottomOf="@id/sign_num"
         app:layout_constraintStart_toEndOf="@id/view_list_button"
-        app:layout_constraintEnd_toStartOf="@id/share_button"
+        app:layout_constraintEnd_toStartOf="@id/edit_button"
         app:layout_constraintBottom_toTopOf="@id/qrcode_text"/>
 
     <ImageView
-        android:id="@+id/share_button"
+        android:id="@+id/edit_button"
         android:layout_width="0dp"
         android:layout_height="70dp"
-        android:src="@drawable/share"
+        android:src="@drawable/edit"
         android:background="@drawable/modify_icon"
         android:layout_marginEnd="40dp"
         android:layout_marginTop="30dp"
@@ -131,7 +131,7 @@
         app:layout_constraintTop_toBottomOf="@id/sign_num"
         app:layout_constraintStart_toEndOf="@id/qrcode_button"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/share_text"/>
+        app:layout_constraintBottom_toTopOf="@id/edit_text"/>
 
     <!-- 4th row -->
     <TextView
@@ -158,18 +158,18 @@
         android:layout_weight="1"
         app:layout_constraintTop_toBottomOf="@id/qrcode_button"
         app:layout_constraintStart_toEndOf="@id/view_list_text"
-        app:layout_constraintEnd_toStartOf="@id/share_text"/>
+        app:layout_constraintEnd_toStartOf="@id/edit_text"/>
 
     <TextView
-        android:id="@+id/share_text"
+        android:id="@+id/edit_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
         android:layout_marginEnd="15dp"
-        android:text="Share"
+        android:text="Edit"
         android:gravity="center"
         android:layout_weight="1"
-        app:layout_constraintTop_toBottomOf="@id/share_button"
+        app:layout_constraintTop_toBottomOf="@id/edit_button"
         app:layout_constraintStart_toEndOf="@id/qrcode_text"
         app:layout_constraintEnd_toEndOf="parent"/>
 
@@ -187,7 +187,7 @@
         app:layout_constraintTop_toBottomOf="@id/view_list_text"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toStartOf="@id/delete_button"
-        app:layout_constraintBottom_toTopOf="@id/edit_text"/>
+        app:layout_constraintBottom_toTopOf="@id/promotion_text"/>
 
     <ImageView
         android:id="@+id/delete_button"
@@ -206,7 +206,7 @@
 
     <!-- 6th row -->
     <TextView
-        android:id="@+id/edit_text"
+        android:id="@+id/promotion_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
@@ -227,7 +227,7 @@
         android:gravity="center"
         android:layout_weight="1"
         app:layout_constraintTop_toBottomOf="@id/delete_button"
-        app:layout_constraintStart_toEndOf="@id/edit_text"
+        app:layout_constraintStart_toEndOf="@id/promotion_text"
         app:layout_constraintEnd_toStartOf="@id/notify_text"/>
 
     <TextView
@@ -253,7 +253,7 @@
         android:src="@drawable/notify"
         android:background="@drawable/modify_icon"
         app:layout_constraintHorizontal_weight="1"
-        app:layout_constraintTop_toBottomOf="@id/share_text"
+        app:layout_constraintTop_toBottomOf="@id/edit_text"
         app:layout_constraintStart_toEndOf="@id/delete_button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toTopOf="@id/notify_text"/>
