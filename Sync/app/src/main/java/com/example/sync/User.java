@@ -32,7 +32,7 @@ public class User extends AppCompatActivity {
         this.userID = userID;
         username = "Visitor";
         password = "";
-        profile = new Profile(userID,username,"","","");
+        profile = new Profile(userID,username,"https://firebasestorage.googleapis.com/v0/b/syncqr-fc86d.appspot.com/o/profile%2FehiR2GpaA5MvWn0VHAuQ.png?alt=media&token=46e3212f-038f-44d7-a98c-4843bad57068","","");
         signupevents = new ArrayList<Event>();
         createdevents = new ArrayList<Event>();
         checkinevents = new ArrayList<Event>();

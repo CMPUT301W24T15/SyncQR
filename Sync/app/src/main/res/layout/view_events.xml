@@ -10,11 +10,10 @@
         android:layout_height="wrap_content"
         android:background="@color/white"
         app:titleTextColor="@color/black"
-        app:navigationIcon="?attr/homeAsUpIndicator"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:title="View My Events" />
+        app:title="View Profiles" />
 
     <SearchView
         android:id="@+id/search"

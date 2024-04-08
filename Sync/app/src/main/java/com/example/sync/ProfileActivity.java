@@ -207,6 +207,7 @@ public class ProfileActivity extends AppCompatActivity {
                         String email = userEmailInput.getText().toString().trim();
                         String contact = userContactInput.getText().toString().trim();
                         Map<String, Object> profileData = new HashMap<>();
+                        profileData.put("profileID", userID);
                         profileData.put("email", email);
                         profileData.put("imageUrl", url[0]); // Now url[0] has the URL
                         profileData.put("name", name);
