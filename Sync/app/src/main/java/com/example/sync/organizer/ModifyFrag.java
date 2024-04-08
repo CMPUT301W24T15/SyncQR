@@ -19,7 +19,6 @@ import androidx.fragment.app.Fragment;
 
 import com.example.sync.Checkin;
 import com.example.sync.Event;
-import com.example.sync.R;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
 
@@ -127,7 +126,7 @@ public class ModifyFrag extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.modify_organizer, container, false);
+        View view = inflater.inflate(com.example.sync.R.layout.modify_organizer, container, false);
         return view;
     }
 
@@ -141,14 +140,14 @@ public class ModifyFrag extends Fragment {
      */
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        delete = view.findViewById(R.id.delete_button);
-        notify = view.findViewById(R.id.notify_button);
-        promotion = view.findViewById(R.id.promotion_button);
-        viewList = view.findViewById(R.id.view_list_button);
-        generate = view.findViewById(R.id.qrcode_button);
-        checkinNum = view.findViewById(R.id.check_num);
-        signupNum = view.findViewById(R.id.sign_num);
-        map = view.findViewById(R.id.map);
+        delete = view.findViewById(com.example.sync.R.id.delete_button);
+        notify = view.findViewById(com.example.sync.R.id.notify_button);
+        promotion = view.findViewById(com.example.sync.R.id.promotion_button);
+        viewList = view.findViewById(com.example.sync.R.id.view_list_button);
+        generate = view.findViewById(com.example.sync.R.id.qrcode_button);
+        checkinNum = view.findViewById(com.example.sync.R.id.check_num);
+        signupNum = view.findViewById(com.example.sync.R.id.sign_num);
+        map = view.findViewById(com.example.sync.R.id.map);
 
         // Initialize osmdroid configuration
         Configuration.getInstance().load(requireContext(), PreferenceManager.getDefaultSharedPreferences(requireContext()));        // Set initial map center and zoom level

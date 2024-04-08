@@ -27,7 +27,7 @@ import com.example.sync.Attendee;
 import com.example.sync.Checkin;
 import com.example.sync.Database;
 import com.example.sync.Event;
-import com.example.sync.R;
+
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.Timestamp;
 
@@ -191,7 +191,7 @@ public class CreateEventFrag extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.create_new_event, container, false);
+        View view = inflater.inflate(com.example.sync.R.layout.create_new_event, container, false);
         return view;
     }
 
@@ -204,17 +204,17 @@ public class CreateEventFrag extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        toolbar = view.findViewById(R.id.toolbar);
-        upload = view.findViewById(R.id.upload_image_button);
-        create = view.findViewById(R.id.create);
-        image = view.findViewById(R.id.image);
+        toolbar = view.findViewById(com.example.sync.R.id.toolbar);
+        upload = view.findViewById(com.example.sync.R.id.upload_image_button);
+        create = view.findViewById(com.example.sync.R.id.create);
+        image = view.findViewById(com.example.sync.R.id.image);
 
-        name = view.findViewById(R.id.name_input);
-        date = view.findViewById(R.id.date_input);
-        location = view.findViewById(R.id.location_input);
-        organizer = view.findViewById(R.id.organizerName_input);
-        attendeeNum = view.findViewById(R.id.attendeeNum_input);
-        description = view.findViewById(R.id.description_input);
+        name = view.findViewById(com.example.sync.R.id.name_input);
+        date = view.findViewById(com.example.sync.R.id.date_input);
+        location = view.findViewById(com.example.sync.R.id.location_input);
+        organizer = view.findViewById(com.example.sync.R.id.organizerName_input);
+        attendeeNum = view.findViewById(com.example.sync.R.id.attendeeNum_input);
+        description = view.findViewById(com.example.sync.R.id.description_input);
     }
 
     /**

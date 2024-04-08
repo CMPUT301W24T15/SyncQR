@@ -37,27 +37,6 @@ public class LoginActivity extends AppCompatActivity {
      *     recently supplied in {@link #onSaveInstanceState}.  <b><i>Note: Otherwise it is null.</i></b>
      *
      */
-    public ArrayList<String> getAllAccounts() {
-        ArrayList<String> allUserIds = new ArrayList<>();
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        db.collection("Accounts")
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                // Retrieve profile data
-                                Map<String, Object> data = document.getData();
-                                allUserIds.add((String)data.get("userID"));
-                                Log.d(TAG, (String)data.get("userID") + " Found");
-                            }
-                        }
-                    }
-                });
-        return allUserIds;
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

@@ -71,12 +71,14 @@ dependencies {
     implementation ("com.github.bumptech.glide:glide:4.16.0")
     implementation ("com.google.zxing:core:3.4.1")
     annotationProcessor ("com.github.bumptech.glide:compiler:4.16.0")
-    androidTestImplementation ("androidx.test.espresso:espresso-core:3.4.0")
-    androidTestImplementation ("androidx.test.espresso:espresso-contrib:3.4.0")
-    androidTestImplementation ("androidx.test.espresso:espresso-intents:3.4.0")
+    androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
+    androidTestImplementation ("androidx.test.espresso:espresso-contrib:3.5.1")
+    androidTestImplementation ("androidx.test.espresso:espresso-intents:3.5.1")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation ("androidx.test:core:1.4.0")
 //    testImplementation ("com.github.manusajith.firebase-mock:firebase-firestore:18.0.0")
 //    testImplementation ("com.google.firebase:firebase-admin-testing:8.1.0")
     implementation("com.google.firebase:firebase-firestore:23.0.3")
+
+    //implementation(files("libs/android.jar"))
 }

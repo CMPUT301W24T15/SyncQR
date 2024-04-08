@@ -17,7 +17,6 @@ import androidx.fragment.app.Fragment;
 
 import com.bumptech.glide.Glide;
 import com.example.sync.Event;
-import com.example.sync.R;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -89,7 +88,7 @@ public class DisplayFrag extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.overview_organizer, container, false);
+        View view = inflater.inflate(com.example.sync.R.layout.overview_organizer, container, false);
         return view;
     }
 
@@ -102,12 +101,12 @@ public class DisplayFrag extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        name = view.findViewById(R.id.name);
-        date = view.findViewById(R.id.date);
-        location = view.findViewById(R.id.location);
-        organizer = view.findViewById(R.id.organizer);
-        description = view.findViewById(R.id.description);
-        poster = view.findViewById(R.id.poster);
+        name = view.findViewById(com.example.sync.R.id.name);
+        date = view.findViewById(com.example.sync.R.id.date);
+        location = view.findViewById(com.example.sync.R.id.location);
+        organizer = view.findViewById(com.example.sync.R.id.organizer);
+        description = view.findViewById(com.example.sync.R.id.description);
+        poster = view.findViewById(com.example.sync.R.id.poster);
     }
 
     /**

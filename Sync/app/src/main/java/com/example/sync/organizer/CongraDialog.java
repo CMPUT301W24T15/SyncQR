@@ -11,7 +11,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.DialogFragment;
 
-import com.example.sync.R;
+
 
 /**
  * Shows a congratulation dialog when any of created events reached the milestone (10, 20, 40, 80)
@@ -59,11 +59,11 @@ public class CongraDialog extends DialogFragment {
         builder.setTitle("Congratulations!");
 
         // link to a view
-        View view = LayoutInflater.from(getContext()).inflate(R.layout.congratulation, null);
+        View view = LayoutInflater.from(getContext()).inflate(com.example.sync.R.layout.congratulation, null);
         builder.setView(view);
 
-        TextView eventName = view.findViewById(R.id.event_name);
-        TextView congratulation = view.findViewById(R.id.congratulation);
+        TextView eventName = view.findViewById(com.example.sync.R.id.event_name);
+        TextView congratulation = view.findViewById(com.example.sync.R.id.congratulation);
 
         // get event information
         Bundle args = getArguments();

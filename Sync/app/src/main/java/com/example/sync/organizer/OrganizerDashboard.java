@@ -15,7 +15,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.sync.Checkin;
 import com.example.sync.Event;
-import com.example.sync.R;
 
 import java.util.ArrayList;
 import java.util.Map;
@@ -73,18 +72,18 @@ public class OrganizerDashboard extends AppCompatActivity implements FragListene
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_organizer);
+        setContentView(com.example.sync.R.layout.activity_organizer);
 
         // find fragments
-        dashboard = findViewById(R.id.dashboard);
-        fragmentContainer = findViewById(R.id.fragment_container);
+        dashboard = findViewById(com.example.sync.R.id.dashboard);
+        fragmentContainer = findViewById(com.example.sync.R.id.fragment_container);
 
         // set visibility
         fragmentContainer.setVisibility(View.GONE);
 
-        Button createEvent = dashboard.findViewById(R.id.create_new_event);
-        Button viewEvent = dashboard.findViewById(R.id.view_my_events);
-        recyclerView = dashboard.findViewById(R.id.recycler_view);
+        Button createEvent = dashboard.findViewById(com.example.sync.R.id.create_new_event);
+        Button viewEvent = dashboard.findViewById(com.example.sync.R.id.view_my_events);
+        recyclerView = dashboard.findViewById(com.example.sync.R.id.recycler_view);
 
         // initialize list for milestones
         // ****************** change to userId intent ***************
@@ -148,7 +147,7 @@ public class OrganizerDashboard extends AppCompatActivity implements FragListene
                 // ****************** change to userId intent ***************
                 CreateEventFrag createEventFrag = CreateEventFrag.newInstance(organizer);
                 FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-                transaction.replace(R.id.fragment_container, createEventFrag);
+                transaction.replace(com.example.sync.R.id.fragment_container, createEventFrag);
                 transaction.addToBackStack(null);
                 transaction.commit();
 
@@ -163,7 +162,7 @@ public class OrganizerDashboard extends AppCompatActivity implements FragListene
                 // ****************** change to userId intent ***************
                 ViewEventsFrag viewEventsFrag = ViewEventsFrag.newInstance(organizer);
                 FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-                transaction.replace(R.id.fragment_container, viewEventsFrag);
+                transaction.replace(com.example.sync.R.id.fragment_container, viewEventsFrag);
                 transaction.addToBackStack(null);
                 transaction.commit();
 

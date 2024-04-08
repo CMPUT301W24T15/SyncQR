@@ -9,7 +9,6 @@ import android.widget.BaseExpandableListAdapter;
 import android.widget.ExpandableListAdapter;
 import android.widget.TextView;
 
-import com.example.sync.R;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -143,10 +142,10 @@ public class ViewAttendeeAdapter extends BaseExpandableListAdapter {
 
         if (convertView == null) {
             LayoutInflater inflater = LayoutInflater.from(context);
-            convertView = inflater.inflate(R.layout.parent_list, parent, false);
+            convertView = inflater.inflate(com.example.sync.R.layout.parent_list, parent, false);
         }
 
-        TextView listNameView= convertView.findViewById(R.id.parent);
+        TextView listNameView= convertView.findViewById(com.example.sync.R.id.parent);
         listNameView.setText(name);
 
         return convertView;
@@ -174,10 +173,10 @@ public class ViewAttendeeAdapter extends BaseExpandableListAdapter {
 
         if (convertView == null) {
             LayoutInflater inflater = LayoutInflater.from(context);
-            convertView = inflater.inflate(R.layout.child_list, parent, false);
+            convertView = inflater.inflate(com.example.sync.R.layout.child_list, parent, false);
         }
 
-        TextView listNameView= convertView.findViewById(R.id.child);
+        TextView listNameView= convertView.findViewById(com.example.sync.R.id.child);
         listNameView.setText(data);
 
         return convertView;

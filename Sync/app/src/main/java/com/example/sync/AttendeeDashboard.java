@@ -23,7 +23,6 @@ public class AttendeeDashboard extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.dashboard_attendee);
-        Button permissionButton = findViewById(R.id.permission_button);
 
         Log.d(TAG, "Entered AttendeeDashboard");
 
