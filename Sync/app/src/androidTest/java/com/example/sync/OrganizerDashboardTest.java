@@ -23,29 +23,29 @@ import org.junit.runner.RunWith;
 
 @RunWith(AndroidJUnit4.class)
 @LargeTest
-
-public class LoginActivityTest {
+public class OrganizerDashboardTest {
     @Rule
     public ActivityScenarioRule<LoginActivity>scenario = new ActivityScenarioRule<LoginActivity>(LoginActivity.class);
 
-    // Test if attendee login button redirects to the correct activity
-    @Test
-    public void testAttendeeLogin() {
-        onView(withId(R.id.login_attendee_button)).perform(click());
-        onView(withId(R.id.attendee_label)).check(matches(withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)));
+    // helper function to setup tests
+    private void setupTest() {
+        onView(withId(R.id.login_organizer_button)).perform(click());
     }
 
-    // Test if organizer login button redirects to the correct activity
+    // Test if we can open event
     @Test
-    public void testOrganizerLogin() {
-        onView(withId(R.id.login_organizer_button)).perform(click());
-        try {
-            onView(withId(R.id.congratulation)).check(matches(isDisplayed()));
-            onView(isRoot()).perform(pressBack());
-        } catch (NoMatchingViewException e) {
-            // no dialog popping out, do nothing
-        }
-        onView(withId(R.id.dashboard)).check(matches(withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)));
+    public void testCreateEvent() {
+        setupTest();
+        onView(withId(R.id.create_new_event)).perform(click());
+        onView(withId(R.id.fragment_container)).check(matches(withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)));
+    }
+
+    // Test if we can open message
+    @Test
+    public void testViewEvent() {
+        setupTest();
+        onView(withId(R.id.view_my_events)).perform(click());
+        onView(withId(R.id.fragment_container)).check(matches(withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)));
     }
 
 }
