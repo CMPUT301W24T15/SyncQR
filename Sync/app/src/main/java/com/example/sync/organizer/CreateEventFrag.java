@@ -41,23 +41,79 @@ import java.util.HashMap;
 import java.util.Objects;
 import java.util.logging.SimpleFormatter;
 
+/**
+ * This is the fragment invoked to create a new event
+ * Can reach this by pressing the button on the organizer dashboard
+ * It collects all the event information from the user
+ * And store them into firebase as record
+ * This is a subclass of fragment
+ *
+ * @see Fragment
+ *
+ */
 public class CreateEventFrag extends Fragment {
+
+    /**
+     * The image picker.
+     */
     ActivityResultLauncher<PickVisualMediaRequest> pickMedia;
+    /**
+     * The create button for saving
+     */
     Button create;
+    /**
+     * The upload button for uploading a poster
+     */
     Button upload;
+    /**
+     * The view of poster
+     */
     ImageView image;
+    /**
+     * The view of event name entered
+     */
     TextInputEditText name;
+    /**
+     * The view of event date entered
+     */
     TextInputEditText date;
+    /**
+     * The view of event location entered
+     */
     TextInputEditText location;
+    /**
+     * The view of organizer name entered
+     */
     TextInputEditText organizer;
+    /**
+     * The view of event limited attendee number
+     */
     TextInputEditText attendeeNum;
+    /**
+     * The view of event description
+     */
     TextInputEditText description;
 
 
+    /**
+     * The back button
+     */
     Toolbar toolbar;
+    /**
+     * The poster in bitmap format
+     */
     Bitmap imageBitmap;
+    /**
+     * The listener connected to its parent activity
+     */
     FragListener listener;
 
+    /**
+     * Create a new instance of the fragment with arguments
+     * Call its constructor within the static method
+     * @param userId The id of the user
+     * @return CreateEventFrag
+     */
     static CreateEventFrag newInstance(String userId) {
         // create the fragment instance
         CreateEventFrag fragment = new CreateEventFrag();
@@ -67,7 +123,10 @@ public class CreateEventFrag extends Fragment {
         return fragment;
     }
 
-
+    /**
+     * Attach the listener
+     * @param context the context of the application
+     */
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
@@ -79,6 +138,12 @@ public class CreateEventFrag extends Fragment {
         }
     }
 
+    /**
+     * The process of create a new fragment
+     * Initialize a media picker, determine its procedure after image is collected
+     * @param savedInstanceState If the fragment is being re-created from
+     * a previous saved state, this is the state.
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -101,8 +166,6 @@ public class CreateEventFrag extends Fragment {
                             imageBitmap = BitmapFactory.decodeStream(inputStream);
                             inputStream.close();
 
-                        } catch (FileNotFoundException e) {
-                            throw new RuntimeException(e);
                         } catch (IOException e) {
                             throw new RuntimeException(e);
                         }
@@ -113,6 +176,18 @@ public class CreateEventFrag extends Fragment {
 
     }
 
+    /**
+     * Inflate a layout
+     * @param inflater The LayoutInflater object that can be used to inflate
+     * any views in the fragment,
+     * @param container If non-null, this is the parent view that the fragment's
+     * UI should be attached to.  The fragment should not add the view itself,
+     * but this can be used to generate the LayoutParams of the view.
+     * @param savedInstanceState If non-null, this fragment is being re-constructed
+     * from a previous saved state as given here.
+     *
+     * @return
+     */
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -120,6 +195,12 @@ public class CreateEventFrag extends Fragment {
         return view;
     }
 
+    /**
+     * Link all the relevant views
+     * @param view The View returned by {@link #onCreateView(LayoutInflater, ViewGroup, Bundle)}.
+     * @param savedInstanceState If non-null, this fragment is being re-constructed
+     * from a previous saved state as given here.
+     */
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -136,6 +217,13 @@ public class CreateEventFrag extends Fragment {
         description = view.findViewById(R.id.description_input);
     }
 
+    /**
+     * Determine the work procedure after fragment is created
+     * Unbindle the argument
+     * Set listeners for (back, upload, create) buttons
+     * Save the event to datbase
+     * @see ActivityResultLauncher<PickVisualMediaRequest>
+     */
     @Override
     public void onStart() {
         super.onStart();
@@ -176,6 +264,11 @@ public class CreateEventFrag extends Fragment {
         });
     }
 
+    /**
+     * Save the event instance to database
+     * @param userId The id of the user who created this event
+     * @throws ParseException date failed to convert to the format
+     */
     public void saveEvent(String userId) throws ParseException {
         // obtain data
         String nameText = name.getText().toString();
@@ -196,7 +289,6 @@ public class CreateEventFrag extends Fragment {
         Date date = sdf.parse(dateText);
 
         // store data into database
-        // ********************* change organizer to account ******************
         Timestamp timestamp = new Timestamp(date);
         Event event = new Event(nameText, timestamp, locationText, (long)Integer.parseInt(attendeeNumText),
                 organizerText, descriptionText, "", userId);
@@ -210,11 +302,6 @@ public class CreateEventFrag extends Fragment {
                     event.setPoster(uri);
 
                     // if successfully, initialize all database
-                    // Event: save the new event into database
-                    // Checkin: create a new checkin system accompanied with the event
-                    // Account: record that the user has created a new event (record the eventid)
-                    // Toast: notify user
-
                     initializeEventProcess(event, userId);
 
                 }
@@ -227,6 +314,15 @@ public class CreateEventFrag extends Fragment {
 
     }
 
+    /**
+     * if successfully, initialize all database
+     * Event: save the new event into database
+     * Checkin: create a new checkin system accompanied with the event
+     * Account: record that the user has created a new event (record the eventid)
+     * Toast: notify user
+     * @param event The event that needs to be stored into database
+     * @param userId The id of the user who created this event
+     */
     public void initializeEventProcess(Event event, String userId){
         // save event
         event.saveEventToDatabase();

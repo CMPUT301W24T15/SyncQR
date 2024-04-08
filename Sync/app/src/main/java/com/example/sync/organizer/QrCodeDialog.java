@@ -41,16 +41,48 @@ import java.io.InputStream;
 import java.security.KeyStore;
 import java.util.ArrayList;
 
+/**
+ * A dialog fragment for generating, reusing, saving, and sharing QR codes.
+ */
 public class QrCodeDialog extends DialogFragment {
+    /**
+     * The view to display a qrcode image
+     */
     ImageView qrcode;
+    /**
+     * The view tapped to generate a new qrcode
+     */
     Button generate;
+    /**
+     * The view tapped to upload and recognize an existed qrcode
+     */
     Button reuse;
+    /**
+     * The share button
+     */
     Button share;
+    /**
+     * The save button
+     */
     Button save;
+    /**
+     * The image in bitmap format
+     */
     Bitmap bitmap;
+    /**
+     * The string that qrcode represented
+     */
     String qrcodeText;
+    /**
+     * The image picker
+     */
     ActivityResultLauncher<PickVisualMediaRequest> pickMedia;
 
+    /**
+     * Creates a new instance of QrCodeDialog with the given event ID.
+     * @param eventId The ID of the event.
+     * @return QrCodeDialog
+     */
     static QrCodeDialog newInstance(String eventId) {
         // create the fragment instance
         QrCodeDialog dialog = new QrCodeDialog();
@@ -62,7 +94,13 @@ public class QrCodeDialog extends DialogFragment {
         return dialog;
     }
 
-
+    /**
+     * Called to create the dialog shown in the fragment.
+     * @param savedInstanceState The last saved instance state of the Fragment,
+     * or null if this is a freshly created Fragment.
+     *
+     * @return AlertDialog
+     */
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
@@ -144,12 +182,21 @@ public class QrCodeDialog extends DialogFragment {
         return builder.create();
     }
 
+    /**
+     * Generates a QR code for the given event ID and displays it.
+     * @param id The ID of the event.
+     */
     private void generateQRcode(String id){
         qrcodeText = "SyncQRcheckin"+id;
         bitmap = QRCodeGenerator.generateQRCodeBitmap(qrcodeText, 300, 300);
         qrcode.setImageBitmap(bitmap);
     }
 
+    /**
+     * Recognizes the QR code from the provided URI and extracts the text.
+     * @param uri The URI of the image containing the QR code.
+     * @return The extracted text from the QR code.
+     */
     private String recognize(Uri uri){
         try {
             // Convert URI to Bitmap
@@ -180,6 +227,10 @@ public class QrCodeDialog extends DialogFragment {
         return "error";
     }
 
+    /**
+     * Converts a bitmap image to a Uri.
+     * @return The Uri of the converted image.
+     */
     private Uri bitmapToUri() {
         ByteArrayOutputStream bytes = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
@@ -189,6 +240,10 @@ public class QrCodeDialog extends DialogFragment {
         return uri;
     }
 
+    /**
+     * Enables the save and share functionality for the generated QR code.
+     * @param id The ID of the event.
+     */
     private void enableSaveAndShare(String id) {
         share.setOnClickListener(new View.OnClickListener() {
             @Override

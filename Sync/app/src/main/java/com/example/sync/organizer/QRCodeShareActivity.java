@@ -27,11 +27,23 @@ import java.io.IOException;
  * Activity for sharing a generated QR code image.
  */
 public class QRCodeShareActivity extends AppCompatActivity {
-
+    /**
+     * The view for qrcode to be displayed
+     */
     private static ImageView qrCodeImageView;
-    private static ProgressBar progressBar;
-    private Bitmap qrCodeBitmap; // Store the generated QR code bitmap here
 
+    /**
+     * The generated QR code in bitmap
+     */
+    private Bitmap qrCodeBitmap;
+
+    /**
+     * Create a new UI interface
+     * @param savedInstanceState If the activity is being re-initialized after
+     *     previously being shut down then this Bundle contains the data it most
+     *     recently supplied in {@link #onSaveInstanceState}.  <b><i>Note: Otherwise it is null.</i></b>
+     *
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,7 +51,6 @@ public class QRCodeShareActivity extends AppCompatActivity {
 
         // Initialize views
         qrCodeImageView = findViewById(R.id.qrCodeImageView);
-        progressBar = findViewById(R.id.progressBar);
 
         // Set up share button click listener
         FloatingActionButton shareButton = findViewById(R.id.share_button);
@@ -53,19 +64,28 @@ public class QRCodeShareActivity extends AppCompatActivity {
         // Get the inputID from the intent and generate QR code
         String inputID = getIntent().getStringExtra("inputID");
         if (inputID != null) {
-            progressBar.setVisibility(ProgressBar.VISIBLE);
             generateQRCode(inputID, 300, 300, this);
         }
     }
 
-    // Inflate the menu resource for this activity's toolbar
+    /**
+     * Inflate the menu resource for this activity's toolbar
+     * @param menu The options menu in which you place your items.
+     *
+     * @return Boolean
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.qr_code_menu, menu);
         return true;
     }
 
-    // Handle menu item clicks
+    /**
+     * Handle menu item clicks
+     * @param item The menu item that was selected.
+     *
+     * @return Boolean
+     */
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == R.id.action_share) {
@@ -75,7 +95,10 @@ public class QRCodeShareActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    // Share the generated QR code
+    /**
+     * Share the generated QR code
+     * @see Intent
+     */
     private void shareQRCode() {
         if (qrCodeBitmap != null) {
             Intent shareIntent = new Intent(Intent.ACTION_SEND);
@@ -87,19 +110,28 @@ public class QRCodeShareActivity extends AppCompatActivity {
         }
     }
 
-    // Generate QR code bitmap
+    /**
+     * Generate QR code bitmap
+     * @param inputID The input string that needs to be converted
+     * @param width The width of the qrcode
+     * @param height The height of the qrcode
+     * @param context The context of current dialog
+     */
     private void generateQRCode(String inputID, int width, int height, QRCodeShareActivity context) {
         qrCodeBitmap = QRCodeGenerator.generateQRCodeBitmap(inputID, width, height);
         if (qrCodeBitmap != null) {
             qrCodeImageView.setImageBitmap(qrCodeBitmap);
-            progressBar.setVisibility(ProgressBar.GONE);
         } else {
-            progressBar.setVisibility(ProgressBar.GONE);
             Toast.makeText(this, "Failed to generate QR Code", Toast.LENGTH_SHORT).show();
         }
     }
 
-    // Get the URI of a bitmap
+    /**
+     * Gets the URI of a bitmap.
+     * @param bmp The bitmap to convert to URI.
+     * @return Uri.
+     */
+
     private Uri getLocalBitmapUri(Bitmap bmp) {
         Uri bmpUri = null;
         try {

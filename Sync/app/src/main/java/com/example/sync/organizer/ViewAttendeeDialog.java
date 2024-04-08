@@ -19,8 +19,22 @@ import com.example.sync.R;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+/**
+ * A DialogFragment for displaying attendee details in an ExpandableListView.
+ */
 public class ViewAttendeeDialog extends DialogFragment {
+    /**
+     * The expandable list view used to display three lists
+     */
     ExpandableListView attendeeList;
+
+    /**
+     * Creates a new instance of ViewAttendeeDialog.
+     * @param counts The list of check in counts.
+     * @param current The list of current attendees.
+     * @param signup The list of sign-up attendees.
+     * @return A new instance of ViewAttendeeDialog.
+     */
     static ViewAttendeeDialog newInstance(ArrayList<String> counts, ArrayList<String> current, ArrayList<String> signup) {
         // create the fragment instance
         ViewAttendeeDialog dialog = new ViewAttendeeDialog();
@@ -34,7 +48,13 @@ public class ViewAttendeeDialog extends DialogFragment {
         return dialog;
     }
 
-
+    /**
+     * Create a new dialog
+     * @param savedInstanceState The last saved instance state of the Fragment,
+     * or null if this is a freshly created Fragment.
+     *
+     * @return AlertDialog
+     */
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {

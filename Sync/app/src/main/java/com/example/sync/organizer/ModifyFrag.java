@@ -36,23 +36,70 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-
+/**
+ * Fragment for modifying event details and performing related operations such as deletion, notification, viewing attendee list, generating QR codes, and more.
+ * It contains various buttons and functionalities related to event management.
+ * It represents event is in its modified mode
+ * This is a subclass of Fragment
+ */
 public class ModifyFrag extends Fragment {
+    /**
+     * Communicate to its parent and parent's parent to delete an event
+     */
     interface ModifyListener {
         void notifyGrandparent();
     }
+
+    /**
+     * The listener that communicate with its parnet
+     */
     private ModifyListener listener;
+    /**
+     * The view displayed checkin number
+     */
     private TextView checkinNum;
+    /**
+     * The view displayed sign up number
+     */
     private TextView signupNum;
+    /**
+     * The button for deletion
+     */
     private ImageView delete;
+    /**
+     * The button for notification
+     */
     private ImageView notify;
+    /**
+     * The button for generating promotion code
+     */
     private ImageView promotion;
+    /**
+     * The button for generating checkin QR code
+     */
     private ImageView generate;
+    /**
+     * The button for displaying all relevant lists
+     */
     private ImageView viewList;
+    /**
+     * The mao that shows all user's location
+     */
     private MapView map;
+    /**
+     * The specific event that is being operating
+     */
     private Event event;
+    /**
+     * The fragment itself
+     */
     private ModifyFrag self = this;
 
+    /**
+     * Creates a new instance of ModifyFrag with the given event.
+     * @param event The event to be modified.
+     * @return ModifyFrag
+     */
     static ModifyFrag newInstance(Event event) {
         // create the fragment instance
         ModifyFrag fragment = new ModifyFrag();
@@ -65,6 +112,18 @@ public class ModifyFrag extends Fragment {
     }
 
 
+    /**
+     * Inflate a  layout
+     * @param inflater The LayoutInflater object that can be used to inflate
+     * any views in the fragment,
+     * @param container If non-null, this is the parent view that the fragment's
+     * UI should be attached to.  The fragment should not add the view itself,
+     * but this can be used to generate the LayoutParams of the view.
+     * @param savedInstanceState If non-null, this fragment is being re-constructed
+     * from a previous saved state as given here.
+     *
+     * @return View
+     */
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -72,6 +131,14 @@ public class ModifyFrag extends Fragment {
         return view;
     }
 
+    /**
+     * Link to all views that are related
+     * Initialize the map
+     * @param view The View returned by {@link #onCreateView(LayoutInflater, ViewGroup, Bundle)}.
+     * @param savedInstanceState If non-null, this fragment is being re-constructed
+     * from a previous saved state as given here.
+     * @see Configuration
+     */
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         delete = view.findViewById(R.id.delete_button);
@@ -93,7 +160,10 @@ public class ModifyFrag extends Fragment {
     }
 
 
-
+    /**
+     * Called when the fragment is starting. Fetches the event data from the arguments bundle,
+     * displays the users' locations on the map, and sets up listeners for various views.
+     */
     @Override
     public void onStart() {
         super.onStart();
@@ -189,10 +259,18 @@ public class ModifyFrag extends Fragment {
 
     }
 
+    /**
+     * Set the listener
+     * @param listener A listener that used to communicate with its parent
+     */
     public void setListener(ModifyListener listener) {
         this.listener = listener;
     }
 
+    /**
+     * Displays the number of check-ins and sign-ups for the event.
+     * @param eventId The ID of the event to display statistics for.
+     */
     public void displayNumber(String eventId) {
         Checkin.getListFromDatabase(eventId, new Checkin.Callback() {
             @Override
@@ -203,12 +281,20 @@ public class ModifyFrag extends Fragment {
         });
     }
 
+    /**
+     * Called when the fragment is visible to the user and actively running.
+     * Resumes the map rendering.
+     */
     @Override
     public void onResume() {
         super.onResume();
         map.onResume();
     }
 
+    /**
+     * Called when the Fragment is no longer resumed.
+     * Pauses the map rendering.
+     */
     @Override
     public void onPause() {
         super.onPause();
