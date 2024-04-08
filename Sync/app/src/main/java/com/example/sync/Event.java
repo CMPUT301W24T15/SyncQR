@@ -28,7 +28,6 @@ import java.util.Map;
 public class Event implements Serializable {
 
     private static String TAG = "Event";
-    private static FirebaseFirestore db = FirebaseFirestore.getInstance();
     private String eventId;
     private String eventName;
     private Timestamp eventDate;
@@ -101,6 +100,7 @@ public class Event implements Serializable {
      * @param callback callback function to be used after finding the target event
      */
     public static void getEventFromDatabase(String eventID, Callback callback){
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection("Events")
                 .whereEqualTo("eventId", eventID)
                 .get()
@@ -143,6 +143,7 @@ public class Event implements Serializable {
      * @param callback when event array is ready, it return the event array
      */
     public static void getAllEventFromDatabase(Callback callback) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
         Timestamp current = new Timestamp(new Date());
         db.collection("Events")
                 .whereGreaterThanOrEqualTo("eventDate", current)
@@ -204,7 +205,7 @@ public class Event implements Serializable {
         eventData.put("organizerName", organizerName);
         eventData.put("organizerId", organizerId);
 
-
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection("Events").document(String.valueOf(eventId)).set(eventData)
                 // Upload successful
                 .addOnSuccessListener(aVoid -> {
@@ -219,6 +220,7 @@ public class Event implements Serializable {
      * @param eventId eventID of the event to delete
      */
     public static void deleteEvent(String eventId){
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
         DocumentReference doc = db.collection("Events").document(eventId);
         doc.delete()
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -244,6 +246,7 @@ public class Event implements Serializable {
      *                 method.
      */
     public static void getCreatedEventIdList(String userId, Callback callback) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection("Accounts")
                 .document(userId)
                 .get()
@@ -268,6 +271,7 @@ public class Event implements Serializable {
      * @param eventId The ID of the event to register in the user's account.
      */
     public static void registerInAccount(String userId, String eventId) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection("Accounts").whereEqualTo("userID", userId).get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
@@ -294,6 +298,7 @@ public class Event implements Serializable {
      * @param eventId The ID of the event whose poster is to be removed.
      */
     public static void removePoster(String eventId) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
         DocumentReference doc = db.collection("Events").document(eventId);
         Map<String, Object> data = new HashMap<>();
         data.put("poster", "");

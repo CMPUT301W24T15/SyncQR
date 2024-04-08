@@ -15,7 +15,7 @@ import java.util.Map;
  */
 public class User extends AppCompatActivity {
     private static String TAG = "Kevin";
-    private static FirebaseFirestore db = FirebaseFirestore.getInstance();
+//    private static FirebaseFirestore db = FirebaseFirestore.getInstance();
     private String userID;
     private String username;
     private String password;
@@ -70,7 +70,7 @@ public class User extends AppCompatActivity {
         userData.put("createdevents", createdevents);
         userData.put("checkinevents", checkinevents);
 
-
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection("Accounts").document(userID).set(userData)
                 // Upload successful
                 .addOnSuccessListener(aVoid -> {
