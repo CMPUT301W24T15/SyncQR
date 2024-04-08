@@ -71,6 +71,8 @@
                 android:id="@+id/remove_event"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:backgroundTint="@color/button_yellow"
+                android:textColor="@color/black"
                 android:text="Remove Event">
             </Button>
 
@@ -78,6 +80,8 @@
                 android:id="@+id/remove_qr_code"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:backgroundTint="@color/button_yellow"
+                android:textColor="@color/black"
                 android:text="Remove Check-In QR Code">
             </Button>
 
