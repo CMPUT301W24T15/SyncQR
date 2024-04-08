@@ -56,7 +56,19 @@ public class SignUpEventListActivity extends EventListActivity {
 
         setupItemClickListener();
     }
-
+    /**
+     * Fetches the sign-up events for a specific user by their ID and updates a data list.
+     * <p>
+     * This method queries the Firestore database for the "signupevents" field of a specific user
+     * in the "Accounts" collection. It then fetches each event using its ID from the "Events" collection.
+     * Each successfully fetched event is added to a data list and notifies an associated list adapter
+     * to update the UI. If an event does not exist or cannot be fetched, an error message is logged.
+     * If the user has no sign-up events or does not exist, a log message is also produced.
+     * </p>
+     *
+     * @param userID The unique identifier for the user whose sign-up events are being fetched.
+     *               This ID is used to locate the user document in the "Accounts" collection.
+     */
     private void fetchUserSignUpEvents(String userID) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection("Accounts").document(userID)

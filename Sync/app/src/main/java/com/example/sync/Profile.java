@@ -21,7 +21,7 @@ public class Profile implements Parcelable {
     private String profileID;
     private String name;
     private String imageUrl;
-    private String email;
+    private String homepage;
     private String phoneNumber;
     private static FirebaseFirestore db = FirebaseFirestore.getInstance();
 
@@ -37,23 +37,22 @@ public class Profile implements Parcelable {
      * @param profileID   The ID of the profile.
      * @param name        The name of the user.
      * @param imageUrl    The URL of the user's profile image.
-     * @param email       The email address of the user.
+     * @param homepage       The homepage address of the user.
      * @param phoneNumber The phone number of the user.
      */
-    public Profile(String profileID, String name, String imageUrl, String email, String phoneNumber) {
+    public Profile(String profileID, String name, String imageUrl, String homepage, String phoneNumber) {
         this.profileID = profileID;
         this.name = name;
         this.imageUrl = imageUrl;
-        this.email = email;
+        this.homepage = homepage;
         this.phoneNumber = phoneNumber;
     }
-
 
     protected Profile(Parcel in) {
         profileID = in.readString();
         name = in.readString();
         imageUrl = in.readString();
-        email = in.readString();
+        homepage = in.readString();
         phoneNumber = in.readString();
     }
 
@@ -93,12 +92,12 @@ public class Profile implements Parcelable {
         this.imageUrl = imageUrl;
     }
 
-    public String getEmail() {
-        return email;
+    public String getHomepage() {
+        return homepage;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setHomepage(String homepage) {
+        this.homepage = homepage;
     }
 
     public String getPhoneNumber() {
@@ -119,7 +118,7 @@ public class Profile implements Parcelable {
         dest.writeString(profileID);
         dest.writeString(name);
         dest.writeString(imageUrl);
-        dest.writeString(email);
+        dest.writeString(homepage);
         dest.writeString(phoneNumber);
     }
 
@@ -143,13 +142,13 @@ public class Profile implements Parcelable {
                                     String id = (String) profileData.get("profileID");
                                     String name = (String) profileData.get("name");
                                     String imageUrl = (String) profileData.get("imageUrl");
-                                    String email = (String) profileData.get("email");
+                                    String homepage = (String) profileData.get("homepage");
                                     String phoneNumber = (String) profileData.get("phoneNumber");
 
                                     // Create Profile instance
                                     if (!name.isEmpty()) {
                                         // Add profile to list
-                                        Profile profile = new Profile(id, name, imageUrl, email, phoneNumber);
+                                        Profile profile = new Profile(id, name, imageUrl, homepage, phoneNumber);
                                         profileList.add(profile);
                                     }
                                 }

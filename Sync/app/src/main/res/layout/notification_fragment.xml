@@ -2,8 +2,20 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:padding="16dp">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        app:titleTextColor="@color/black"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:title="View Notifications" />
 
     <ListView
         android:id="@+id/notificationsListView"
@@ -11,14 +23,5 @@
         android:layout_height="0dp"
         android:layout_weight="1"
         android:scrollbars="vertical" />
-
-    <Button
-        android:id="@+id/clearNotificationsButton"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Clear Notifications"
-        android:backgroundTint="@color/button_yellow"
-        android:textColor="@color/black"
-        android:layout_marginTop="16dp"/>
 
 </LinearLayout>

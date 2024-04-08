@@ -1,13 +1,14 @@
 package com.example.sync;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.app.AlertDialog;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -90,7 +91,6 @@ public class ProfileListActivity extends AppCompatActivity {
                 String profileID = profile.getProfileID();
                 Intent intent = new Intent(ProfileListActivity.this, ProfileActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-
                 intent.putExtra("userID", profileID);
                 startActivity(intent);
             }
@@ -113,6 +113,7 @@ public class ProfileListActivity extends AppCompatActivity {
                     // Deleting the profile from Firestore
                     Profile profile = dataList.get(position);
                     String profileID = profile.getProfileID();
+                    Log.d("UserID","User ID is " + profileID);
                     ProfileDeletion.deleteProfile(profileID);
                     // Delete the profile from your data list and update the adapter
                     dataList.remove(position);

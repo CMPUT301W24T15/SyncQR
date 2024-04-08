@@ -27,7 +27,7 @@ public class ProfileDeletion {
         blankProfileData.put("profileID", profileID);
         blankProfileData.put("name", "");
         blankProfileData.put("imageUrl", "");
-        blankProfileData.put("email", "");
+        blankProfileData.put("homepage", "");
         blankProfileData.put("phoneNumber", "");
 
         // Update the profile field with the new blank profile data

@@ -84,13 +84,6 @@ public class User extends AppCompatActivity {
                 });
     }
 
-    /**
-     * Initiates the QR code scanning activity.
-     */
-    public void scanQRCode(){
-        new QRCodeScanActivity();
-    }
-
     // Getters and setters for user properties
     public String getUserID() {
         return userID;
@@ -117,11 +110,11 @@ public class User extends AppCompatActivity {
         this.password = password;
     }
 
-    public String getProfileEmail() {
-        return profile.getEmail();
+    public String getProfileHomepage() {
+        return profile.getHomepage();
     }
-    public void setProfileEmail(String email) {
-        this.profile.setEmail(email);
+    public void setProfileHomepage(String homepage) {
+        this.profile.setHomepage(homepage);
     }
 
     public String getProfilePhoneNumber() {

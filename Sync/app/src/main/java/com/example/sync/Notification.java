@@ -22,8 +22,8 @@ import java.util.Map;
  * Class for managing notifications.
  */
 public class Notification {
-    private final static String TAG = "Notification";
-    private final static FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private static String TAG = "Notification";
+    private static FirebaseFirestore db = FirebaseFirestore.getInstance();
     private static ArrayList<String> eventQuery;
     private String eventID;
     private String title;   // event name
@@ -81,7 +81,7 @@ public class Notification {
 
                                 // extract the eventID
                                 Map<String, Object> data = document.getData();
-                                eventQuery = (ArrayList<String>) data.get("event");
+                                eventQuery = (ArrayList<String>) data.get("signupevents");
                             }
 
                             if (eventQuery.isEmpty()){

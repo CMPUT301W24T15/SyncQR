@@ -7,12 +7,13 @@ import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.sync.R;
-import com.google.firebase.firestore.EventListener;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
@@ -37,30 +38,60 @@ public class NotificationActivity extends AppCompatActivity {
         adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, notificationsList);
         listView.setAdapter(adapter);
 
-        // Fetch notifications from Firestore
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        db.collection("Notifications")
-                .addSnapshotListener(new EventListener<QuerySnapshot>() {
+        String userID = getIntent().getStringExtra("userID");
+        Log.d("UserID", "User ID: " + userID);
+
+        // Fetch signupevents for the specific userID
+        db.collection("Accounts")
+                .document(userID)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                     @Override
-                    public void onEvent(QuerySnapshot queryDocumentSnapshots, FirebaseFirestoreException e) {
-                        if (e != null) {
-                            Log.w(TAG, "Listen failed.", e);
-                            return;
-                        }
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if (task.isSuccessful()) {
+                            DocumentSnapshot document = task.getResult();
+                            if (document.exists()) {
+                                List<String> eventIds = (List<String>) document.get("signupevents");
 
-                        List<String> newNotifications = new ArrayList<>();
-                        for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
-                            // Concatenate the title and message for each notification
-                            String title = doc.getString("title");
-                            String message = doc.getString("message");
-                            newNotifications.add(title + ": " + message);
-                        }
+                                if (eventIds != null && !eventIds.isEmpty()) {
+                                    for (String eventId : eventIds) {
+                                        // Fetch notifications for the current event ID
+                                        db.collection("Notifications")
+                                                .whereEqualTo("eventID", eventId)
+                                                .get()
+                                                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                                    @Override
+                                                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                                        if (task.isSuccessful()) {
+                                                            List<String> newNotifications = new ArrayList<>();
+                                                            for (QueryDocumentSnapshot doc : task.getResult()) {
+                                                                // Concatenate the title and message for each notification
+                                                                String title = doc.getString("title");
+                                                                String message = doc.getString("message");
+                                                                newNotifications.add(title + ": " + message);
+                                                            }
 
-                        // Update the UI
-                        notificationsList.clear();
-                        notificationsList.addAll(newNotifications);
-                        adapter.notifyDataSetChanged();
+                                                            // Update the UI
+                                                            notificationsList.addAll(newNotifications);
+                                                            adapter.notifyDataSetChanged();
+                                                        } else {
+                                                            Log.d(TAG, "Error getting documents: ", task.getException());
+                                                        }
+                                                    }
+                                                });
+                                    }
+                                } else {
+                                    Log.d(TAG, "No sign-up events found for the user.");
+                                }
+                            } else {
+                                Log.d(TAG, "No such document");
+                            }
+                        } else {
+                            Log.d(TAG, "get failed with ", task.getException());
+                        }
                     }
                 });
+
     }
 }

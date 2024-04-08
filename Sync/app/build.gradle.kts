@@ -46,7 +46,8 @@ dependencies {
     implementation("androidx.recyclerview:recyclerview:1.3.2")
     implementation ("com.google.code.gson:gson:2.10.1")
     implementation("androidx.test:monitor:1.6.1")
-    implementation("com.google.android.gms:play-services-maps:18.2.0")
+    implementation("org.osmdroid:osmdroid-android:6.1.18")
+    implementation ("androidx.preference:preference:1.2.0")
     testImplementation("junit:junit:4.13.2")
     implementation(platform("com.google.firebase:firebase-bom:32.8.0"))
     testImplementation("org.junit.jupiter:junit-jupiter:5.10.2")
@@ -67,5 +68,11 @@ dependencies {
     androidTestImplementation ("androidx.test.ext:junit:1.1.3")
     androidTestImplementation ("androidx.test:core:1.4.0")
     testImplementation ("org.mockito:mockito-core:5.11.0")
+    testImplementation ("com.github.manusajith.firebase-mock:firebase-firestore:18.0.0")
+    testImplementation ("com.google.firebase:firebase-admin-testing:8.1.0")
+    implementation("com.google.firebase:firebase-firestore:23.0.3")
+
+
+
 
 }

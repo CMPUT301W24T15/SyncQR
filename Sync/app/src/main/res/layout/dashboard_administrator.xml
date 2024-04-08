@@ -40,24 +40,32 @@
             android:id="@+id/home_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:backgroundTint="@color/white"
+            android:textColor="@color/black"
             android:text="Home" />
 
         <Button
             android:id="@+id/profile_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:backgroundTint="@color/white"
+            android:textColor="@color/black"
             android:text="Profile" />
 
         <Button
             android:id="@+id/event_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:backgroundTint="@color/white"
+            android:textColor="@color/black"
             android:text="Event" />
 
         <Button
             android:id="@+id/messages_button"
-            android:layout_width="wrap_content"
+            android:layout_width="@dimen/messages_button"
             android:layout_height="wrap_content"
+            android:backgroundTint="@color/white"
+            android:textColor="@color/black"
             android:text="Messages" />
     </LinearLayout>
 
@@ -74,6 +82,8 @@
             android:layout_width="189dp"
             android:layout_height="wrap_content"
             android:text="Browse Event"
+            android:backgroundTint="@color/button_yellow"
+            android:textColor="@color/black"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -83,6 +93,8 @@
             android:layout_width="190dp"
             android:layout_height="wrap_content"
             android:text="Browse Profile"
+            android:backgroundTint="@color/button_yellow"
+            android:textColor="@color/black"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />

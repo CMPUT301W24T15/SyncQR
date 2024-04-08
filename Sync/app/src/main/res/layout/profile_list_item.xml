@@ -5,13 +5,6 @@
     android:orientation="horizontal"
     android:padding="8dp">
 
-    <ImageView
-        android:id="@+id/profile_Image"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:src="@mipmap/ic_launcher"
-        android:padding="4dp"/>
-
     <LinearLayout
         android:layout_width="0dp"
         android:layout_height="match_parent"
@@ -27,7 +20,7 @@
             android:textStyle="bold"/>
 
         <TextView
-            android:id="@+id/profile_email"
+            android:id="@+id/profile_homepage"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="10sp"/>

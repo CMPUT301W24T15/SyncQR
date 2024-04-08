@@ -3,22 +3,13 @@ package com.example.sync;
 import static java.lang.Boolean.FALSE;
 import static java.lang.Boolean.TRUE;
 
-import android.Manifest;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.FieldValue;
-import com.google.firebase.firestore.FirebaseFirestore;
 
 /**
  * Activity representing the dashboard for attendees.
@@ -27,7 +18,6 @@ public class AttendeeDashboard extends AppCompatActivity {
     private static String TAG = "Kevin";
     boolean userCheckedIn = FALSE;
     private String userID;
-    public String username;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -122,18 +112,6 @@ public class AttendeeDashboard extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-    }
-
-
-
-    private void removeFromCheckInSystem(String userID) {
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        DocumentReference checkInRef = db.collection("Checkin System").document(userID);
-
-        // Remove the user's ID from the "signup" field
-        checkInRef.update("signup", FieldValue.arrayRemove(userID))
-                .addOnSuccessListener(aVoid -> Log.d(TAG, "User removed from check-in system successfully."))
-                .addOnFailureListener(e -> Log.w(TAG, "Error removing user from check-in system.", e));
     }
 
 }

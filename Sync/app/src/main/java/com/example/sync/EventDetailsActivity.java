@@ -101,7 +101,6 @@ public class EventDetailsActivity extends AppCompatActivity {
             FirebaseFirestore db = FirebaseFirestore.getInstance();
             DocumentReference eventRef = db.collection("Events").document(eventId);
 
-//            final Map<String, Object> data;
             eventRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                 @Override
                 public void onComplete(@NonNull Task<DocumentSnapshot> task) {
