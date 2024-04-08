@@ -33,6 +33,7 @@ public class AttendeeDashboardTest {
         onView(withId(R.id.login_attendee_button)).perform(click());
     }
     // shouldn't change activity since this is home
+    @Test
     public void testHomeButton() {
         setupTest();
         onView(withId(R.id.home_button)).perform(click());
@@ -56,6 +57,7 @@ public class AttendeeDashboardTest {
     }
 
     // Test if we can open message
+    @Test
     public void testMessageButton() {
         setupTest();
         onView(withId(R.id.messages_button)).perform(click());
