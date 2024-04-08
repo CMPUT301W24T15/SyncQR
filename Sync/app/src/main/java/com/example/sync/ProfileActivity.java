@@ -2,6 +2,8 @@ package com.example.sync;
 
 import static android.content.ContentValues.TAG;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -9,6 +11,7 @@ import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -19,6 +22,8 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.CustomTarget;
+import com.bumptech.glide.request.transition.Transition;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentReference;
@@ -29,6 +34,7 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -96,37 +102,43 @@ public class ProfileActivity extends AppCompatActivity {
                         userEmailInput.setText(email);
                         userContactInput.setText(contact);
 
+                        // Download and store the image if imageUrl is not empty
                         if (imageUrl != null && !imageUrl.isEmpty()) {
-                            // Download the profile image as a Bitmap, then store it in Firebase Storage
-                            new Thread(() -> {
-                                try {
-                                    Bitmap bitmap = Glide.with(ProfileActivity.this)
-                                            .asBitmap()
-                                            .load(imageUrl)
-                                            .submit()
-                                            .get(); // Download the image as a Bitmap
-
-                                    // Define the path for storing the image in Firebase Storage
-                                    String path = "profile/" + userID + ".png";
-
-                                    // Use the Database class to store the image
-                                    Database.storeImage(bitmap, path, new Database.Callback() {
+                            Glide.with(ProfileActivity.this)
+                                    .asBitmap()
+                                    .load(imageUrl)
+                                    .into(new CustomTarget<Bitmap>() {
                                         @Override
-                                        public void onSuccess(String downloadUrl) {
-                                            Log.d(TAG, "Image stored successfully with download URL: " + downloadUrl);
-                                            // Optionally, update the Firestore document with the new image download URL
+                                        public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
+                                            // The resource (bitmap) is now ready
+                                            // Define the path for storing the image in Firebase Storage
+                                            String path = "profile/" + userID + ".png";
+
+                                            // Use the Database class to store the image
+                                            Database.storeImage(resource, path, new Database.Callback() {
+                                                @Override
+                                                public void onSuccess(String downloadUrl) {
+                                                    Log.d(TAG, "Image stored successfully with download URL: " + downloadUrl);
+                                                    // Optionally, update the Firestore document with the new image download URL
+                                                }
+
+//                                                @Override
+//                                                public void onFailure(Exception e) {
+//                                                    Log.e(TAG, "Failed to store image", e);
+//                                                    // Handle the error
+//                                                }
+                                            });
                                         }
 
-//                                        @Override
-//                                        public void onFailure(Exception e) {
-//                                            Log.e(TAG, "Failed to store image", e);
-//                                            // Handle the error
-//                                        }
+                                        @Override
+                                        public void onLoadCleared(@Nullable Drawable placeholder) {
+                                            // Called when the drawable is being reset to default state (cleared from memory)
+                                            // Implement if needed
+                                        }
                                     });
-                                } catch (Exception e) {
-                                    Log.e(TAG, "Error loading image", e);
-                                }
-                            }).start();
+                        } else {
+                            // Handle the case where imageUrl is empty
+                            Log.d(TAG, "Image URL is empty");
                         }
 
                         if (name != null && !name.isEmpty()) {
@@ -147,8 +159,6 @@ public class ProfileActivity extends AppCompatActivity {
                 Log.d("DatabaseTag", "Error loading profile data", task.getException());
             }
         });
-
-
 
 
         // Set click listeners
@@ -288,8 +298,21 @@ public class ProfileActivity extends AppCompatActivity {
      * Removes the profile image and sets it to the default image.
      */
     private void removeProfileImage() {
-        // Set to default image or clear
-        userImageInput.resetToDefault();
+        // Show a confirmation dialog before removing the profile image
+        new AlertDialog.Builder(this)
+                .setTitle("Remove Profile Image")
+                .setMessage("Are you sure you want to remove the profile image?")
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        // User clicked Yes, remove the profile image
+                        userImageInput.resetToDefault();
+                        // Update the profile imageUrl to empty in the database
+                        updateProfileImageUrl("");
+                    }
+                })
+                .setNegativeButton(android.R.string.no, null)
+                .show();
     }
     /**
      * Handles the result of picking an image from the device.
@@ -302,12 +325,18 @@ public class ProfileActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
-            imageUri = data.getData();
-            // Assuming loadImage is a method to load image from URI using Glide or similar
-            userImageInput.setImageUri(imageUri); // Update this line to use the new method
+            Uri selectedImageUri = data.getData();
+            try {
+                Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), selectedImageUri);
+                // Set the bitmap to the AvatarView
+                userImageInput.setImageBitmap(bitmap);
+                // Save the bitmap for later use
+                userBitmap = bitmap;
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
-
     public Bitmap getBitmapFromView(View view) {
         // Create a bitmap with the same dimensions as the view
         Bitmap returnedBitmap = Bitmap.createBitmap(view.getWidth(), view.getHeight(), Bitmap.Config.ARGB_8888);
@@ -326,6 +355,41 @@ public class ProfileActivity extends AppCompatActivity {
         view.draw(canvas);
         // return the bitmap
         return returnedBitmap;
+    }
+
+    /**
+     * Updates the profile image URL in the database.
+     *
+     * @param imageUrl The new profile image URL.
+     */
+    private void updateProfileImageUrl(String imageUrl) {
+        // Get the user ID from the intent
+        String userID = getIntent().getStringExtra("userID");
+        if (userID != null) {
+            // Create a map containing the updated profile imageUrl
+            Map<String, Object> profileData = new HashMap<>();
+            profileData.put("imageUrl", imageUrl);
+            // Update the 'profile' field with the new imageUrl
+            FirebaseFirestore db = FirebaseFirestore.getInstance();
+            db.collection("Accounts").document(userID)
+                    .update("profile.imageUrl", imageUrl)
+                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            Log.d(TAG, "Profile image URL updated successfully");
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Log.e(TAG, "Failed to update profile image URL", e);
+                            // Optionally, show an error message
+                        }
+                    });
+        } else {
+            Log.e(TAG, "User ID is null");
+            // Handle the error, perhaps by informing the user to try again
+        }
     }
 
 }
