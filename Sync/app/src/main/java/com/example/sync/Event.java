@@ -235,6 +235,14 @@ public class Event implements Serializable {
                 });
     }
 
+    /**
+     * Retrieves the list of event IDs created by a specific user.
+     *
+     * @param userId   The user ID whose created event ID list is being retrieved.
+     * @param callback The callback interface to handle the result of the asynchronous operation.
+     *                 The result will be returned through the {@link Callback#onSuccessReturnId(ArrayList)}
+     *                 method.
+     */
     public static void getCreatedEventIdList(String userId, Callback callback) {
         db.collection("Accounts")
                 .document(userId)
@@ -253,6 +261,12 @@ public class Event implements Serializable {
                 });
     }
 
+    /**
+     * Registers an event in the account of a user.
+     *
+     * @param userId  The user ID to register the event in.
+     * @param eventId The ID of the event to register in the user's account.
+     */
     public static void registerInAccount(String userId, String eventId) {
         db.collection("Accounts").whereEqualTo("userID", userId).get()
                 .addOnCompleteListener(task -> {
@@ -274,7 +288,11 @@ public class Event implements Serializable {
                 });
     }
 
-
+    /**
+     * Removes the poster of a specific event by setting its poster field to an empty string.
+     *
+     * @param eventId The ID of the event whose poster is to be removed.
+     */
     public static void removePoster(String eventId) {
         DocumentReference doc = db.collection("Events").document(eventId);
         Map<String, Object> data = new HashMap<>();
@@ -288,10 +306,6 @@ public class Event implements Serializable {
                     }
                 });
     }
-
-
-
-
 
     /**
      * Getters and Setters

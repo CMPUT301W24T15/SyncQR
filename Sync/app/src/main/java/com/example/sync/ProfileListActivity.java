@@ -91,7 +91,6 @@ public class ProfileListActivity extends AppCompatActivity {
                 String profileID = profile.getProfileID();
                 Intent intent = new Intent(ProfileListActivity.this, ProfileActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-
                 intent.putExtra("userID", profileID);
                 startActivity(intent);
             }

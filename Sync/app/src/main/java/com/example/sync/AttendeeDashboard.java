@@ -11,10 +11,6 @@ import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.FieldValue;
-import com.google.firebase.firestore.FirebaseFirestore;
-
 /**
  * Activity representing the dashboard for attendees.
  */
@@ -22,7 +18,6 @@ public class AttendeeDashboard extends AppCompatActivity {
     private static String TAG = "Kevin";
     boolean userCheckedIn = FALSE;
     private String userID;
-    public String username;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -117,18 +112,6 @@ public class AttendeeDashboard extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-    }
-
-
-
-    private void removeFromCheckInSystem(String userID) {
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        DocumentReference checkInRef = db.collection("Checkin System").document(userID);
-
-        // Remove the user's ID from the "signup" field
-        checkInRef.update("signup", FieldValue.arrayRemove(userID))
-                .addOnSuccessListener(aVoid -> Log.d(TAG, "User removed from check-in system successfully."))
-                .addOnFailureListener(e -> Log.w(TAG, "Error removing user from check-in system.", e));
     }
 
 }

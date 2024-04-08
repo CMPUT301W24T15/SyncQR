@@ -268,6 +268,8 @@ public class ProfileActivity extends AppCompatActivity {
      */
     private void navigateToAttendee() {
         Intent intent = new Intent(this, AttendeeDashboard.class);
+        String userID = getIntent().getStringExtra("userID");
+        intent.putExtra("userID", userID);
         startActivity(intent);
     }
 
@@ -275,7 +277,9 @@ public class ProfileActivity extends AppCompatActivity {
      * Navigates to the Event activity.
      */
     private void navigateToEvent() {
-        Intent intent = new Intent(this, EventListActivity.class);
+        Intent intent = new Intent(this, SignUpEventListActivity.class);
+        String userID = getIntent().getStringExtra("userID");
+        intent.putExtra("userID", userID);
         startActivity(intent);
     }
 
@@ -284,6 +288,8 @@ public class ProfileActivity extends AppCompatActivity {
      */
     private void navigateToMyNotificationReceiver() {
         Intent intent = new Intent(this, NotificationActivity.class);
+        String userID = getIntent().getStringExtra("userID");
+        intent.putExtra("userID", userID);
         startActivity(intent);
     }
 
@@ -375,6 +381,20 @@ public class ProfileActivity extends AppCompatActivity {
             }
         }
     }
+    /**
+     * Creates a bitmap from the provided view.
+     * <p>
+     * This method generates a bitmap that represents the provided View's current appearance.
+     * It captures both the View's background and its content. If the View does not have a
+     * background, a white background will be used instead.
+     * </p>
+     *
+     * @param view The View to be converted into a bitmap.
+     * @return A bitmap representation of the provided View. The bitmap will have the same
+     * dimensions as the View and will include the View's background if present.
+     * If no background is provided, a white background is used. The bitmap is
+     * created with {@link Bitmap.Config#ARGB_8888 ARGB_8888} configuration.
+     */
     public Bitmap getBitmapFromView(View view) {
         // Create a bitmap with the same dimensions as the view
         Bitmap returnedBitmap = Bitmap.createBitmap(view.getWidth(), view.getHeight(), Bitmap.Config.ARGB_8888);

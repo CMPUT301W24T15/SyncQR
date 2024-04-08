@@ -116,8 +116,6 @@ public class QRCodeScanActivity extends AppCompatActivity {
         if (resultCode == RESULT_OK && data != null && data.getData() != null) {
             Uri imageUri = data.getData();
             processPickedQRCode(imageUri);
-            Toast.makeText(this, "Image picked: " + imageUri.toString(), Toast.LENGTH_LONG).show();
-            // processPickedQRCode(imageUri); // Uncomment this when method is implemented
         } else {
             Toast.makeText(this, "Image picking cancelled", Toast.LENGTH_SHORT).show();
             finish(); // Finish the activity if no image is picked
@@ -129,23 +127,15 @@ public class QRCodeScanActivity extends AppCompatActivity {
      * @param scannedData The data obtained from scanning the QR code.
      */
     private void processScannedData(String scannedData) {
-        Toast.makeText(this, "Scanned QR Code: " + scannedData, Toast.LENGTH_LONG).show();
-
         if ("Administrator".equals(scannedData)) {
             // Handle Administrator action
             Intent intent = new Intent(QRCodeScanActivity.this, AdministratorDashboard.class);
             startActivity(intent);
-        } else if (scannedData.startsWith("t")) {
+        } else if (scannedData.startsWith("SyncQRevent")) {
             // Extract the event ID from the scanned data
             String eventId = extractSubstringAfterDelimiter(scannedData, "t");
             // Start EventDetailsActivity with the extracted event ID
             EventDetailsActivity.startWithEventId(this, eventId);
-        } else if (scannedData.startsWith("n")) {
-            // Extract the event ID from the scanned data
-            eventId = extractSubstringAfterDelimiter(scannedData, "n");
-            String userID = getIntent().getStringExtra("userID");
-            Log.e("UserID:", "UserID = " + userID);
-            fetchLocationAndCheckIn(userID);
         } else {
             // Handle any other unexpected QR code data
             FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -197,8 +187,6 @@ public class QRCodeScanActivity extends AppCompatActivity {
             String qrCodeText = qrCodeResult.getText();
             processScannedData(qrCodeText);
 
-            // Use the QR code text
-            Toast.makeText(this, "QR Code Found: " + qrCodeText, Toast.LENGTH_LONG).show();
         } catch (Exception e) {
             Toast.makeText(this, "Error decoding QR Code", Toast.LENGTH_LONG).show();
             e.printStackTrace();

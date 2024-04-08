@@ -37,7 +37,6 @@ public class LoginActivity extends AppCompatActivity {
      *     recently supplied in {@link #onSaveInstanceState}.  <b><i>Note: Otherwise it is null.</i></b>
      *
      */
-
     public ArrayList<String> getAllAccounts() {
         ArrayList<String> allUserIds = new ArrayList<>();
         FirebaseFirestore db = FirebaseFirestore.getInstance();

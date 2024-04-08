@@ -48,7 +48,6 @@ public class Profile implements Parcelable {
         this.phoneNumber = phoneNumber;
     }
 
-
     protected Profile(Parcel in) {
         profileID = in.readString();
         name = in.readString();

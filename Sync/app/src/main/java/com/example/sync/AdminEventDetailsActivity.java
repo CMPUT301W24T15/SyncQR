@@ -135,6 +135,10 @@ public class AdminEventDetailsActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Displays a dialog to confirm the removal of the poster for the current event.
+     * If the user confirms, the poster for the event is removed.
+     */
     private void showRemovePosterDialog() {
         new AlertDialog.Builder(this)
                 .setTitle("Remove Poster") // Set the dialog title
@@ -150,6 +154,10 @@ public class AdminEventDetailsActivity extends AppCompatActivity {
                 .show();
     }
 
+    /**
+     * Displays a dialog to confirm the removal of the QR code for the current event.
+     * If the user confirms, the QR code for the event is removed.
+     */
     private void showRemoveQRCodeDialog() {
         new AlertDialog.Builder(this)
                 .setTitle("Remove QR Code") // Set the dialog title

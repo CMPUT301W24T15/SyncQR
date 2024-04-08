@@ -84,13 +84,6 @@ public class User extends AppCompatActivity {
                 });
     }
 
-    /**
-     * Initiates the QR code scanning activity.
-     */
-    public void scanQRCode(){
-        new QRCodeScanActivity();
-    }
-
     // Getters and setters for user properties
     public String getUserID() {
         return userID;

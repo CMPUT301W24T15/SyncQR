@@ -261,6 +261,12 @@ public class Checkin {
                 });
     }
 
+    /**
+     * Registers a check-in event for a user by adding the eventID to the user's "checkinevents" field.
+     *
+     * @param eventId The ID of the event to register for check-in.
+     * @param userId  The ID of the user to register the check-in event for.
+     */
     public static void registerCheckinForUser(String eventId, String userId){
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection("Accounts").whereEqualTo("userID", userId).get()
@@ -283,6 +289,16 @@ public class Checkin {
                 });
     }
 
+    /**
+     * Adds a real-time listener to an event document to monitor changes in the check-in count.
+     *
+     * @param eventId    The ID of the event to add the listener to.
+     * @param position   The position of the event in the list.
+     * @param oldCount   The previous check-in count of the event.
+     * @param callback   The callback interface to handle the result of the asynchronous operation.
+     *                   The updated event name and check-in count will be returned through the
+     *                   {@link Callback#onSuccessUpdate(String, int)} method if there is a change in the check-in count.
+     */
     public static void addListenerToEvent(String eventId, int position, ArrayList<Integer> oldCount, Callback callback) {
         DocumentReference docRef = collection.document(eventId);
 
@@ -307,7 +323,15 @@ public class Checkin {
 
     }
 
-
+    /**
+     * Saves a QR code for an event in the Firestore database.
+     *
+     * @param qrcodeText The text content of the QR code to save.
+     * @param eventId    The ID of the event to associate with the QR code.
+     * @param callback   The callback interface to handle the result of the asynchronous operation.
+     *                   A message indicating the result of the save operation will be returned through the
+     *                   {@link Callback#onSavedQRCode(String)} method.
+     */
     public static void saveQRcode(String qrcodeText, String eventId, Callback callback) {
 
         // check to see if it is already existed
@@ -335,6 +359,11 @@ public class Checkin {
                 });
     }
 
+    /**
+     * Removes the QR code associated with a specific event by clearing the "qrcode" field.
+     *
+     * @param eventId The ID of the event whose QR code is to be removed.
+     */
     public static void removeQRCode(String eventId) {
         DocumentReference doc = collection.document(eventId);
         Map<String, Object> data = new HashMap<>();
