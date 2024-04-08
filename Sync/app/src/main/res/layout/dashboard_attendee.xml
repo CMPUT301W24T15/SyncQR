@@ -32,7 +32,8 @@
             android:backgroundTint="@color/button_grey"
             android:textColor="@color/black"
             android:text="Permission"
-            android:layout_toStartOf="@id/profile_image_top_right"/>
+            android:layout_toStartOf="@id/profile_image_top_right"
+            android:visibility="gone"/>
 
     </RelativeLayout>
 
