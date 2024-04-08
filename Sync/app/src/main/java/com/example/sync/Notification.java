@@ -81,7 +81,7 @@ public class Notification {
 
                                 // extract the eventID
                                 Map<String, Object> data = document.getData();
-                                eventQuery = (ArrayList<String>) data.get("event");
+                                eventQuery = (ArrayList<String>) data.get("signupevents");
                             }
 
                             if (eventQuery.isEmpty()){
