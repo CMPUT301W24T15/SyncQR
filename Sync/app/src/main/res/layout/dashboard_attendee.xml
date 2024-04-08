@@ -69,10 +69,10 @@
 
         <Button
             android:id="@+id/messages_button"
-            android:layout_width="@dimen/messages_button"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:backgroundTint="@color/white"
-            android:text="Messages"
+            android:text="Message"
             android:textColor="@color/black" />
     </LinearLayout>
 

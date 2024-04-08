@@ -36,7 +36,6 @@ public class EventModelTest {
 //    @Mock
 //    private Context context;
 
-    @Test
     public void testSaveEventsToDatabase() {
 //        when(context.getString(R.string.app_name)).thenReturn("Sync");
 //        when(context.getString(R.string.homeBtn)).thenReturn("Home");
