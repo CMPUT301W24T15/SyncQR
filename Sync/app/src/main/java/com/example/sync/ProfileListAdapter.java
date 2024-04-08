@@ -43,12 +43,12 @@ public class ProfileListAdapter extends ArrayAdapter<Profile> {
         }
 
         TextView textViewUsername = listViewItem.findViewById(R.id.profile_name);
-        TextView textViewEmail = listViewItem.findViewById(R.id.profile_email);
+        TextView textViewHomepage = listViewItem.findViewById(R.id.profile_homepage);
         TextView textViewPhoneNumber = listViewItem.findViewById(R.id.profile_phone_number);
 
         Profile profile = profiles.get(position);
         textViewUsername.setText(profile.getName());
-        textViewEmail.setText(profile.getEmail());
+        textViewHomepage.setText(profile.getHomepage());
         textViewPhoneNumber.setText(profile.getPhoneNumber());
 
         return listViewItem;

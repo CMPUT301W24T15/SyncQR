@@ -68,5 +68,11 @@ dependencies {
     androidTestImplementation ("androidx.test.ext:junit:1.1.3")
     androidTestImplementation ("androidx.test:core:1.4.0")
     testImplementation ("org.mockito:mockito-core:5.11.0")
+    testImplementation ("com.github.manusajith.firebase-mock:firebase-firestore:18.0.0")
+    testImplementation ("com.google.firebase:firebase-admin-testing:8.1.0")
+    implementation("com.google.firebase:firebase-firestore:23.0.3")
+
+
+
 
 }

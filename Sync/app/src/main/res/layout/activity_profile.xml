@@ -73,14 +73,6 @@
         android:layout_gravity="center_horizontal"
         android:src="@mipmap/ic_launcher" />
 
-    <TextView
-        android:id="@+id/profile_name_label"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:text="Name"
-        android:textSize="24sp" />
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -117,10 +109,10 @@
             android:hint="Enter Name"/>
 
         <EditText
-            android:id="@+id/user_email_input"
+            android:id="@+id/user_homepage_input"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Enter Email Address"/>
+            android:hint="Enter Homepage Address"/>
 
         <EditText
             android:id="@+id/user_contact_input"
@@ -154,9 +146,5 @@
             android:textColor="@color/black"
             android:text="Cancel" />
     </LinearLayout>
-
-
-    <!-- Add EditTexts for user name, email, phone and Buttons for save & cancel here similar to above structure -->
-
 </LinearLayout>
 

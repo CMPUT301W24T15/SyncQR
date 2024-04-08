@@ -45,7 +45,7 @@ import java.util.Map;
  */
 public class ProfileActivity extends AppCompatActivity {
     // Class variables
-    private EditText userNameInput, userEmailInput, userContactInput;
+    private EditText userNameInput, userHomepageInput, userContactInput;
     private AvatarView userImageInput;
     private static final int PICK_IMAGE_REQUEST = 1;
     private Uri imageUri;
@@ -68,7 +68,7 @@ public class ProfileActivity extends AppCompatActivity {
         // Initialize UI elements
         userNameInput = findViewById(R.id.user_name_input);
         userImageInput = findViewById(R.id.profile_image_middle); // Initialize AvatarView
-        userEmailInput = findViewById(R.id.user_email_input);
+        userHomepageInput = findViewById(R.id.user_homepage_input);
         userContactInput = findViewById(R.id.user_contact_input);
         Button saveButton = findViewById(R.id.save_button);
         Button cancelButton = findViewById(R.id.cancel_button);
@@ -115,13 +115,13 @@ public class ProfileActivity extends AppCompatActivity {
                     if (profile != null) {
                         // Extract fields from the profile map
                         String name = (String) profile.get("name");
-                        String email = (String) profile.get("email");
+                        String homepage = (String) profile.get("homepage");
                         String contact = (String) profile.get("phoneNumber");
                         String imageUrl = (String) profile.get("imageUrl"); // Assuming this is where the image URL is stored
 
                         // Update UI with the retrieved data
                         userNameInput.setText(name);
-                        userEmailInput.setText(email);
+                        userHomepageInput.setText(homepage);
                         userContactInput.setText(contact);
 
                         // Download and store the image if imageUrl is not empty
@@ -226,11 +226,11 @@ public class ProfileActivity extends AppCompatActivity {
 
                         // Now that you have the URL, update Firestore here
                         String name = userNameInput.getText().toString().trim();
-                        String email = userEmailInput.getText().toString().trim();
+                        String homepage = userHomepageInput.getText().toString().trim();
                         String contact = userContactInput.getText().toString().trim();
                         Map<String, Object> profileData = new HashMap<>();
                         profileData.put("profileID", userID);
-                        profileData.put("email", email);
+                        profileData.put("homepage", homepage);
                         profileData.put("imageUrl", url[0]); // Now url[0] has the URL
                         profileData.put("name", name);
                         profileData.put("phoneNumber", contact);
@@ -298,7 +298,7 @@ public class ProfileActivity extends AppCompatActivity {
      */
     private void clearInputs() {
         userNameInput.setText("");
-        userEmailInput.setText("");
+        userHomepageInput.setText("");
         userContactInput.setText("");
     }
 
